@@ -1,0 +1,34 @@
+general:
+    branches:
+        only:
+            - dev
+            - master
+
+machine:
+    node:
+        version: 6.1.0
+    timezone:
+        America/Los_Angeles
+
+dependencies:
+    cache_directories:
+        - "node_modules"
+    override:
+        - npm update properjs-hobo
+        - npm install
+        - npm rebuild node-sass
+        - npm run webpack # lint, babel, sass
+
+test:
+    override:
+        - echo "test"
+
+deployment:
+    staging:
+        branch: dev
+        commands:
+            - make -f Circlefile deploy_staging
+    production:
+        branch: master
+        commands:
+            - make -f Circlefile deploy_production

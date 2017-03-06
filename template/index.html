@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="description" content="<%= locals.site.data[ 'site.description' ].value %>" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="<%= locals.site.data[ 'site.appTitle' ].value %>" />
+        <meta name="google-site-verification" content="<%= locals.site.data[ 'site.googleVerify' ].value %>" />
+        <meta property="og:site_name" content="<%= locals.site.data[ 'site.title' ].value %>" />
+        <meta property="og:title" content="<%= locals.site.data[ 'site.title' ].value %>" />
+        <meta property="og:url" content="<%= locals.site.data[ 'site.url' ].value %>" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content="<%= locals.site.data[ 'site.description' ].value %>" />
+        <meta property="og:image" content="<%= locals.site.data[ 'site.image' ].value.main.url %>" />
+        <meta itemprop="name" content="<%= locals.site.data[ 'site.title' ].value %>" />
+        <meta itemprop="description" content="<%= locals.site.data[ 'site.description' ].value %>" />
+        <meta itemprop="url" content="<%= locals.site.data[ 'site.url' ].value %>" />
+        <meta itemprop="thumbnailUrl" content="<%= locals.site.data[ 'site.image' ].value.main.url %>" />
+        <meta itemprop="image" content="<%= locals.site.data[ 'site.image' ].value.main.url %>" />
+        <link rel="shortcut icon" type="image/x-icon" href="<%= locals.site.data[ 'site.favicon' ].value.main.url %>" />
+        <link rel="canonical" href="" />
+        <link rel="image_src" href="<%= locals.site.data[ 'site.image' ].value.main.url %>" />
+        <link rel="apple-touch-icon-precomposed" href="<%= locals.site.data[ 'site.touchicon' ].value.main.url %>" />
+        <title><%= locals.site.data[ 'site.title' ].value %></title>
+        <link href="<%= locals.stylesheet %>" rel="stylesheet" />
+    </head>
+    <body class="-fzero">
+        <header class="header js-header"></header>
+        <nav class="navi js-navi"></nav>
+        <main class="main js-main"></main>
+        <div class="intro js-intro screen"></div>
+        <footer class="footer js-footer"></footer>
+        <script>window.APP_CONFIG = { googleUA: "<%= locals.site.data[ 'site.googleUA' ].value %>" };</script>
+        <script src="<%= locals.javascript %>"></script>
+    </body>
+</html>

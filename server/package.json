@@ -1,0 +1,29 @@
+{
+  "title": "Kitajchuk Prismic Template Server",
+  "name": "kitajchuk-template-prismic-server",
+  "version": "0.1.0",
+  "description": "Express.js app server.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+      "start-staging": "export NODE_ENV=staging ; ./node_modules/.bin/forever start server.js",
+      "start-production": "export NODE_ENV=production ; ./node_modules/.bin/forever start server.js",
+      "stop": "./node_modules/.bin/forever stopall"
+  },
+  "contributors": [
+    {
+      "name": "Brandon Kitajchuk",
+      "email": "kitajchuk@gmail.com",
+      "url": "http://blkpdx.com"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "consolidate": "^0.14.1",
+    "ejs": "^2.5.2",
+    "forever": "^0.15.2",
+    "prismic.io": "^3.1.3",
+    "express": "^4.14.0",
+    "compression": "^1.6.2"
+  }
+}

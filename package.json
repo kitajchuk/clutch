@@ -1,0 +1,85 @@
+{
+  "title": "Kitajchuk Prismic Template",
+  "name": "kitajchuk-template-prismic",
+  "description": "Boilerplate template and scaffold for Prismic.io projects.",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "start": "echo 'Starting...' && (npm run server & npm run watch)",
+    "watch": "./node_modules/.bin/webpack -d --watch --colors",
+    "build": "./node_modules/.bin/webpack -d --colors",
+    "server": "export NODE_ENV=sandbox ; node server/server.js",
+    "minjs": "./node_modules/.bin/uglifyjs static/js/app.js -c -m -o static/js/app.min.js",
+    "mincss": "./node_modules/.bin/csso ./static/css/screen.css ./static/css/screen.min.css",
+    "postinstall": "mkdir local ; mkdir template/partials ; touch .notes ; cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not attr filter detach remove append' ; cd ../../server && npm install",
+    "deploy-staging": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]'  --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
+    "deploy-production": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]'  --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
+    "connect-staging": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]",
+    "connect-production": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.7.6",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-es2015": "^6.22.0",
+    "browser-sync": "^2.18.8",
+    "browser-sync-webpack-plugin": "^1.1.4",
+    "css-loader": "^0.26.2",
+    "csso": "^2.3.1",
+    "eslint": "^3.17.0",
+    "eslint-loader": "^1.6.3",
+    "expose-loader": "^0.7.3",
+    "fg-loadjs": "^1.0.0",
+    "file-loader": "^0.10.1",
+    "node-sass": "^4.5.0",
+    "on-build-webpack": "^0.1.0",
+    "paramalama": "~0.2",
+    "postcss": "^5.2.15",
+    "postcss-cssnext": "^2.9.0",
+    "postcss-import": "^9.1.0",
+    "postcss-loader": "^1.3.3",
+    "properjs-controller": "~0.2",
+    "properjs-debounce": "^0.2.0",
+    "properjs-easing": "~0.2",
+    "properjs-hobo": "^0.3.10",
+    "properjs-imageloader": ">=0.3.1",
+    "properjs-matchelement": "~0.2",
+    "properjs-matchroute": "^0.2.0",
+    "properjs-mediabox": "~0.3",
+    "properjs-pagecontroller": "~0.3",
+    "properjs-pushstate": "^0.3.4",
+    "properjs-resizecontroller": "~0.2",
+    "properjs-router": "^0.3.7",
+    "properjs-scroll2": "~0.2",
+    "properjs-scrollcontroller": "~0.2",
+    "properjs-template": "~0.2",
+    "properjs-throttle": "^0.3.0",
+    "properjs-tween": "~0.2",
+    "sass-loader": "^6.0.2",
+    "uglifyjs": "^2.4.10",
+    "webpack": "^2.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kitajchuk/kitajchuk-template-prismic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kitajchuk/kitajchuk-template-prismic/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/kitajchuk/kitajchuk-template-prismic/blob/master/LICENSE"
+    }
+  ],
+  "keywords": [],
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Brandon Lee Kitajchuk",
+      "email": "kitajchuk@gmail.com",
+      "url": "http://kitajchuk.com"
+    }
+  ],
+  "readmeFilename": "README.md"
+}

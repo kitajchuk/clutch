@@ -1,0 +1,73 @@
+/******************************************************************************
+ * Paragraphs
+*******************************************************************************/
+.p,
+.cms p,
+.li,
+.cms li {
+    @include p();
+
+    a {
+        border-bottom: 1px solid inherit;
+        font-weight: bold;
+        }
+    em {
+        font-style: italic;
+        }
+    strong {
+        font-weight: bold;
+        }
+    }
+.cms li {
+    line-height: 1.5;
+    }
+.cms__node + .cms__node {
+    margin-top: 40px;
+    }
+.p + .p {
+    margin-top: 20px;
+    }
+
+
+/******************************************************************************
+ * Links
+*******************************************************************************/
+.a,
+.cms a {
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color $fast-duration $ease-three;
+    @include a();
+
+    &:hover {
+        border-bottom-color: $black;
+        }
+    }
+
+
+/******************************************************************************
+ * Headlines
+*******************************************************************************/
+.h1,
+.cms h1 {
+    @include h1();
+    }
+.h2,
+.cms h2 {
+    @include h2();
+    }
+.h3,
+.cms h3 {
+    @include h3();
+    }
+.h4,
+.cms h4 {
+    @include h4();
+    }
+.h5,
+.cms h5 {
+    @include h5();
+    }
+.h6,
+.cms h6 {
+    @include h6();
+    }

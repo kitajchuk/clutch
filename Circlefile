@@ -1,0 +1,77 @@
+# ABOUT THIS FILE
+#
+# In conjunction with a properly configured Circle CI build, this file
+# will deploy a static build from Circle to a remote host of your
+# choosing for every branch that is pushed to Github.
+#
+# To use it, add the following command to your circle.yml file:
+#
+# make -ef Circlefile deploy
+#
+# Note that this file is actually a *Makefile* masquerading as a
+# "Circlefile". That"s why to run these tasks you"ll need to pass the
+# "-f" flag and identify this file explicitly.
+#
+# By default, variables defined within a Makefile override environment
+# variable values. This file is designed with the opposite principle in
+# mind -- i.e. that the sane defaults are set explicitly here, any of
+# which can be overridden via environment variables.
+#
+# To ensure this behavior, make sure to run this file with the `-e`
+# flag.
+
+
+# REQUIRED ENVIRONMENT VARIABLES
+#
+# The following environment variables must be defined in order for the
+# make tasks in this file to execute properly. Most of these are
+# already defined by Circle CI during each build.
+#
+# CIRCLEFILE_GITHUB_ACCESS_TOKEN
+# An access token for this projects repository that has permission
+# to get/post to the Github Status API. Set this value in the Circle
+# CI admin under Project Settings > Tweaks > Environment Variables
+#
+# CIRCLE_PROJECT_USERNAME
+# The username or organization name of the project being tested, i.e.
+# "foo" in circleci.com/gh/foo/bar/123. Available by default in
+# Circle CI build.
+#
+# CIRCLE_PROJECT_REPONAME
+# The repository name of the project being tested, i.e. "bar" in
+# circleci.com/gh/foo/bar/123. Available by default in Circle CI
+# build.
+#
+# CIRCLE_BRANCH
+# The name of the branch being tested, e.g. "master". Available by
+# default in Circle CI build.
+#
+# CIRCLE_SHA1
+# The SHA1 of the commit being tested. Available by default in
+# Circle CI build.
+
+
+# VARIABLES
+#
+# Note: Run make with the "-e" flag to ensure environment variables
+# take precedence over these definitions.
+
+CIRCLEFILE_AWS_DEST := /var/www/html/
+CIRCLEFILE_AWS_USER := ec2-user
+CIRCLEFILE_AWS_STAGING_HOST := [EC2_IP_HERE]
+CIRCLEFILE_AWS_PRODUCTION_HOST := [EC2_IP_HERE]
+
+
+# TARGETS
+#
+# Deploy to all AWS instances.
+
+
+deploy_staging:
+		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_STAGING_HOST):$(CIRCLEFILE_AWS_DEST)
+		@ssh $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_STAGING_HOST) 'cd $(CIRCLEFILE_AWS_DEST)server/ ; sudo npm run stop ; sudo npm install ; sudo npm run start-staging'
+
+
+deploy_production:
+		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_PRODUCTION_HOST):$(CIRCLEFILE_AWS_DEST)
+		@ssh $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_PRODUCTION_HOST) 'cd $(CIRCLEFILE_AWS_DEST)server/ ; sudo npm run stop ; sudo npm install ; sudo npm run start-production'

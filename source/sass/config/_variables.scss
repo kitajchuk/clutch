@@ -1,7 +1,8 @@
 /******************************************************************************
  * Fonts
 *******************************************************************************/
-$font-family: monospace;
+$font-family-serif: Georgia;
+$font-family-sans: Helvetica;
 
 
 
@@ -31,7 +32,6 @@ $expander-one: 80px;
 $expander-two: 160px;
 $expander-three: 240px;
 $expander-mobile: 40px;
-$expander-dub: $expander-two + 20px;
 
 
 
@@ -39,6 +39,7 @@ $expander-dub: $expander-two + 20px;
  * Sizes
 *******************************************************************************/
 $wrap-copy: 700px;
+$logo-width: 200px;
 
 
 

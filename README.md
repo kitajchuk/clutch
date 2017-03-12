@@ -12,7 +12,7 @@ Download this template and install the packages with `npm install`. To run the p
 
 ### Prismic
 
-Once the [Prismic](http://prismic.io) respository is setup the API access endpoint can be added to `server/server.js` by swapping it out for the placeholder value — `[PRISMIC_API_ENDPOINT]`.
+Once the [Prismic](http://prismic.io) respository is setup add the `Site` model and config. To do this create a new custom type called `Site` with a slug of `site` and paste the contents of `json/Site.json` into the editor. Save it. This model contains high-level app information that gets rendered in the `<head>` of your document. The API access endpoint can be added to `server/server.js` by swapping out the url value for the `apiAccess` variable.
 
 
 ### AWS
@@ -48,3 +48,10 @@ There are 3 node environments for the project.
 * sandbox
 * staging
 * production
+
+
+
+### Helpful links
+
+* [Icongen](http://iconogen.com)
+* [SVG Optimizer](https://petercollingridge.appspot.com/svg-editor)

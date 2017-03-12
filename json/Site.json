@@ -7,13 +7,6 @@
                 "label": "Title"
             }
         },
-        "appTitle": {
-            "type": "Text",
-            "fieldset": "App Title",
-            "config": {
-                "label": "App Title"
-            }
-        },
         "url": {
             "type": "Text",
             "fieldset": "URL",
@@ -49,25 +42,162 @@
                 "label": "Google Site Verification"
             }
         },
-        "image": {
-            "type": "Image",
-            "fieldset": "Image",
+
+        "appName": {
+            "type": "Text",
+            "fieldset": "App Name",
             "config": {
-                "placeholder": "Add image..."
+                "label": "App Name"
             }
         },
-        "touchicon": {
+        "appLogo": {
             "type": "Image",
-            "fieldset": "Touch Icon",
+            "fieldset": "Logo Image ( can be svg )",
             "config": {
-                "placeholder": "Add image..."
+                "placeholder": "Logo Image ( can be svg )"
             }
         },
-        "favicon": {
+        "appImage": {
             "type": "Image",
-            "fieldset": "Favicon",
+            "fieldset": "OG Image ( jpg or png )",
             "config": {
-                "placeholder": "Add image..."
+                "placeholder": "OG Image ( jpg or png )"
+            }
+        },
+        "appFavicon": {
+            "type": "Image",
+            "fieldset": "Favicon Image ( ico )",
+            "config": {
+                "placeholder": "Favicon Image ( ico )"
+            }
+        },
+
+        "appIOSIcon180x180": {
+            "type": "Image",
+            "fieldset": "apple-icon-180x180 ( png )",
+            "config": {
+                "placeholder": "apple-icon-180x180 ( png )"
+            }
+        },
+        "appIOSIcon152x152": {
+            "type": "Image",
+            "fieldset": "apple-icon-152x152 ( png )",
+            "config": {
+                "placeholder": "apple-icon-152x152 ( png )"
+            }
+        },
+        "appIOSIcon144x144": {
+            "type": "Image",
+            "fieldset": "apple-icon-144x144 ( png )",
+            "config": {
+                "placeholder": "apple-icon-144x144 ( png )"
+            }
+        },
+        "appIOSIcon120x120": {
+            "type": "Image",
+            "fieldset": "apple-icon-120x120 ( png )",
+            "config": {
+                "placeholder": "apple-icon-120x120 ( png )"
+            }
+        },
+        "appIOSIcon114x114": {
+            "type": "Image",
+            "fieldset": "apple-icon-114x114 ( png )",
+            "config": {
+                "placeholder": "apple-icon-114x114 ( png )"
+            }
+        },
+        "appIOSIcon76x76": {
+            "type": "Image",
+            "fieldset": "apple-icon-76x76 ( png )",
+            "config": {
+                "placeholder": "apple-icon-76x76 ( png )"
+            }
+        },
+        "appIOSIcon72x72": {
+            "type": "Image",
+            "fieldset": "apple-icon-72x72 ( png )",
+            "config": {
+                "placeholder": "apple-icon-72x72 ( png )"
+            }
+        },
+        "appIOSIcon60x60": {
+            "type": "Image",
+            "fieldset": "apple-icon-60x60 ( png )",
+            "config": {
+                "placeholder": "apple-icon-60x60 ( png )"
+            }
+        },
+        "appIOSIcon57x57": {
+            "type": "Image",
+            "fieldset": "apple-icon-57x57 ( png )",
+            "config": {
+                "placeholder": "apple-icon-57x57 ( png )"
+            }
+        },
+
+        "appIcon192x192": {
+            "type": "Image",
+            "fieldset": "favicon-192x192 ( png )",
+            "config": {
+                "placeholder": "favicon-192x192 ( png )"
+            }
+        },
+        "appIcon96x96": {
+            "type": "Image",
+            "fieldset": "favicon-96x96 ( png )",
+            "config": {
+                "placeholder": "favicon-96x96 ( png )"
+            }
+        },
+        "appIcon32x32": {
+            "type": "Image",
+            "fieldset": "favicon-32x32 ( png )",
+            "config": {
+                "placeholder": "favicon-32x32 ( png )"
+            }
+        },
+        "appIcon16x16": {
+            "type": "Image",
+            "fieldset": "favicon-16x16 ( png )",
+            "config": {
+                "placeholder": "favicon-16x16 ( png )"
+            }
+        },
+
+        "appMSTileColor": {
+            "type": "Color",
+            "fieldset": "msapplication-TileColor",
+            "config": {
+                "label": "msapplication-TileColor"
+            }
+        },
+        "appMSIcon310x310": {
+            "type": "Image",
+            "fieldset": "msapp-icon-310x310logo ( png )",
+            "config": {
+                "placeholder": "msapp-icon-310x310logo ( png )"
+            }
+        },
+        "appMSIcon310x150": {
+            "type": "Image",
+            "fieldset": "msa-icon-310x150logo ( png )",
+            "config": {
+                "placeholder": "msa-icon-310x150logo ( png )"
+            }
+        },
+        "appMSIcon150x150": {
+            "type": "Image",
+            "fieldset": "msapp-icon-150x150logo ( png )",
+            "config": {
+                "placeholder": "msapp-icon-150x150logo ( png )"
+            }
+        },
+        "appMSIcon70x70": {
+            "type": "Image",
+            "fieldset": "msapp-icon-70x70logo ( png )",
+            "config": {
+                "placeholder": "msapp-icon-70x70logo ( png )"
             }
         }
     }

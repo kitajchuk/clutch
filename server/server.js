@@ -12,10 +12,14 @@ const expressApp = express();
 const compression = require( "compression" );
 const consolidate = require( "consolidate" );
 const expressPort = 8000;
-const apiAccess = "[PRISMIC_API_ENDPOINT]";
+const apiAccess = "https://kitajchuk-template-prismic.cdn.prismic.io/api";
 const layout = path.join( __dirname, "../template/index.html" );
 const partials = path.join( __dirname, "../template", "partials" );
 const cache = {};
+const tpl = {
+    "module": "ejs",
+    "require": require( "ejs" )
+};
 
 
 
@@ -24,7 +28,7 @@ const cache = {};
  * Mustache adapter for templating.
  *
  */
-consolidate.requires.ejs = require( "ejs" );
+consolidate.requires[ tpl.module ] = tpl.require;
 
 
 
@@ -87,7 +91,7 @@ const getSite = function ( req, res ) {
         // Maintain an updated global `site` reference
         cache.site = data.site;
 
-        consolidate.ejs( layout, data )
+        consolidate[ tpl.module ]( layout, data )
             .then(function ( html ) {
                 res.send( html );
             })
@@ -109,7 +113,7 @@ const getPartial = function ( params, query, data ) {
         const template = (query.template || params.type);
         const jsonData = { site: cache.site, data: data };
 
-        consolidate.ejs( path.join( partials, `${template}.html` ), jsonData )
+        consolidate[ tpl.module ]( path.join( partials, `${template}.html` ), jsonData )
             .then(function ( html ) {
                 resolve( html );
             })

@@ -3,7 +3,7 @@
 *******************************************************************************/
 .animate {
     opacity: 0;
-    transition: opacity 1200ms $ease-three;
+    transition: opacity $base-duration $ease-three;
 
     &.is-animate {
         opacity: 1;
@@ -13,8 +13,3 @@
         transition-duration: 0ms;
         }
 }
-.animate--lift {
-    transform: translate3d( 0, $expander-two, 0 );
-    transition: opacity $long-duration $ease,
-                transform $long-duration $ease;
-    }

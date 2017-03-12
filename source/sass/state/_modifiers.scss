@@ -15,12 +15,7 @@
     padding-left: $expander-one;
     padding-right: $expander-one;
     }
-.-wrap-dub {
-    padding-left: $expander-dub;
-    padding-right: $expander-dub;
-    }
-.-wrap-copy,
-.-wrap-block {
+.-wrap-copy {
     display: inline-block;
     width: 100%;
     }
@@ -79,6 +74,9 @@
     }
 .-text--left {
     text-align: left;
+    }
+.-dark {
+    color: $black;
     }
 .-light {
     color: $white;

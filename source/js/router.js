@@ -1,6 +1,7 @@
 import * as core from "./core";
 import PageController from "properjs-pagecontroller";
-import paramalama from "paramalama";
+import ImageController from "./class/ImageController";
+// import AnimateController from "./class/AnimateController";
 
 
 /**
@@ -84,35 +85,6 @@ const router = {
     /**
      *
      * @public
-     * @method route
-     * @param {string} path The uri to route to
-     * @memberof router
-     * @description Trigger app to route a specific page. [Reference]{@link https://github.com/ProperJS/Router/blob/master/Router.js#L222}
-     *
-     */
-    route ( path ) {
-        this.controller.getRouter().trigger( path );
-    },
-
-
-    /**
-     *
-     * @public
-     * @method push
-     * @param {string} path The uri to route to
-     * @param {function} cb Optional callback to fire
-     * @memberof router
-     * @description Trigger a silent route with a supplied callback.
-     *
-     */
-    push ( path, cb ) {
-        this.controller.routeSilently( path, (cb || core.util.noop) );
-    },
-
-
-    /**
-     *
-     * @public
      * @method bindEmptyHashLinks
      * @memberof router
      * @description Suppress #hash links.
@@ -120,28 +92,6 @@ const router = {
      */
     bindEmptyHashLinks () {
         core.dom.body.on( "click", "[href^='#']", ( e ) => e.preventDefault() );
-    },
-
-
-    /**
-     *
-     * @public
-     * @method setRoot
-     * @param {string} url The new root URL
-     * @memberof router
-     * @description Update document root...
-     *
-     */
-    setRoot ( url ) {
-        const query = paramalama( window.location.search );
-
-        this.root = url;
-
-        if ( query.tag ) {
-            this.root += `?tag=${query.tag}`;
-        }
-
-        core.dom.roots.attr( "href", this.root );
     },
 
 
@@ -156,6 +106,7 @@ const router = {
      */
     initPage ( data ) {
         this.viewChange( data );
+        this.execControllers();
     },
 
 
@@ -204,6 +155,8 @@ const router = {
             core.emitter.fire( "app--view-teardown" );
 
         }, 0 );
+
+        this.destroyControllers();
     },
 
 
@@ -218,6 +171,8 @@ const router = {
      */
     changeContent ( data ) {
         this.viewChange( data );
+
+        this.execControllers();
     },
 
 
@@ -232,6 +187,34 @@ const router = {
      */
     changePageIn ( /* data */ ) {
         core.emitter.fire( "app--analytics-pageview" );
+    },
+
+
+    execControllers () {
+        // this.anims = core.dom.main.find( core.config.animSelector );
+        this.images = core.dom.main.find( core.config.lazyImageSelector );
+
+        this.imageController = new ImageController( this.images );
+        this.imageController.on( "preloaded", () => {
+            // if ( this.anims.length ) {
+            //     this.animController = new AnimateController( this.anims );
+            // }
+
+            core.emitter.fire( "app--intro-teardown" );
+        });
+    },
+
+
+    destroyControllers () {
+        if ( this.imageController ) {
+            this.imageController.destroy();
+            this.imageController = null;
+        }
+
+        // if ( this.animController ) {
+        //     this.animController.destroy();
+        //     this.animController = null;
+        // }
     }
 };
 

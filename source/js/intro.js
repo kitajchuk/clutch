@@ -19,17 +19,20 @@ const intro = {
      *
      */
     init () {
-        this.header = core.dom.header;
-
         core.emitter.on( "app--intro-teardown", this.teardown.bind( this ) );
     },
 
 
     teardown () {
         setTimeout( () => {
-            this.header.removeClass( "is-hylian" );
+            core.dom.intro.removeClass( "is-active" );
 
         }, 1000 );
+
+        setTimeout( () => {
+            core.dom.intro.remove();
+
+        }, 2000 );
     }
 };
 

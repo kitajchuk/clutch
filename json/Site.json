@@ -66,9 +66,9 @@
         },
         "appFavicon": {
             "type": "Image",
-            "fieldset": "Favicon Image ( ico )",
+            "fieldset": "Favicon Image ( png )",
             "config": {
-                "placeholder": "Favicon Image ( ico )"
+                "placeholder": "Favicon Image ( png )"
             }
         },
 

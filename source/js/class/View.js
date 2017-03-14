@@ -4,23 +4,6 @@ import AnimateController from "./AnimateController";
 import ImageController from "./ImageController";
 
 
-// Normalize document.data property names
-const _props = function ( doc ) {
-    let key = null;
-    const obj = {};
-
-    for ( key in doc.data ) {
-        if ( doc.data.hasOwnProperty( key ) ) {
-            obj[ key.replace( `${doc.type}.`, "" ) ] = doc.data[ key ];
-        }
-    }
-
-    doc.data = obj;
-
-    return doc;
-};
-
-
 /**
  *
  * @public
@@ -56,7 +39,6 @@ class View {
     init () {
         this.load().then( ( response ) => {
             this.response = response;
-            this.process( this.response );
             this.render();
             this.exec();
             this.done();
@@ -95,7 +77,6 @@ class View {
 
         this.load().then( ( response ) => {
             this.response = response;
-            this.process( this.response );
             this.done();
         });
     }
@@ -116,29 +97,10 @@ class View {
             dataType: "html",
             method: "GET",
             data: {
-                format: "html"
+                format: "html",
+                template: this.id
             }
         });
-    }
-
-
-    /**
-     *
-     * @instance
-     * @description Process response data for view
-     * @memberof View
-     * @method process
-     * @param {object} res The response object
-     *
-     */
-    process ( res ) {
-        /* @data
-            {
-                document,
-                documents
-            }
-        */
-        this.data = this.props( res );
     }
 
 
@@ -152,33 +114,6 @@ class View {
      */
     render () {
         this.element[ 0 ].innerHTML = this.response;
-    }
-
-
-    /**
-     *
-     * @instance
-     * @description Cleanup data props for mustache
-     * @memberof View
-     * @method props
-     * @param {object} data The response object
-     * @returns {object}
-     *
-     */
-    props ( data ) {
-        if ( data.documents ) {
-            data.documents.forEach(( doc ) => {
-                doc = _props( doc );
-
-                return doc;
-            });
-        }
-
-        if ( data.document ) {
-            data.document = _props( data.document );
-        }
-
-        return data;
     }
 
 

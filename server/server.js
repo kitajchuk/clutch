@@ -51,22 +51,23 @@ const isProduction = function () {
 const getData = function ( type ) {
     return new Promise(function ( resolve, reject ) {
         prismic.api( apiAccess, undefined ).then(function ( api ) {
-            var query = [prismic.Predicates.at( "document.type", type )];
+            const query = [prismic.Predicates.at( "document.type", type )];
+            const done = function ( json ) {
+                resolve( json.results );
+            };
+            const fail = function ( error ) {
+                reject( error );
+            };
 
             // Custom querying can be done here...
 
             // How to use an `active` field for querying
-            // query.push( prismic.Predicates.has( "my.[type].active" ) );
+            // query.push( prismic.Predicates.has( `my.${type}.active` ) );
 
             // How to use an `order` field for ordering
-            // query.push( prismic.Predicates.orderings( "my.[type].order" ) );
+            // api.form( "everything" ).ref( api.master() ).query( query ).orderings( `[my.${type}.order]` ).submit().then( done ).catch( fail );
 
-            api.query( query ).then(function ( json ) {
-                resolve( json.results );
-
-            }).catch(function ( error ) {
-                reject( error );
-            });
+            api.form( "everything" ).ref( api.master() ).query( query ).submit().then( done ).catch( fail );
         });
     });
 };

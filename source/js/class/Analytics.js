@@ -29,7 +29,7 @@ class Analytics {
 
             emitter.on( "app--analytics-pageview", this.track.bind( this ) );
 
-            log( "Analytics initialized", this );
+            log( "[Analytics initialized]" );
 
             _instance = this;
         }

@@ -11,16 +11,46 @@ import View from "./class/View";
  */
 const views = {
     init () {
+        core.log( "[PageController::views initialized]" );
+    },
+
+
+    setup () {
         this.views = {};
-        this.elements = core.dom.views;
+        this.elements = core.dom.main.find( ".js-view" );
+    },
+
+
+    onload () {
+        core.log( "[PageController::views onload]" );
 
         this.elements.forEach(( element, i ) => {
-            this.initView( this.elements.eq( i ) );
+            this.loadView( this.elements.eq( i ) );
         });
     },
 
 
-    initView ( element ) {
+    unload () {
+        core.log( "[PageController::views unload]" );
+
+        this.teardown();
+    },
+
+
+    teardown () {
+        this.views = {};
+        this.elements = null;
+    },
+
+
+    isActive () {
+        this.setup();
+
+        return (this.elements.length > 0);
+    },
+
+
+    loadView ( element ) {
         const data = element.data();
 
         this.views[ data.uid ] = new View({

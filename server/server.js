@@ -68,33 +68,35 @@ const getData = function ( type ) {
                 reject( error );
             };
 
-            // Custom querying can be done here...
+            // form
+            const form = api.form( (api.data.forms[ type ] ? type : "everything") );
 
-            // Example use of `active` field for querying
-            // api.query( [prismic.Predicates.has( `my.${type}.active` )] )
+            // ref
+            form.ref( api.master() );
 
-            // Example use of `order` field for ordering
-            // api.orderings( `[my.${type}.order]` )
-
-            // Prismic Collections
-            if ( api.data.forms[ type ] ) {
-                api.form( type )
-                    .ref( api.master() )
-                    .submit()
-                    .then( done )
-                    .catch( fail );
-
-            // Prismic Custom Types
-            } else {
+            if ( !api.data.forms[ type ] ) {
                 query.push( prismic.Predicates.at( "document.type", type ) );
-
-                api.form( "everything" )
-                    .ref( api.master() )
-                    .query( query )
-                    .submit()
-                    .then( done )
-                    .catch( fail );
             }
+
+            // Custom querying can be done here...
+            // Example use of `active` field for querying
+            // if ( type === "${sometype}" ) {
+            //     query.push( prismic.Predicates.has( `my.${type}.active` ) );
+            // }
+
+            // query
+            if ( query.length ) {
+                form.query( query );
+            }
+
+            // Custom ordering can be done here...
+            // Example use of `order` field for ordering
+            // if ( type === "${sometype}" ) {
+            //     form.orderings( `[my.${type}.order]` );
+            // }
+
+            // submit
+            form.submit().then( done ).catch( fail );
         });
     });
 };

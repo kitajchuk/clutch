@@ -1,6 +1,5 @@
 import $ from "properjs-hobo";
 import * as core from "../core";
-import AnimateController from "./AnimateController";
 import ImageController from "./ImageController";
 
 
@@ -126,15 +125,10 @@ class View {
      *
      */
     exec () {
-        this.anims = this.element.find( core.config.animSelector );
         this.images = this.element.find( core.config.lazyImageSelector );
 
         this.imageController = new ImageController( this.images );
         this.imageController.on( "preloaded", () => {
-            if ( this.anims.length ) {
-                this.animController = new AnimateController( this.anims );
-            }
-
             core.emitter.fire( "app--intro-teardown" );
         });
     }
@@ -152,11 +146,6 @@ class View {
         if ( this.imageController ) {
             this.imageController.destroy();
             this.imageController = null;
-        }
-
-        if ( this.animController ) {
-            this.animController.destroy();
-            this.animController = null;
         }
     }
 }

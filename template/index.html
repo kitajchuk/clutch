@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="is-<%= locals.page %>-page">
     <head>
         <meta charset="utf-8" />
-        <title><%= locals.site.data[ 'site.title' ].value %></title>
+        <title><%= locals.site.data[ 'site.title' ] ? locals.site.data[ 'site.title' ].value : '' %></title>
         <meta name="description" content="<%= locals.site.data[ 'site.description' ] ? locals.site.data[ 'site.description' ].value : '' %>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="google-site-verification" content="<%= locals.site.data[ 'site.googleVerify' ] ? locals.site.data[ 'site.googleVerify' ].value : '' %>" />
@@ -44,12 +44,22 @@
         <meta itemprop="thumbnailUrl" content="<%= locals.site.data[ 'site.appImage' ] ? locals.site.data[ 'site.appImage' ].value.main.url : '' %>" />
         <meta itemprop="image" content="<%= locals.site.data[ 'site.appImage' ] ? locals.site.data[ 'site.appImage' ].value.main.url : '' %>" />
 
-        <link href="<%= locals.stylesheet %>" rel="stylesheet" />
+        <link href="<%= locals.stylesheet + '?v=' + locals.timestamp %>" rel="stylesheet" />
     </head>
     <body class="-fzero">
         <header class="header js-header"></header>
-        <nav class="navi js-navi"></nav>
-        <main class="main js-main"></main>
+        <nav class="navi js-navi -wrap -exp">
+            <a class="h2" href="/">Home</a>
+            <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a class="h2" href="/items/">Items</a>
+            <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a class="h2" href="/foo/">Foo</a>
+            <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a class="h2" href="/bar/">Bar</a>
+        </nav>
+        <main class="main js-main">
+            <%- include( locals.template ) %>
+        </main>
         <footer class="footer js-footer"></footer>
         <div class="intro js-intro screen ghost -wrap -text--center is-active">
             <div class="ghost__child">
@@ -57,6 +67,6 @@
             </div>
         </div>
         <script>window.APP_CONFIG = { googleUA: "<%= locals.site.data[ 'site.googleUA' ] ? locals.site.data[ 'site.googleUA' ].value : '' %>" };</script>
-        <script src="<%= locals.javascript %>"></script>
+        <script src="<%= locals.javascript + '?v=' + locals.timestamp %>"></script>
     </body>
 </html>

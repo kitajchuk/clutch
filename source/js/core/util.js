@@ -9,7 +9,7 @@
 import $ from "properjs-hobo";
 import ImageLoader from "properjs-imageloader";
 import config from "./config";
-import emitter from "./emitter";
+import detect from "./detect";
 
 
 /**
@@ -74,7 +74,6 @@ const loadImages = function ( images, handler ) {
     images = (images || $( config.lazyImageSelector ));
 
     // Hook here to determine image variant sizes to load ?
-    emitter.fire( "app--util--load-images", images );
 
     return new ImageLoader({
         elements: images,
@@ -94,31 +93,6 @@ const loadImages = function ( images, handler ) {
  */
 const noop = function () {
     return true;
-};
-
-
-/**
- *
- * @public
- * @method sortByOrder
- * @memberof util
- * @param {object} objA The left object
- * @param {object} objB The right object
- * @description Use with a collection array as executor func for [].sort()
- * @returns {number}
- *
- */
-const sortByOrder = function ( objA, objB ) {
-    let ret = 0;
-
-    if ( objA.data.order.value < objB.data.order.value ) {
-        ret = -1;
-
-    } else {
-        ret = 1;
-    }
-
-    return ret;
 };
 
 
@@ -148,18 +122,42 @@ const getElementsInView = function ( $nodes, executor ) {
 };
 
 
+/**
+ *
+ * @description Get the applied transition duration from CSS
+ * @method getTransitionDuration
+ * @param {object} el The DOMElement
+ * @memberof util
+ * @returns {number}
+ *
+ */
+const getTransitionDuration = function ( el ) {
+    let ret = 0;
+    let duration = null;
+    let isSeconds = false;
+    let multiplyBy = 1000;
+
+    if ( el ) {
+        duration = getComputedStyle( el )[ detect.getPrefixed( "transition-duration" ) ];
+        isSeconds = duration.indexOf( "ms" ) === -1;
+        multiplyBy = isSeconds ? 1000 : 1;
+
+        ret = parseFloat( duration ) * multiplyBy;
+    }
+
+    return ret;
+};
+
+
 
 /******************************************************************************
  * Export
 *******************************************************************************/
 export {
-    // Loading
+    noop,
     loadImages,
     isElementLoadable,
     isElementVisible,
     getElementsInView,
-
-    // Random
-    noop,
-    sortByOrder
+    getTransitionDuration
 };

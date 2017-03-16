@@ -1,29 +1,37 @@
 /******************************************************************************
  * Display
 *******************************************************************************/
+.-exp-2 {
+    padding-bottom: $expander-two;
+    padding-top: $expander-two;
+    }
+.-exp-1 {
+    padding-bottom: $expander-one;
+    padding-top: $expander-one;
+    }
 .-exp {
-    padding-bottom: $expander-two;
-    padding-top: $expander-two;
-    }
-.-exp-t {
-    padding-top: $expander-two;
-    }
-.-exp-b {
-    padding-bottom: $expander-two;
+    padding-bottom: $expander-mobile;
+    padding-top: $expander-mobile;
     }
 .-wrap {
     padding-left: $expander-one;
     padding-right: $expander-one;
-    }
-.-wrap-copy {
-    display: inline-block;
-    width: 100%;
     }
 .-wrap-l {
     padding-left: $expander-one;
     }
 .-wrap-r {
     padding-right: $expander-one;
+    }
+.-wrap-t {
+    padding-top: $expander-one;
+    }
+.-wrap-b {
+    padding-bottom: $expander-one;
+    }
+.-wrap-copy {
+    display: inline-block;
+    width: 100%;
     }
 .-vtop {
     vertical-align: top;
@@ -36,6 +44,9 @@
     }
 .-tall {
     height: 100%;
+    }
+.-block {
+    display: block;
     }
 
 

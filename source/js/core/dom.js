@@ -1,4 +1,5 @@
 import $ from "properjs-hobo";
+import config from "./config";
 
 
 /**
@@ -46,34 +47,12 @@ const dom = {
     /**
      *
      * @public
-     * @member header
-     * @memberof core.dom
-     * @description The cached <header> node.
-     *
-     */
-    header: $( ".js-header" ),
-
-
-    /**
-     *
-     * @public
-     * @member footer
-     * @memberof core.dom
-     * @description The cached <footer> node.
-     *
-     */
-    footer: $( ".js-footer" ),
-
-
-    /**
-     *
-     * @public
      * @member views
      * @memberof core.dom
      * @description The cached view nodes.
      *
      */
-    views: $( ".js-view" ),
+    views: $( config.viewSelector ),
 
 
     /**
@@ -84,7 +63,7 @@ const dom = {
      * @description The cached intro node.
      *
      */
-    intro: $( ".js-intro" ),
+    intro: $( config.introSelector ),
 
 
     /**
@@ -95,7 +74,7 @@ const dom = {
      * @description The cached main node.
      *
      */
-    main: $( ".js-main" ),
+    main: $( config.mainSelector ),
 
 
     /**
@@ -106,7 +85,7 @@ const dom = {
      * @description The cached <nav> nodes.
      *
      */
-    navi: $( ".js-navi" )
+    navi: $( config.naviSelector )
 };
 
 

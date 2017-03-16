@@ -57,6 +57,50 @@ const config = {
     /**
      *
      * @public
+     * @member mainSelector
+     * @memberof core.config
+     * @description The string selector used for <main> node.
+     *
+     */
+    mainSelector: ".js-main",
+
+
+    /**
+     *
+     * @public
+     * @member introSelector
+     * @memberof core.config
+     * @description The string selector used for <intro> node.
+     *
+     */
+    introSelector: ".js-intro",
+
+
+    /**
+     *
+     * @public
+     * @member viewSelector
+     * @memberof core.config
+     * @description The string selector used for <view> nodes.
+     *
+     */
+    viewSelector: ".js-view",
+
+
+    /**
+     *
+     * @public
+     * @member naviSelector
+     * @memberof core.config
+     * @description The string selector used for <navi> node.
+     *
+     */
+    naviSelector: ".js-navi",
+
+
+    /**
+     *
+     * @public
      * @member lazyImageSelector
      * @memberof core.config
      * @description The string selector used for images deemed lazy-loadable.

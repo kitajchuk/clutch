@@ -1,7 +1,8 @@
 require( "../sass/screen.scss" );
 
 
-import router from "./router";
+// import router from "./router-views";
+import router from "./router-pages";
 import * as core from "./core";
 import views from "./views";
 import intro from "./intro";
@@ -18,9 +19,10 @@ import Analytics from "./class/Analytics";
 class App {
     constructor () {
         this.core = core;
-        this.router = router;
         this.views = views;
         this.intro = intro;
+        // this.router = router;
+        this.router = router;
 
         this.initModules();
     }
@@ -38,15 +40,15 @@ class App {
     initModules () {
         // Core
         this.core.detect.init();
-        this.core.resizes.init();
 
-        // Utility?
+        // Utility ?
 
         // Views
         this.views.init();
         this.intro.init();
 
         // Controller
+        // this.router.init();
         this.router.init();
 
         // Analytics

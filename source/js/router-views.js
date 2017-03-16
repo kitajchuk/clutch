@@ -1,7 +1,5 @@
 import * as core from "./core";
 import PageController from "properjs-pagecontroller";
-import ImageController from "./class/ImageController";
-// import AnimateController from "./class/AnimateController";
 
 
 /**
@@ -124,7 +122,7 @@ const router = {
             core.dom.html.removeClass( `is-${this.view}-page` );
         }
 
-        this.view = (data.request.params.view || "root");
+        this.view = (data.request.params.view || "home");
 
         if ( this.page ) {
             this.page.removeClass( "is-active" );
@@ -155,8 +153,6 @@ const router = {
             core.emitter.fire( "app--view-teardown" );
 
         }, 0 );
-
-        this.destroyControllers();
     },
 
 
@@ -171,8 +167,6 @@ const router = {
      */
     changeContent ( data ) {
         this.viewChange( data );
-
-        this.execControllers();
     },
 
 
@@ -187,34 +181,6 @@ const router = {
      */
     changePageIn ( /* data */ ) {
         core.emitter.fire( "app--analytics-pageview" );
-    },
-
-
-    execControllers () {
-        // this.anims = core.dom.main.find( core.config.animSelector );
-        this.images = core.dom.main.find( core.config.lazyImageSelector );
-
-        this.imageController = new ImageController( this.images );
-        this.imageController.on( "preloaded", () => {
-            // if ( this.anims.length ) {
-            //     this.animController = new AnimateController( this.anims );
-            // }
-
-            core.emitter.fire( "app--intro-teardown" );
-        });
-    },
-
-
-    destroyControllers () {
-        if ( this.imageController ) {
-            this.imageController.destroy();
-            this.imageController = null;
-        }
-
-        // if ( this.animController ) {
-        //     this.animController.destroy();
-        //     this.animController = null;
-        // }
     }
 };
 

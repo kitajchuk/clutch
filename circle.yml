@@ -17,7 +17,7 @@ dependencies:
         - npm update properjs-hobo
         - npm install
         - npm rebuild node-sass
-        - npm run bulid
+        - npm run build
 
 test:
     override:

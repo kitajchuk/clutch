@@ -27,6 +27,12 @@ Also, [this repository](https://github.com/kitajchuk/kitajchuk-www) has some sma
 
 #### Endpoints
 
+##### Previews
+Prismic has built-in preview functionality for un-published content out of the box. This Express server supports previews using Prismic's `previewSession` cookie. You can click the `preview` icon from the writing room editor in Prismic and view un-published content. This assumes you have correctly setup your preview sites within your repository settings. These are useful links for referencing Prismic preview sites information.
+
+* [Previews docs](https://prismic.io/docs/in-website-preview#?lang=javascript)
+* [Previews blog](https://prismic.io/blog/preview-content-changes-in-your-website)
+
 ##### Pages
 There are two main ways to request data from the server. The first is by standard URI structure. This loads templates from the `template/pages` directory. The server is designed to work relatively intelligently with your Prismic data. For instance, say you have a `custom type` called `item`. You can visit `yoursite.com/item` and expect the template located at `template/pages/item.html` to render.
 

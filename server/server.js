@@ -1,3 +1,7 @@
+"use strict";
+
+
+
 /**
  *
  * Clientside Express application server.
@@ -12,6 +16,7 @@ const express = require( "express" );
 const expressApp = express();
 const compression = require( "compression" );
 const consolidate = require( "consolidate" );
+const cookieParser = require( "cookie-parser" );
 const expressPort = 8000;
 const apiAccess = "https://kitajchuk-template-prismic.cdn.prismic.io/api";
 const apiToken = null;
@@ -49,10 +54,27 @@ const isProduction = function () {
 
 /**
  *
+ * Get valid `ref` for Prismic API data.
+ *
+ */
+const getRef = function ( req, api ) {
+    let ref = api.master();
+
+    if ( req && req.cookies && req.cookies[ prismic.previewCookie ] ) {
+        ref = req.cookies[ prismic.previewCookie ];
+    }
+
+    return ref;
+};
+
+
+
+/**
+ *
  * Get data from Prismic.
  *
  */
-const getData = function ( type ) {
+const getData = function ( type, req ) {
     return new Promise(function ( resolve, reject ) {
         prismic.api( apiAccess, apiToken ).then(function ( api ) {
             const query = [];
@@ -72,7 +94,7 @@ const getData = function ( type ) {
             const form = api.form( (api.data.forms[ type ] ? type : "everything") );
 
             // ref
-            form.ref( api.master() );
+            form.ref( getRef( req, api ) );
 
             if ( !api.data.forms[ type ] ) {
                 query.push( prismic.Predicates.at( "document.type", type ) );
@@ -97,6 +119,32 @@ const getData = function ( type ) {
 
             // submit
             form.submit().then( done ).catch( fail );
+        });
+    });
+};
+
+
+
+/**
+ *
+ * Handle preview URLs from Prismic for draft content.
+ *
+ */
+const getPreview = function ( req, res ) {
+    const previewToken = req.query.token;
+    const linkResolver = function ( doc ) {
+        return `/${doc.type}/${doc.uid}/`;
+    };
+
+    prismic.api( apiAccess, apiToken ).then(function ( api ) {
+        api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
+            res.cookie( prismic.previewCookie, previewToken, {
+                maxAge: 60 * 30 * 1000,
+                path: "/",
+                httpOnly: false
+            });
+
+            res.redirect( redirectUrl );
         });
     });
 };
@@ -167,7 +215,7 @@ const getSite = function ( req, res ) {
             });
     };
 
-    getData( "site" ).then(function ( json ) {
+    getData( "site", req ).then(function ( json ) {
         // New Site reference each time
         cache.site = json[ 0 ];
 
@@ -180,7 +228,7 @@ const getSite = function ( req, res ) {
 
         // Check for :path so we get can query for Prismic data
         } else if ( req.params.path ) {
-            getData( req.params.path )
+            getData( req.params.path, req )
                 .then( check )
                 .catch( fail );
 
@@ -229,7 +277,7 @@ const getPartial = function ( params, query, data ) {
  *
  */
 const getApi = function ( req, res ) {
-    getData( req.params.type, req.params.uid ).then(function ( json ) {
+    getData( req.params.type ).then(function ( json ) {
         const data = json.length > 1 ? { documents: json } : { document: json[ 0 ] };
 
         if ( req.query.format === "html" ) {
@@ -250,13 +298,14 @@ const getApi = function ( req, res ) {
  * Configure Express.
  *
  */
- expressApp.use( compression({
-     threshold: 0
- }));
- expressApp.use( express.static( path.join( __dirname, "../static" ), {
-     // One day
-     maxAge: 86400000
- }));
+expressApp.use( cookieParser() );
+expressApp.use( compression({
+    threshold: 0
+}));
+expressApp.use( express.static( path.join( __dirname, "../static" ), {
+    // One day
+    maxAge: 86400000
+}));
 
 
 
@@ -267,6 +316,7 @@ const getApi = function ( req, res ) {
  */
 expressApp.get( "/api/:type", getApi );
 expressApp.get( "/api/:type/:uid", getApi );
+expressApp.get( "/preview", getPreview );
 expressApp.get( "/", getSite );
 expressApp.get( "/:path", getSite );
 expressApp.get( "/:path/:uid", getSite );

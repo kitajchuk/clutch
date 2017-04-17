@@ -6,7 +6,6 @@ const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );
 const execSync = require( "child_process" ).execSync;
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
-const WebpackOnBuildPlugin = require( "on-build-webpack" );
 
 
 
@@ -25,10 +24,6 @@ module.exports = {
             options: {
                 postcss: [autoprefixer( { browsers: ["last 2 versions"] } )]
             }
-        }),
-        new WebpackOnBuildPlugin(function ( stats ) {
-            execSync( "npm run minjs" );
-            execSync( "npm run mincss" );
         })
     ],
 

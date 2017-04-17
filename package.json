@@ -6,16 +6,16 @@
   "version": "0.1.0",
   "scripts": {
     "start": "echo 'Starting...' && (npm run server & npm run watch)",
-    "watch": "./node_modules/.bin/webpack -d --watch --colors",
-    "build": "./node_modules/.bin/webpack -d --colors",
+    "watch": "./node_modules/.bin/webpack --env=sandbox --hide-modules --colors --watch",
+    "build": "./node_modules/.bin/webpack --env=sandbox --progress --profile --display-modules --colors",
+    "build:staging": "./node_modules/.bin/webpack --env=staging --progress --profile --display-modules --colors",
+    "build:production": "./node_modules/.bin/webpack --env=production --progress --profile --display-modules --colors -p",
     "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/nodemon server/server.js",
-    "minjs": "./node_modules/.bin/uglifyjs static/js/app.js -c -m -o static/js/app.min.js",
-    "mincss": "./node_modules/.bin/csso ./static/css/screen.css ./static/css/screen.min.css",
     "postinstall": "mkdir local ; mkdir template/partials ; touch .notes ; cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not attr filter detach remove append' ; cd ../../server && npm install",
-    "deploy-staging": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]'  --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
-    "deploy-production": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]'  --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
-    "connect-staging": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]",
-    "connect-production": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]"
+    "deploy:staging": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]'  --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
+    "deploy:production": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]'  --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
+    "connect:staging": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]",
+    "connect:production": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.6",
@@ -25,7 +25,6 @@
     "browser-sync": "^2.18.8",
     "browser-sync-webpack-plugin": "^1.1.4",
     "css-loader": "^0.26.2",
-    "csso": "^2.3.1",
     "ejs-lint": "^0.2.0",
     "eslint": "^3.17.0",
     "eslint-loader": "^1.6.3",
@@ -35,7 +34,6 @@
     "hammerjs": "^2.0.8",
     "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
-    "on-build-webpack": "^0.1.0",
     "paramalama": "~0.2",
     "postcss": "^5.2.15",
     "postcss-cssnext": "^2.9.0",
@@ -56,7 +54,6 @@
     "properjs-throttle": "^0.3.0",
     "properjs-tween": "~0.2",
     "sass-loader": "^6.0.2",
-    "uglifyjs": "^2.4.10",
     "webpack": "^2.2.1"
   },
   "repository": {

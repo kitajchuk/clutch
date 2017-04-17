@@ -17,7 +17,6 @@ dependencies:
         - npm update properjs-hobo
         - npm install
         - npm rebuild node-sass
-        - npm run build
 
 test:
     override:
@@ -27,8 +26,10 @@ deployment:
     staging:
         branch: dev
         commands:
+            - npm run build:staging
             - make -f Circlefile deploy_staging
     production:
         branch: master
         commands:
+            - npm run build:production
             - make -f Circlefile deploy_production

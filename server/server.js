@@ -43,17 +43,6 @@ consolidate.requires[ tpl.module ] = tpl.require;
 
 /**
  *
- * Determine production environment.
- *
- */
-const isProduction = function () {
-    return (process.env.NODE_ENV === "production");
-};
-
-
-
-/**
- *
  * Get valid `ref` for Prismic API data.
  *
  */
@@ -79,6 +68,9 @@ const getData = function ( type, req ) {
         prismic.api( apiAccess, apiToken ).then(function ( api ) {
             const query = [];
             const done = function ( json ) {
+                // Question:
+                // A `single` type should return a pure `result` {object}
+                // A `repeatable` type should return a `results` [array]
                 if ( !json.results.length ) {
                     reject( `The page template for "${type}" exists but Prismic has no data for it.` );
 
@@ -166,8 +158,8 @@ const getSite = function ( req, res ) {
         timestamp: timestamp,
         document: null,
         documents: null,
-        stylesheet: (isProduction() ? "/css/screen.min.css" : "/css/screen.css"),
-        javascript: (isProduction() ? "/js/app.min.js" : "/js/app.js")
+        stylesheet: "/css/screen.css",
+        javascript: "/js/app.js"
     };
     const check = function ( json ) {
         // All documents for /:type

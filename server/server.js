@@ -269,7 +269,7 @@ const getPartial = function ( params, query, data ) {
  *
  */
 const getApi = function ( req, res ) {
-    getData( req.params.type ).then(function ( json ) {
+    getData( req.params.type, req ).then(function ( json ) {
         const data = json.length > 1 ? { documents: json } : { document: json[ 0 ] };
 
         if ( req.query.format === "html" ) {

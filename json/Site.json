@@ -9,9 +9,9 @@
         },
         "url": {
             "type": "Text",
-            "fieldset": "URL",
+            "fieldset": "Site URL",
             "config": {
-                "label": "URL"
+                "label": "Site URL"
             }
         },
         "description": {
@@ -42,7 +42,13 @@
                 "label": "Google Site Verification"
             }
         },
-
+        "awsCloudFrontUrl": {
+            "type": "Text",
+            "fieldset": "AWS CloudFront URL",
+            "config": {
+                "label": "AWS CloudFront URL"
+            }
+        },
         "appName": {
             "type": "Text",
             "fieldset": "App Name",

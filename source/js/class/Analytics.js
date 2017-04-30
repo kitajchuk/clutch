@@ -1,11 +1,5 @@
 import log from "../core/log";
 import env from "../core/env";
-import loadJS from "fg-loadjs";
-import emitter from "../core/emitter";
-
-
-// Singleton
-let _instance = null;
 
 
 /**
@@ -19,59 +13,9 @@ let _instance = null;
  */
 class Analytics {
     constructor () {
-        if ( !_instance ) {
-            this.stageUA = "";
-            this.prodUA = window.APP_CONFIG.googleUA;
-            this.GAScript = "//www.google-analytics.com/analytics.js";
-            this.GAUATag = (env.isProd() ? this.prodUA : this.stageUA);
+        emitter.on( "app--analytics-pageview", this.track.bind( this ) );
 
-            this.initGoogleAnalytics();
-
-            emitter.on( "app--analytics-pageview", this.track.bind( this ) );
-
-            log( "[Analytics initialized]" );
-
-            _instance = this;
-        }
-
-        return _instance;
-    }
-
-
-    /**
-     *
-     * @public
-     * @method initGoogleAnalytics
-     * @memberof core.Analytics
-     * @description Build GA interface and load analytics.js.
-     *
-     */
-    initGoogleAnalytics () {
-        if ( _instance ) {
-            return;
-        }
-
-        // Setup GA Interface
-        window.GoogleAnalyticsObject = "ga";
-        window.ga = (window.ga || function () {
-            // Blockers like `Privacy Badger` will blow GA up here
-            // https://www.eff.org/privacybadger
-            try {
-                window.ga.q = (window.ga.q || []).push( arguments );
-
-            } catch ( error ) {
-                log( "warn", "GA Error", error );
-            }
-        });
-        window.ga.l = Number( new Date() );
-
-        // Load GA Javascript
-        loadJS( this.GAScript, () => {
-            log( "Analytics GA loaded" );
-
-            window.ga( "create", this.GAUATag, "auto" );
-            window.ga( "send", "pageview" );
-        });
+        log( "[Analytics initialized]" );
     }
 
 

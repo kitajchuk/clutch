@@ -100,6 +100,11 @@ Here are some useful links for working on AWS Linux boxes.
 * [Node.js setup on EC2](https://codeforgeek.com/2015/05/setup-node-development-environment-amazon-ec2)
 * [Node.js port forwarding](https://gist.github.com/kentbrew/776580)
 
+Here are some useful links for setting up services on AWS.
+* [S3 Buckets](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html)
+* [IAM Users/Groups](http://docs.aws.amazon.com/IAM/latest/UserGuide/getting-setup.html)
+* [CloudFront CDN](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GettingStarted.html)
+
 
 
 ### Github + Circle CI

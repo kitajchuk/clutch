@@ -6,10 +6,11 @@ const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );
 const execSync = require( "child_process" ).execSync;
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
+const CompressionPlugin = require( "compression-webpack-plugin" );
 
 
 
-module.exports = {
+const config = {
     devtool: "source-map",
 
 
@@ -53,4 +54,20 @@ module.exports = {
             { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", "sass-loader"] }
         ]
     }
+};
+
+
+
+module.exports = ( env ) => {
+    if ( env.production ) {
+        config.plugins.push(new CompressionPlugin({
+            asset: "[path]",
+            algorithm: "gzip",
+            test: /\.(js|css)$/,
+            threshold: 0,
+            minRatio: 0.8
+        }));
+    }
+
+    return config;
 };

@@ -29,6 +29,13 @@ const tpl = {
     "module": "ejs",
     "require": require( "ejs" )
 };
+const cdnBaseUrl = "";
+const endJs = "/js/app.js";
+const endCss = "/css/screen.css";
+const staticAssets = {
+    js: process.env.NODE_ENV === "production" ? `${cdnBaseUrl}${endJs}` : endJs,
+    css: process.env.NODE_ENV === "production" ? `${cdnBaseUrl}${endCss}` : endCss
+};
 
 
 
@@ -158,8 +165,8 @@ const getSite = function ( req, res ) {
         timestamp: timestamp,
         document: null,
         documents: null,
-        stylesheet: "/css/screen.css",
-        javascript: "/js/app.js"
+        stylesheet: staticAssets.css,
+        javascript: staticAssets.js
     };
     const check = function ( json ) {
         // All documents for /:type
@@ -292,6 +299,7 @@ const getApi = function ( req, res ) {
  */
 expressApp.use( cookieParser() );
 expressApp.use( compression({
+    level: 9,
     threshold: 0
 }));
 expressApp.use( express.static( path.join( __dirname, "../static" ), {

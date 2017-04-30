@@ -21,8 +21,9 @@ const doSync = function ( key, secret, region, bucket ) {
             Prefix: "static",
             ACL: "public-read",
             Metadata: {
-                "Accept-Encoding": "gzip"
-            }
+                "Content-Encoding": "gzip"
+            },
+            ContentEncoding: "gzip"
         }
     });
 

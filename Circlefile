@@ -69,11 +69,11 @@ CIRCLEFILE_AWS_PRODUCTION_HOST := [EC2_IP_HERE]
 
 deploy_staging:
 		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_STAGING_HOST):$(CIRCLEFILE_AWS_DEST)
-		@node server/s3sync.js --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)"
+		./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
 		@ssh $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_STAGING_HOST) 'cd $(CIRCLEFILE_AWS_DEST)server/ ; sudo npm run stop ; sudo npm install ; sudo npm run start:staging'
 
 
 deploy_production:
 		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_PRODUCTION_HOST):$(CIRCLEFILE_AWS_DEST)
-		@node server/s3sync.js --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)"
+		./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
 		@ssh $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_PRODUCTION_HOST) 'cd $(CIRCLEFILE_AWS_DEST)server/ ; sudo npm run stop ; sudo npm install ; sudo npm run start:production'

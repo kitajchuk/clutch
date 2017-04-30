@@ -82,6 +82,8 @@ There are three node environments for the project.
 
 Once instances are configured on AWS download and add the pem file to `local/[pemfile]` for SSH scripts. Also swap out the placeholder values in the npm scripts — `[PEM_FILE_HERE]`, `[EC2_IP_HERE]` and in the Circlefile — `[EC2_IP_HERE]`.
 
+This template is designed to compress ( gzip ) and deploy the contents of `static` to an S3 bucket attached to a CloudFront CDN. Check the `Circlefile` to understand that implementation. It uses [ProperJS/s3](https://github.com/ProperJS/s3) to perform the static directory sync.
+
 Here are some useful links for working on AWS Linux boxes.
 * [NGINX setup on EC2](https://gist.github.com/dragonjet/270cf0139df45d1b7690)
 * [Node.js setup on EC2](https://codeforgeek.com/2015/05/setup-node-development-environment-amazon-ec2)

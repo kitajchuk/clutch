@@ -5,6 +5,17 @@ kitajchuk-template-prismic
 
 
 
+## TOC
+
+* [Quickstart](#getting-started)
+* [Prismic.io](#prismic)
+* [Express.js](#prismic--express)
+* [AWS](#aws)
+* [Continuous Integration](#github--circle-ci)
+* [Other Resources](#resources)
+
+
+
 ### Getting Started
 
 Download this template and install the packages with `npm install`. To run the project use `npm start`. This boots the Express server on port `8000` and Webpack. A browser-sync proxy server is started in the Webpack pipeline and will run on port `8001`. The project is configured for [Webpack version 2](https://webpack.js.org/guides/migrating) so familiarization there is good.

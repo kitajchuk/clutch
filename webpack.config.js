@@ -58,7 +58,7 @@ const config = {
 
 
 module.exports = ( env ) => {
-    if ( env.production ) {
+    if ( env.staging || env.production ) {
         config.plugins.push(new CompressionPlugin({
             asset: "[path]",
             algorithm: "gzip",

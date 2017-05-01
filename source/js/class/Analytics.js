@@ -1,5 +1,5 @@
 import log from "../core/log";
-import env from "../core/env";
+import emitter from "../core/emitter";
 
 
 /**

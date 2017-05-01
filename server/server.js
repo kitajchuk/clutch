@@ -33,8 +33,9 @@ const cdnBaseUrl = "";
 const endJs = "/js/app.js";
 const endCss = "/css/screen.css";
 const staticAssets = {
-    js: process.env.NODE_ENV === "production" ? `${cdnBaseUrl}${endJs}` : endJs,
-    css: process.env.NODE_ENV === "production" ? `${cdnBaseUrl}${endCss}` : endCss
+    // Serve CDN assets for `staging` and `production`
+    js: process.env.NODE_ENV === "sandbox" ? endJs : `${cdnBaseUrl}${endJs}`,
+    css: process.env.NODE_ENV === "sandbox" ? endCss : `${cdnBaseUrl}${endCss}`
 };
 
 

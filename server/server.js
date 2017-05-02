@@ -11,32 +11,14 @@
  */
 const fs = require( "fs" );
 const path = require( "path" );
+const config = require( "./config" );
 const prismic = require( "prismic.io" );
 const express = require( "express" );
 const expressApp = express();
 const compression = require( "compression" );
 const consolidate = require( "consolidate" );
 const cookieParser = require( "cookie-parser" );
-const expressPort = 8000;
-const apiAccess = "https://kitajchuk-template-prismic.cdn.prismic.io/api";
-const apiToken = null;
-const layout = path.join( __dirname, "../template/index.html" );
-const pagesDir = path.join( __dirname, "../template", "pages" );
-const partialsDir = path.join( __dirname, "../template", "partials" );
-const timestamp = Date.now();
 const cache = {};
-const tpl = {
-    "module": "ejs",
-    "require": require( "ejs" )
-};
-const cdnBaseUrl = "";
-const endJs = "/js/app.js";
-const endCss = "/css/screen.css";
-const staticAssets = {
-    // Serve CDN assets for `staging` and `production`
-    js: process.env.NODE_ENV === "sandbox" ? endJs : `${cdnBaseUrl}${endJs}`,
-    css: process.env.NODE_ENV === "sandbox" ? endCss : `${cdnBaseUrl}${endCss}`
-};
 
 
 
@@ -45,7 +27,7 @@ const staticAssets = {
  * Mustache adapter for templating.
  *
  */
-consolidate.requires[ tpl.module ] = tpl.require;
+consolidate.requires[ config.template.module ] = config.template.require;
 
 
 
@@ -73,7 +55,7 @@ const getRef = function ( req, api ) {
  */
 const getData = function ( type, req ) {
     return new Promise(function ( resolve, reject ) {
-        prismic.api( apiAccess, apiToken ).then(function ( api ) {
+        prismic.api( config.apiAccess, null ).then(function ( api ) {
             const query = [];
             const done = function ( json ) {
                 // Question:
@@ -136,7 +118,7 @@ const getPreview = function ( req, res ) {
         return `/${doc.type}/${doc.uid}/`;
     };
 
-    prismic.api( apiAccess, apiToken ).then(function ( api ) {
+    prismic.api( config.apiAccess, null ).then(function ( api ) {
         api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
             res.cookie( prismic.previewCookie, previewToken, {
                 maxAge: 60 * 30 * 1000,
@@ -163,11 +145,11 @@ const getSite = function ( req, res ) {
         page: page,
         error: null,
         template: `pages/${page}.html`,
-        timestamp: timestamp,
+        timestamp: config.timestamp,
         document: null,
         documents: null,
-        stylesheet: staticAssets.css,
-        javascript: staticAssets.js
+        stylesheet: config.static.css,
+        javascript: config.static.js
     };
     const check = function ( json ) {
         // All documents for /:type
@@ -206,12 +188,12 @@ const getSite = function ( req, res ) {
         render( data );
     };
     const render = function ( json ) {
-        consolidate[ tpl.module ]( layout, json )
+        consolidate[ config.template.module ]( config.template.layout, json )
             .then(function ( html ) {
                 res.send( html );
             })
             .catch(function ( error ) {
-                console.log( "Consolidate", error );
+                console.log( config.logger, error );
             });
     };
 
@@ -259,7 +241,7 @@ const getPartial = function ( params, query, data ) {
             jsonData.documents = data.documents;
         }
 
-        consolidate[ tpl.module ]( path.join( partialsDir, `${template}.html` ), jsonData )
+        consolidate[ config.template.module ]( path.join( config.template.partialsDir, `${template}.html` ), jsonData )
             .then(function ( html ) {
                 resolve( html );
             })
@@ -295,17 +277,35 @@ const getApi = function ( req, res ) {
 
 /**
  *
+ * Fresh look at the `template/pages dir`.
+ *
+ */
+const readPages = function () {
+    return new Promise(( resolve, reject ) => {
+        fs.readdir( config.template.pagesDir, function ( error, files ) {
+            cache.files = files;
+
+            if ( error ) {
+                reject( error );
+
+            } else {
+                resolve( files );
+            }
+        });
+    });
+};
+
+
+
+/**
+ *
  * Configure Express.
  *
  */
 expressApp.use( cookieParser() );
-expressApp.use( compression({
-    level: 9,
-    threshold: 0
-}));
-expressApp.use( express.static( path.join( __dirname, "../static" ), {
-    // One day
-    maxAge: 86400000
+expressApp.use( compression( config.compression ) );
+expressApp.use(express.static( config.template.staticDir, {
+    maxAge: config.static.maxAge
 }));
 
 
@@ -332,13 +332,25 @@ expressApp.get( "/:path/:uid", getSite );
 
 /**
  *
- * Open Express on proper port.
+ * Start the Express {app}.
  *
  */
-fs.readdir( pagesDir, function ( error, files ) {
-    cache.files = files;
+readPages().then(() => {
+    expressApp.listen( config.port );
 
-    expressApp.listen( expressPort );
+    console.log( config.logger, `Express server started` );
+    console.log( config.logger, `Access URL — http://localhost:${config.port}` );
+});
 
-    console.log( `Express server started` );
+
+
+/**
+ *
+ * Watch the `template` dir to update `cache.files`.
+ *
+ */
+fs.watch( config.template.dir, ( event, filename ) => {
+    readPages().then(( files ) => {
+        console.log( config.logger, `Updated pages list`, JSON.stringify( files, null, 4 ) );
+    });
 });

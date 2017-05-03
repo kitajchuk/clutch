@@ -29,6 +29,8 @@ Once the [Prismic](http://prismic.io) respository is setup add the models found 
 * Site — Single type
 * Page — Repeatable type
 
+You can add documents as the `Page` type and then link them in the `Site Navigation` from within the `Site` document. The query system will resolve URLs for `Page` documents in a different way then other content types. If you have a `Page` called `foobar` for instance, it will resolve the URL `/foobar` so you don't have to do `/page/foobar`.
+
 The API access endpoint under Settings/API & Security can be added to `server/config.js` by swapping out the url value for the `apiAccess` variable.
 
 Here are some helpful links for working with Prismic API:

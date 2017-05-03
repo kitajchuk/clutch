@@ -56,6 +56,10 @@
             <a class="h2" href="/foo/">Foo</a>
             <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
             <a class="h2" href="/bar/">Bar</a>
+            <% locals.site.getGroup( "site.navi" ).toArray().forEach(function ( navi ) { %>
+                <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a class="h2" href="/<%= navi.data.item.value.document.uid %>/"><%= navi.data.item.value.document.uid %></a>
+            <% }) %>
         </nav>
         <main class="main js-main">
             <%- include( locals.template ) %>

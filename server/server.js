@@ -12,6 +12,7 @@
 const fs = require( "fs" );
 const path = require( "path" );
 const config = require( "./config" );
+const watch = require( "node-watch" );
 const prismic = require( "prismic.io" );
 const express = require( "express" );
 const expressApp = express();
@@ -359,8 +360,8 @@ readPages().then(() => {
  * Watch the `template` dir to update `cache.files`.
  *
  */
-fs.watch( config.template.dir, ( event, filename ) => {
-    readPages().then(( files ) => {
-        console.log( config.logger, `Updated pages list`, JSON.stringify( files, null, 4 ) );
-    });
-});
+ watch( config.template.dir, { recursive: true, filter: /\.html$/ }, ( event, filename ) => {
+     readPages().then(( files ) => {
+         console.log( config.logger, `Updated pages list`, JSON.stringify( files, null, 4 ) );
+     });
+ });

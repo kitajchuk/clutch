@@ -1,5 +1,5 @@
 {
-    "Main": {
+    "Site Settings": {
         "title": {
             "type": "Text",
             "fieldset": "Title",
@@ -55,7 +55,9 @@
             "config": {
                 "label": "App Name"
             }
-        },
+        }
+    },
+    "Site Images": {
         "appLogo": {
             "type": "Image",
             "fieldset": "Logo Image ( can be svg )",

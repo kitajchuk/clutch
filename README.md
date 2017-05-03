@@ -24,7 +24,13 @@ Download this template and install the packages with `npm install`. To run the p
 
 ### Prismic
 
-Once the [Prismic](http://prismic.io) respository is setup add the `Site` model and configuration. To do this create a new custom type called `Site` with a slug of `site` and paste the contents of `json/Site.json` into the editor. Save it. This model contains high-level app information that gets rendered in the `<head>` of your document. The API access endpoint can be added to `server/config.js` by swapping out the url value for the `apiAccess` variable.
+Once the [Prismic](http://prismic.io) respository is setup add the models found in the `json` directory. You can create each model type and paste the JSON into the JSON Editor wholesale.
+
+* Nav — Single type
+* Site — Single type
+* Page — Repeatable type
+
+The API access endpoint under Settings/API & Security can be added to `server/config.js` by swapping out the url value for the `apiAccess` variable.
 
 Here are some helpful links for working with Prismic API:
 * [Developers Manual](https://prismic.io/docs/old/documentation/developers-manual)

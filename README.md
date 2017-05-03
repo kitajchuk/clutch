@@ -26,7 +26,6 @@ Download this template and install the packages with `npm install`. To run the p
 
 Once the [Prismic](http://prismic.io) respository is setup add the models found in the `json` directory. You can create each model type and paste the JSON into the JSON Editor wholesale.
 
-* Nav — Single type
 * Site — Single type
 * Page — Repeatable type
 

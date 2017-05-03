@@ -208,5 +208,25 @@
                 "placeholder": "msapp-icon-70x70logo ( png )"
             }
         }
+    },
+    "Site Navigation": {
+        "navi": {
+            "type": "Group",
+            "fieldset": "Navigation Items",
+            "config": {
+                "fields": {
+                    "item": {
+                        "type": "Link",
+                        "fieldset": "Navigation Link to a Page",
+                        "config": {
+                            "placeholder": "Choose a Page to add to the Navigation",
+                            "select": "document",
+                            "masks": ["page"]
+                        }
+                    }
+                },
+                "repeat": true
+            }
+        }
     }
 }

@@ -152,11 +152,6 @@ const getSite = function ( req, res ) {
         javascript: config.static.js
     };
     const check = function ( json ) {
-        // All documents for /:type
-        if ( json.length > 1 ) {
-            data.documents = json;
-        }
-
         // Single document for /:type/:uid
         if ( req.params.uid ) {
             data.document = json.find(function ( document ) {
@@ -171,6 +166,10 @@ const getSite = function ( req, res ) {
             } else {
                 done();
             }
+
+        // All documents for /:type
+        } else if ( json.length > 1 ) {
+            data.documents = json;
 
         // Resolve documents
         } else {
@@ -260,7 +259,18 @@ const getPartial = function ( params, query, data ) {
  */
 const getApi = function ( req, res ) {
     getData( req.params.type, req ).then(function ( json ) {
-        const data = json.length > 1 ? { documents: json } : { document: json[ 0 ] };
+        const data = {};
+
+        // Single document for /:type/:uid
+        if ( req.params.uid ) {
+            data.document = json.find(function ( document ) {
+                return (document.uid === req.params.uid);
+            });
+
+        // All documents for /:type
+        } else {
+            data.documents = json;
+        }
 
         if ( req.query.format === "html" ) {
             getPartial( req.params, req.query, data ).then(function ( html ) {

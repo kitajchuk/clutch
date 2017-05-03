@@ -48,9 +48,7 @@ Prismic has built-in preview functionality for un-published content out of the b
 * [Previews docs](https://prismic.io/docs/in-website-preview#?lang=javascript)
 * [Previews blog](https://prismic.io/blog/preview-content-changes-in-your-website)
 
-#### Endpoints
-
-##### Pages
+#### Content
 There are two main ways to request data from the server. The first is by standard URI structure. This loads templates from the `template/pages` directory. The server is designed to work relatively intelligently with your Prismic data. For instance, say you have a `custom type` called `item`. You can visit `yoursite.com/item` and expect the template located at `template/pages/item.html` to render.
 
 Next say you want to see just one of the items that has a `uid` of `skateboard`. You can visit `yoursite.com/item/skateboard` and expect the same template above to render. This may seem odd, but you have the ability to distinguish in the template what you should render out. Each template is passed either `documents` or `document` data for rendering. So you would either render the `document` OR the `documents`.
@@ -62,6 +60,7 @@ The `json` context for the page templates looks like this:
 {
     site: {object},
     page: {string},
+    error: {object},
     template: {string},
     timestamp: {number},
     document: {object},
@@ -71,7 +70,7 @@ The `json` context for the page templates looks like this:
 }
 ```
 
-##### Partials
+#### API + Partials
 The other way to request data is using the `/api/` endpoints. You can request information in both `json` and rendered `html` partial format. Say you have a model in Prismic called `item`. You can use the endpoints `/api/item` and `/api/item?format=html` in your client-side application. There are injection points in `getData` method in `server/server.js` where you can manipulate queries to Prismic as you need for the project. For requesting `html` from the API you simply need a template to support it. For this example a template located at `template/partials/item.html` will be used. You can also pass a `template` parameter if you want something else. So `/api/item?format=html&template=items` would use a template at `templates/partials/items.html`. This convention is useful to differentiate between rendering a list of items vs one item since model names in Prismic are singular.
 
 The `json` context for template partials looks like this:
@@ -83,8 +82,12 @@ The `json` context for template partials looks like this:
 }
 ```
 
-#### Templates
+#### Template Language
 The Express server works with [ejs](http://ejs.co) for template rendering by default. The good news is it uses the [consolidate](https://www.npmjs.com/package/consolidate) node module so you can switch to any preferred template language before getting started. All templates are located within the `template` directory. The `template/index.html` file is your site layout. The `pages` and `partials` work in conjunction with this template.
+
+
+
+### AWS
 
 #### Environments
 There are three node environments for the project.
@@ -93,10 +96,7 @@ There are three node environments for the project.
 * staging
 * production
 
-
-
-### AWS
-
+#### Configuration
 This template is designed to compress ( gzip ) and deploy the contents of `static` to an S3 bucket attached to a CloudFront CDN. Check the `Circlefile` to understand that implementation. It uses [ProperJS/s3](https://github.com/ProperJS/s3) to perform the static directory sync. The template is a high-level architecture, however, and can absolutely be enhanced or simplified as needed for any given project.
 
 Once the EC2 instances are configured with Elastic IPs on AWS, download and add the pem file to `local/[pemfile]` for SSH scripts. After configuring any other AWS stuff ( IAM, S3, CloudFront, Route 53 etc... ) you can input all the needed environment variables in CircleCI used in the `Circlefile`. The default list included is as follows:

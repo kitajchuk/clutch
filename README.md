@@ -91,9 +91,18 @@ There are three node environments for the project.
 
 ### AWS
 
-Once instances are configured on AWS download and add the pem file to `local/[pemfile]` for SSH scripts. Also swap out the placeholder values in the npm scripts — `[PEM_FILE_HERE]`, `[EC2_IP_HERE]` and in the Circlefile — `[EC2_IP_HERE]`.
+This template is designed to compress ( gzip ) and deploy the contents of `static` to an S3 bucket attached to a CloudFront CDN. Check the `Circlefile` to understand that implementation. It uses [ProperJS/s3](https://github.com/ProperJS/s3) to perform the static directory sync. The template is a high-level architecture, however, and can absolutely be enhanced or simplified as needed for any given project.
 
-This template is designed to compress ( gzip ) and deploy the contents of `static` to an S3 bucket attached to a CloudFront CDN. Check the `Circlefile` to understand that implementation. It uses [ProperJS/s3](https://github.com/ProperJS/s3) to perform the static directory sync.
+Once the EC2 instances are configured with Elastic IPs on AWS, download and add the pem file to `local/[pemfile]` for SSH scripts. After configuring any other AWS stuff ( IAM, S3, CloudFront, Route 53 etc... ) you can input all the needed environment variables in CircleCI used in the `Circlefile`. The default list included is as follows:
+
+* AWS_USER
+* AWS_DEST
+* AWS_STAGING_HOST
+* AWS_PRODUCTION_HOST
+* S3_BUCKET
+* S3_REGION
+* S3_ACCESS_KEY
+* S3_SECRET_KEY
 
 Here are some useful links for working on AWS Linux boxes.
 * [NGINX setup on EC2](https://gist.github.com/dragonjet/270cf0139df45d1b7690)

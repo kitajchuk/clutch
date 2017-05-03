@@ -56,11 +56,6 @@
 # Note: Run make with the "-e" flag to ensure environment variables
 # take precedence over these definitions.
 
-CIRCLEFILE_AWS_DEST := /var/www/html/
-CIRCLEFILE_AWS_USER := ec2-user
-CIRCLEFILE_AWS_STAGING_HOST := [EC2_IP_HERE]
-CIRCLEFILE_AWS_PRODUCTION_HOST := [EC2_IP_HERE]
-
 
 # TARGETS
 #
@@ -68,12 +63,12 @@ CIRCLEFILE_AWS_PRODUCTION_HOST := [EC2_IP_HERE]
 
 
 deploy_staging:
-		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_STAGING_HOST):$(CIRCLEFILE_AWS_DEST)
+		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_STAGING_HOST):$(AWS_DEST)
 		./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
-		@ssh $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_STAGING_HOST) 'cd $(CIRCLEFILE_AWS_DEST)server/ ; sudo npm run stop ; sudo npm install ; sudo npm run start:staging'
+		@ssh $(AWS_USER)@$(AWS_STAGING_HOST) 'cd $(AWS_DEST)server/ ; sudo npm install ; sudo npm run stop ; sudo npm run start:staging'
 
 
 deploy_production:
-		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_PRODUCTION_HOST):$(CIRCLEFILE_AWS_DEST)
+		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_PRODUCTION_HOST):$(AWS_DEST)
 		./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
-		@ssh $(CIRCLEFILE_AWS_USER)@$(CIRCLEFILE_PRODUCTION_HOST) 'cd $(CIRCLEFILE_AWS_DEST)server/ ; sudo npm run stop ; sudo npm install ; sudo npm run start:production'
+		@ssh $(AWS_USER)@$(AWS_PRODUCTION_HOST) 'cd $(AWS_DEST)server/ ; sudo npm install ; sudo npm run stop ; sudo npm run start:production'

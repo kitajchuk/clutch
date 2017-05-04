@@ -211,21 +211,36 @@
     },
     "Site Navigation": {
         "navi": {
-            "type": "Group",
+            "type": "Slices",
             "fieldset": "Navigation Items",
             "config": {
-                "fields": {
+                "choices": {
                     "item": {
-                        "type": "Link",
-                        "fieldset": "Navigation Link to a Page",
+                        "type": "Group",
+                        "fieldset": "Navigation Item",
                         "config": {
-                            "placeholder": "Choose a Page to add to the Navigation",
-                            "select": "document",
-                            "masks": ["page"]
+                            "fields": {
+                                "name": {
+                                    "type": "Text",
+                                    "fieldset": "Navigation Display Text",
+                                    "config": {
+                                        "label": "Navigation Display Text"
+                                    }
+                                },
+                                "page": {
+                                    "type": "Link",
+                                    "fieldset": "Navigation Link to a Page",
+                                    "config": {
+                                        "placeholder": "Choose a Page to add to the Navigation",
+                                        "select": "document",
+                                        "masks": ["page"]
+                                    }
+                                }
+                            },
+                            "repeat": false
                         }
                     }
-                },
-                "repeat": true
+                }
             }
         }
     }

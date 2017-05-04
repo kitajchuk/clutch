@@ -36,12 +36,9 @@ const getRef = function ( req, api ) {
 const getNavi = function ( type ) {
     let ret = false;
 
-    cache.site.getGroup( "site.navi" ).toArray().forEach(( navi ) => {
-        // Resolve a `Page` in the navigation
-        // Normally you would get a URL like `/page/foo`
-        // Utilizing this hook allows for the same context at `/foo`
-        if ( navi.data.item.value.document.uid === type ) {
-            ret = navi.data.item.value.document;
+    cache.site.getSliceZone( "site.navi" ).value.forEach(( slice ) => {
+        if ( slice.value.value[ 0 ].data.page.value.document.uid === type ) {
+            ret = slice.value.value[ 0 ].data.page.value.document;
         }
     });
 

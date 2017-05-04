@@ -77,7 +77,6 @@ The other way to request data is using the `/api/` endpoints. You can request in
 The `json` context for template partials looks like this:
 ```javascript
 {
-    site: {object},
     document: {object},
     documents: [array]
 }

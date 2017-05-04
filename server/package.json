@@ -25,6 +25,7 @@
     "prismic.io": "^3.5.0",
     "express": "^4.14.0",
     "compression": "^1.6.2",
-    "cookie-parser": "^1.4.3"
+    "cookie-parser": "^1.4.3",
+    "node-watch": "^0.5.3"
   }
 }

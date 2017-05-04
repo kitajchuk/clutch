@@ -189,7 +189,7 @@
         },
         "appMSIcon310x150": {
             "type": "Image",
-            "fieldset": "msa-icon-310x150logo ( png )",
+            "fieldset": "msapp-icon-310x150logo ( png )",
             "config": {
                 "placeholder": "msa-icon-310x150logo ( png )"
             }

@@ -14,7 +14,7 @@ const lib = require( "./lib/index" );
  */
 expressApp.use( cookieParser() );
 expressApp.use( compression( config.compression ) );
-expressApp.use(express.static( config.template.staticDir, {
+expressApp.use( express.static( config.template.staticDir, {
     maxAge: config.static.maxAge
 }));
 
@@ -42,8 +42,8 @@ expressApp.get( "/:path/:uid", lib.content.getPage );
 lib.watch.getPages().then(() => {
     lib.watch.startWatch();
 
-    expressApp.listen( config.port );
+    expressApp.listen( config.express.port );
 
     console.log( config.logger, `Express server started` );
-    console.log( config.logger, `Access URL — http://localhost:${config.port}` );
+    console.log( config.logger, `Access URL — http://localhost:${config.express.port}` );
 });

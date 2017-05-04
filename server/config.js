@@ -1,12 +1,22 @@
 const path = require( "path" );
 const config = {
-    isProduction: (process.env.NODE_ENV === "production"),
-    port: 8000,
-    apiAccess: "https://kitajchuk-template-prismic.cdn.prismic.io/api",
-    cdnBaseURL: "",
-    endJS: "/js/app.js",
-    endCSS: "/css/screen.css",
+    // Timestamp ( Will be time app booted )
     timestamp: Date.now(),
+    // Environments
+    env: {
+        sandbox: (process.env.NODE_ENV === "sandbox"),
+        staging: (process.env.NODE_ENV === "staging"),
+        production: (process.env.NODE_ENV === "production")
+    },
+    // API CMS config ( Prismic, Contentful )
+    api: {
+        access: "https://kitajchuk-template-express.cdn.prismic.io/api"
+    },
+    // Deployment config ( AWS etc... )
+    deploy: {
+        cdnURL: "",
+    },
+    // Templating config
     template: {
         module: "ejs",
         require: require( "ejs" ),
@@ -16,22 +26,31 @@ const config = {
         partialsDir: path.join( __dirname, "../template", "partials" ),
         staticDir: path.join( __dirname, "../static" )
     },
+    // Express.js config
+    express: {
+        port: 8000
+    },
+    // Static assets config
     static: {
         // One day
-        maxAge: 86400000
+        maxAge: 86400000,
+        endJS: "/js/app.js",
+        endCSS: "/css/screen.css"
     },
+    // Compression js config
     compression: {
         level: 9,
         threshold: 0
     },
+    // Console log prefix
     logger: "[@kitajchuk]"
 };
 
 
 
 // Serves assets from either CDN or App Server...
-config.static.js = (config.isProduction && config.cdnBaseURL) ? `${config.cdnBaseURL}${config.endJS}` : config.endJS;
-config.static.css = (config.isProduction && config.cdnBaseURL) ? `${config.cdnBaseURL}${config.endCSS}` : config.endCSS;
+config.static.js = (config.env.production && config.deploy.cdnURL) ? `${config.deploy.cdnURL}${config.static.endJS}` : config.static.endJS;
+config.static.css = (config.env.production && config.deploy.cdnURL) ? `${config.deploy.cdURLL}${config.static.endCSS}` : config.static.endCSS;
 
 
 

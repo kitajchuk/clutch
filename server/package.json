@@ -1,6 +1,6 @@
 {
-  "title": "Kitajchuk Prismic Template Server",
-  "name": "kitajchuk-template-prismic-server",
+  "title": "Clutch Server",
+  "name": "clutch-server",
   "version": "0.1.0",
   "description": "Express.js app server.",
   "private": true,

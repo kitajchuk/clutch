@@ -16,8 +16,8 @@ const config = {
         access: "https://clutch.cdn.prismic.io/api",
         adapter: "prismic",
         // Contentful
-        // space: "355y876evbep",
-        // access: "47f7655118881af6f0a9ea6f0d99c0d1b136107aa5469aba4aeb9f1e9e5be274",
+        // space: "",
+        // access: "",
         // adapter: "contentful"
     },
     // Deployment config ( AWS etc... )

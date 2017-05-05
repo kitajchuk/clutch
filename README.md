@@ -7,108 +7,84 @@ clutch
 
 ## TOC
 
-* [Quickstart](#getting-started)
-* [Prismic.io](#prismic)
-* [Express.js](#prismic--express)
+* [Quickstart](#quickstart)
+* [Headless](#headless)
+    * [Prismic](#prismic)
+    * [Contentful](#contentful)
+* [Express](#express)
+* [ProperJS](#properjs)
 * [AWS](#aws)
-* [Continuous Integration](#github--circle-ci)
-* [Other Resources](#resources)
+* [Circle CI](#circle-ci)
+* [Resources](#resources)
 
 
 
-### Getting Started
+### Quickstart
+* Download this template
+* CD into the directory and run `npm install`
+* Now run `npm start`
 
-Download this template and install the packages with `npm install`. To run the project use `npm start`. This boots the Express server on port `8000` and Webpack. A browser-sync proxy server is started in the Webpack pipeline and will run on port `8001`. The project is configured for [Webpack version 2](https://webpack.js.org/guides/migrating) so familiarization there is good.
+This will load the Clutch example connected to a Prismic repository.
 
 
 
-### Prismic
+### Headless
+Clutch aims to be a simple, adapter-based scaffold for building modern wep applications. It's design uses a simple ORM adapter concept to normalize the high-level data structures. From there the system leaves the doors open for you to build, template and work with your data in its provided service format.
 
-Once the [Prismic](http://prismic.io) respository is setup add the models found in the `json` directory. You can create each model type and paste the JSON into the JSON Editor wholesale.
+#### Prismic.io
+The Prismic.io adapter works out of the box. Prismic allows `JSON` authoring of content models so its a bit easier to do the initial setup.
 
-* Site — Single type
-* Page — Repeatable type
+* Create your Prismic.io repository
+* Add your repositories API access key to `server/config.js`
+* Make sure the `adapter` property is set to `prismic`
+* In your repository create a single content type called `Site`
+* In your repository create a repeatable content type called `Page`
+* Using the `JSON` editor paste in the respective contents of the files in `models`
+* You can now create your `Site` document and apply its settings
+* You can create `Page` documents and add them to the `Site` navigation as needed
 
-You can add documents as the `Page` type and then link them in the `Site Navigation` from within the `Site` document. The query system will resolve URLs for `Page` documents in a different way then other content types. If you have a `Page` called `foobar` for instance, it will resolve the URL `/foobar` so you don't have to do `/page/foobar`.
-
-The API access endpoint under Settings/API & Security can be added to `server/config.js` by swapping out the url value for the `config.api.access` property.
-
-Here are some helpful links for working with Prismic API:
 * [Developers Manual](https://prismic.io/docs/old/documentation/developers-manual)
 * [API Documentation](https://prismic.io/docs/old/documentation/api-documentation)
-
-Also, [this repository](https://github.com/kitajchuk/kitajchuk-www) has some small helpful examples for using the Prismic API in template partials. You can see them in `template/partials`.
-
-
-
-### Prismic + Express
-
-#### Previews
-Prismic has built-in preview functionality for un-published content out of the box. This Express server supports previews using Prismic's `previewSession` cookie. You can click the `preview` icon from the writing room editor in Prismic and view un-published content. This assumes you have correctly setup your preview sites within your repository settings. These are useful links for referencing Prismic preview sites information.
-
 * [Previews docs](https://prismic.io/docs/in-website-preview#?lang=javascript)
 * [Previews blog](https://prismic.io/blog/preview-content-changes-in-your-website)
 
-#### Content
-There are two main ways to request data from the server. The first is by standard URI structure. This loads templates from the `template/pages` directory. The server is designed to work relatively intelligently with your Prismic data. For instance, say you have a `custom type` called `item`. You can visit `yoursite.com/item` and expect the template located at `template/pages/item.html` to render.
-
-Next say you want to see just one of the items that has a `uid` of `skateboard`. You can visit `yoursite.com/item/skateboard` and expect the same template above to render. This may seem odd, but you have the ability to distinguish in the template what you should render out. Each template is passed either `documents` or `document` data for rendering. So you would either render the `document` OR the `documents`.
-
-You can also use paths that match up with Prismic `collections`. Say you make a collection and call it `items`. Then you whitelist your `item` custom type for this collection. You can now work with the same setup above but replace the singular "item" with the plural "items". This may create more desirable URI paths as you would now have `yoursite.com/items` and `yoursite.com/items/skateboard`. It's really up to you whether you prefer to utilize collections for this or not.
-
-The `json` context for the page templates looks like this:
-```javascript
-{
-    site: {object},
-    page: {string},
-    error: {object},
-    template: {string},
-    timestamp: {number},
-    document: {object},
-    documents: [array],
-    stylesheet: {string},
-    javascript: {string}
-}
-```
-
-#### API + Partials
-The other way to request data is using the `/api/` endpoints. You can request information in both `json` and rendered `html` partial format. Say you have a model in Prismic called `item`. You can use the endpoints `/api/item` and `/api/item?format=html` in your client-side application. There are injection points in `getData` method in `server/server.js` where you can manipulate queries to Prismic as you need for the project. For requesting `html` from the API you simply need a template to support it. For this example a template located at `template/partials/item.html` will be used. You can also pass a `template` parameter if you want something else. So `/api/item?format=html&template=items` would use a template at `templates/partials/items.html`. This convention is useful to differentiate between rendering a list of items vs one item since model names in Prismic are singular.
-
-The `json` context for template partials looks like this:
-```javascript
-{
-    document: {object},
-    documents: [array]
-}
-```
-
-#### Template Language
-The Express server works with [ejs](http://ejs.co) for template rendering by default. The good news is it uses the [consolidate](https://www.npmjs.com/package/consolidate) node module so you can switch to any preferred template language before getting started. All templates are located within the `template` directory. The `template/index.html` file is your site layout. The `pages` and `partials` work in conjunction with this template.
+#### Contentful
+The Contentful adapter is in progess so hopefully its ready really soon ;)
 
 
 
-### AWS
+### Express
+
+#### URL
+The Clutch node server is designed to access data in a convention over configuration approach. The format is `:type/:uid`. As long as you have content in your CMS for the types and UIDs your content will be loaded.
+
+#### API
+The Clutch node server also operates as a `JSON` API for your data. The format is `api/:type/:uid`.
+
+#### Template
+The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `server/config.js` editing the `template.module` and `template.requires` fields.
 
 #### Environments
-There are three node environments for the project.
+Clutch utilizes a 3 environment system to differentiate between local and remote instances.
 
 * sandbox
 * staging
 * production
 
-#### Configuration
-This template is designed to compress ( gzip ) and deploy the contents of `static` to an S3 bucket attached to a CloudFront CDN. Check the `Circlefile` to understand that implementation. It uses [ProperJS/s3](https://github.com/ProperJS/s3) to perform the static directory sync. The template is a high-level architecture, however, and can absolutely be enhanced or simplified as needed for any given project.
 
-Once the EC2 instances are configured with Elastic IPs on AWS, download and add the pem file to `local/[pemfile]` for SSH scripts. After configuring any other AWS stuff ( IAM, S3, CloudFront, Route 53 etc... ) you can input all the needed environment variables in CircleCI used in the `Circlefile`. The default list included is as follows:
 
-* AWS_USER
-* AWS_DEST
-* AWS_STAGING_HOST
-* AWS_PRODUCTION_HOST
-* S3_BUCKET
-* S3_REGION
-* S3_ACCESS_KEY
-* S3_SECRET_KEY
+### ProperJS
+Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS) web app architecture. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
+
+
+
+### AWS
+Clutch will integrate well with AWS if you want it to.
+
+#### Setup
+You can take advantage of this as much or as little as you want. At the grandest level Clutch will gzip the static directory and deploy it to an S3 bucket. Optionally, you can have that bucket origin attached to a CloudFront CDN.
+
+But you can do as little as just configure an EC2 instance to deploy your app to. If you don't hook up S3, Clutch serves everything out of the static directory where your app is running minified and gzipped.
 
 Here are some useful links for working on AWS Linux boxes.
 * [NGINX setup on EC2](https://gist.github.com/dragonjet/270cf0139df45d1b7690)
@@ -122,13 +98,22 @@ Here are some useful links for setting up services on AWS.
 
 
 
-### Github + Circle CI
+### Circle CI
+If your project is on Github or BitBucket you can connect it to [Circle CI](http://circleci.com) by adding it as a build. In the project settings on Circle CI add the SSH key for your EC2 instances. You can also input all the needed environment variables in Circle CI used in the `Circlefile`. The default list included is as follows:
 
-Once the project is up on Github connect the repository to [Circle CI](http://circleci.com) by adding it as a build. In the project settings the AWS SSH key from the pem file needs to be added for the deploy steps in the build process.
+* AWS_USER
+* AWS_DEST
+* AWS_STAGING_HOST
+* AWS_PRODUCTION_HOST
+* S3_BUCKET
+* S3_REGION
+* S3_ACCESS_KEY
+* S3_SECRET_KEY
 
 
 
 ### Resources
+Just some general UI tools I find myself using on new projects.
 
 * [Icongen](http://iconogen.com)
 * [SVG Optimizer](https://petercollingridge.appspot.com/svg-editor)

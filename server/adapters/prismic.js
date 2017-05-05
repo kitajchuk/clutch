@@ -26,6 +26,7 @@ const cache = {};
 const lib = {
     template: require( "../lib/template" )
 };
+const ContextObject = require( "../class/ContextObject" );
 
 
 
@@ -199,18 +200,21 @@ const getPreview = function ( req, res ) {
  */
 const getPartial = function ( params, query, data ) {
     return new Promise(( resolve, reject ) => {
-        const jsonData = {};
-        const template = path.join( config.template.partialsDir, `${(query.template || params.type)}.html` );
+        const partial = (query.template || params.type);
+        const localObject = {
+            context: new ContextObject( partial )
+        };
+        const template = path.join( config.template.partialsDir, `${partial}.html` );
 
         if ( data.document ) {
-            jsonData.document = data.document;
+            localObject.context.set( "item", data.document );
         }
 
         if ( data.documents ) {
-            jsonData.documents = data.documents;
+            localObject.context.set( "items", data.documents );
         }
 
-        lib.template.render( template, jsonData )
+        lib.template.render( template, localObject )
             .then(( html ) => {
                 resolve( html );
             })

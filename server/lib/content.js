@@ -4,6 +4,7 @@ const lib = {
     query: require( "./query" ),
     template: require( "./template" )
 };
+const ContextObject = require( "../class/ContextObject" );
 
 
 
@@ -13,71 +14,47 @@ const lib = {
  *
  */
 const getPage = function ( req, res ) {
-    const page = (req.params.path ? req.params.path : "home");
-    const data = {
-        site: null,
-        page: page,
-        cache: config.env.production,
-        error: null,
-        template: `pages/${page}.html`,
-        timestamp: config.timestamp,
-        document: null,
-        documents: null,
-        stylesheet: config.static.css,
-        javascript: config.static.js
-    };
-    const check = function ( json ) {
-        data.site = lib.query.cache.site;
+    const page = (req.params.type ? req.params.type : config.homepage);
+    const context = new ContextObject( page );
+    const check = function ( data ) {
+        context.set({
+            site: lib.query.cache.site,
+            navi: lib.query.cache.navi
+        });
 
-        // 0.0 => Template file does not exist
-        // 0.1 => Single document for /:type => /page/:type
-        // 0.2 => Single document for /:type/:uid
-        // 0.3 => All documents for /:type
-        // 0.4 => Resolve documents
+        // 0.0 => Missing template file
+        // 0.1 => Single ContentItem
+        // 0.2 => Multiple ContentItems(s)
         if ( lib.watch.cache.pages.indexOf( `${page}.html` ) === -1 ) {
-            fail( `The template file for this path is missing at "templates/pages/${page}.html".` );
+            const file = path.join( config.template.pagesDir, `${page}.html` );
 
-        } else if ( json.length === 1 && json[ 0 ].type === "page" ) {
-            data.document = json[ 0 ];
+            fail( `The template file for this path is missing at "${file}".` );
 
-            done();
+        } else if ( data.item ) {
+            context.set( "item", data.item );
 
-        } else if ( req.params.uid ) {
-            data.document = json.find(function ( document ) {
-                return (document.uid === req.params.uid);
-            });
-
-            // The :uid is invalid
-            if ( !data.document ) {
-                fail( `The document with UID "${req.params.uid}" could not be found by Prismic.` );
-
-            // Resolve document
-            } else {
-                done();
-            }
-
-        } else if ( json.length > 1 ) {
-            data.documents = json;
-
-            done();
-
-        } else {
-            done();
+        } else if ( data.items ) {
+            context.set( "items", data.items );
         }
+
+        render();
     };
     const fail = function ( error ) {
-        data.site = lib.query.cache.site;
-        data.page = "404";
-        data.error = error;
-        data.template = "pages/404.html";
+        context.set({
+            navi: lib.query.cache.navi,
+            site: lib.query.cache.site,
+            page: "404",
+            error: error
+        });
 
-        render( data );
+        render();
     };
-    const done = function () {
-        render( data );
-    };
-    const render = function ( json ) {
-        lib.template.render( config.template.layout, json )
+    const render = function () {
+        const localObject = {
+            context: context
+        };
+
+        lib.template.render( config.template.layout, localObject )
             .then(( html ) => {
                 res.send( html );
             })

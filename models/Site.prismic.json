@@ -1,5 +1,5 @@
 {
-    "Site Settings": {
+    "Information": {
         "title": {
             "type": "Text",
             "fieldset": "Title",
@@ -27,7 +27,9 @@
             "config": {
                 "label": "Email"
             }
-        },
+        }
+    },
+    "Google": {
         "googleUA": {
             "type": "Text",
             "fieldset": "Google Analytics Tag",
@@ -41,23 +43,16 @@
             "config": {
                 "label": "Google Site Verification"
             }
-        },
-        "awsCloudFrontUrl": {
-            "type": "Text",
-            "fieldset": "AWS CloudFront URL",
-            "config": {
-                "label": "AWS CloudFront URL"
-            }
-        },
+        }
+    },
+    "Webapp": {
         "appName": {
             "type": "Text",
             "fieldset": "App Name",
             "config": {
                 "label": "App Name"
             }
-        }
-    },
-    "Site Images": {
+        },
         "appLogo": {
             "type": "Image",
             "fieldset": "Logo Image ( can be svg )",
@@ -209,7 +204,7 @@
             }
         }
     },
-    "Site Navigation": {
+    "Navigation": {
         "navi": {
             "type": "Slices",
             "fieldset": "Navigation Items",

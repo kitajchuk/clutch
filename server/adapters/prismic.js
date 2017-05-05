@@ -1,6 +1,24 @@
 "use strict";
 
 
+
+/**
+ *
+ * Adapter for Prismic.io
+ * Every adapter must have a common ORM format exposed to the scaffold:
+ * cache: { site: Object, navi: Object }
+ * getApi: Function
+ * getPage: Function
+ * getSite: Function
+ * getNavi: Function
+ * getPreview: Function
+ * getPartial: Function
+ *
+ * Different Headless CMS will require slightly different internal approaches
+ * Whatever means necessary is A-OK as long as the data resolves to the ORM format
+ *
+ *
+ */
 const path = require( "path" );
 const config = require( "../config" );
 const prismic = require( "prismic.io" );
@@ -13,17 +31,118 @@ const lib = {
 
 /**
  *
- * Get valid `ref` for Prismic API data.
+ * Handle API requests.
  *
  */
-const getRef = function ( req, api ) {
-    let ref = api.master();
+const getApi = function ( req, res ) {
+    getDataForApi( req ).then(( json ) => {
+        const data = {};
 
-    if ( req && req.cookies && req.cookies[ prismic.previewCookie ] ) {
-        ref = req.cookies[ prismic.previewCookie ];
-    }
+        // Single document for /:type/:uid
+        if ( req.params.uid ) {
+            data.document = json.find(( document ) => {
+                return (document.uid === req.params.uid);
+            });
 
-    return ref;
+        // All documents for /:type
+        } else {
+            data.documents = json;
+        }
+
+        if ( req.query.format === "html" ) {
+            getPartial( req.params, req.query, data ).then(( html ) => {
+                res.send( html );
+            });
+
+        } else {
+            res.json( data );
+        }
+
+    }).catch(( error ) => {
+        res.json( error );
+    });
+};
+
+
+
+/**
+ *
+ * Handle Page requests.
+ *
+ */
+const getPage = function ( req ) {
+    return new Promise(( resolve, reject ) => {
+        getDataForPage( req ).then(( json ) => {
+            resolve( json );
+
+        }).catch(( error ) => {
+            reject( error );
+        });
+    });
+};
+
+
+
+/**
+ *
+ * Load the Site context model.
+ *
+ */
+const getSite = function () {
+    return new Promise(( resolve, reject ) => {
+        prismic.api( config.api.access, null ).then(( api ) => {
+            api.getSingle( "site" ).then(( document ) => {
+                const navi = {
+                    items: []
+                };
+                const site = {
+                    data: {}
+                };
+
+                // Normalize site context
+                for ( let i in document.fragments ) {
+                    if ( i !== "site.navi" ) {
+                        const key = i.replace( /^site\./, "" );
+
+                        site.data[ key ] = document.fragments[ i ].value || document.fragments[ i ].url;
+                    }
+                }
+
+                // Normalize navi context
+                document.getSliceZone( "site.navi" ).value.forEach(( slice ) => {
+                    let id = null;
+                    let uid = null;
+                    let type = null;
+                    let slug = "";
+                    const title = slice.value.value[ 0 ].data.name.value;
+
+                    if ( slice.value.value[ 0 ].data.slug ) {
+                        slug = `/${slice.value.value[ 0 ].data.slug.value.replace( /\//g, "" )}/`;
+
+                    } else if ( slice.value.value[ 0 ].data.page ) {
+                        id = slice.value.value[ 0 ].data.page.value.document.id;
+                        uid = slice.value.value[ 0 ].data.page.value.document.uid;
+                        type = slice.value.value[ 0 ].data.page.value.document.type;
+                        slug = `/${uid}/`;
+                    }
+
+                    navi.items.push({
+                        id: id,
+                        uid: uid,
+                        type: type,
+                        slug: slug,
+                        title: title
+                    });
+                });
+
+                cache.api = api;
+                cache.site = site;
+                cache.navi = navi;
+
+                resolve();
+            });
+        });
+    });
 };
 
 
@@ -36,9 +155,9 @@ const getRef = function ( req, api ) {
 const getNavi = function ( type ) {
     let ret = false;
 
-    cache.site.getSliceZone( "site.navi" ).value.forEach(( slice ) => {
-        if ( slice.value.value[ 0 ].data.page && slice.value.value[ 0 ].data.page.value.document.uid === type ) {
-            ret = slice.value.value[ 0 ].data.page.value.document;
+    cache.navi.items.forEach(( item ) => {
+        if ( item.uid === type ) {
+            ret = item;
         }
     });
 
@@ -105,27 +224,7 @@ const getPartial = function ( params, query, data ) {
 
 /**
  *
- * Load the Site context model.
- *
- */
-const getSite = function () {
-    return new Promise(( resolve, reject ) => {
-        prismic.api( config.api.access, null ).then(( api ) => {
-            api.getSingle( "site" ).then(( site ) => {
-                cache.api = api;
-                cache.site = site;
-
-                resolve( site );
-            });
-        });
-    });
-};
-
-
-
-/**
- *
- * Load data for API response.
+ * Load data for API response. Resolve RAW from Service.
  *
  */
 const getDataForApi = function ( req ) {
@@ -174,16 +273,33 @@ const getDataForApi = function ( req ) {
  */
 const getDataForPage = function ( req ) {
     return new Promise(( resolve, reject ) => {
+        const data = {
+            item: null,
+            items: null
+        };
         const doQuery = function ( type ) {
             const done = function ( json ) {
-                // Question:
+                // Question?
                 // A `single` type should return a pure `result` {object}
                 // A `repeatable` type should return a `results` [array]
+
                 if ( !json.results.length ) {
                     reject( `The page template for "${type}" exists but Prismic has no data for it.` );
 
                 } else {
-                    resolve( json.results );
+                    // uid
+                    if ( req.params.uid || navi ) {
+                        data.item = getDoc( (navi ? navi.uid : req.params.uid), json.results );
+
+                        if ( !data.item ) {
+                            reject( `The document with UID "${navi ? navi.uid : req.params.uid}" could not be found by Prismic.` );
+                        }
+
+                    } else {
+                        data.items = json.results;
+                    }
+
+                    resolve( data );
                 }
             };
             const fail = function ( error ) {
@@ -197,21 +313,18 @@ const getDataForPage = function ( req ) {
             const navi = getNavi( type );
 
             // form
-            const form = cache.api.form( (cache.api.data.forms[ type ] ? type : "everything") );
+            const form = cache.api.form( "everything" );
 
             // ref
             form.ref( getRef( req, cache.api ) );
 
             // type
-            if ( !cache.api.data.forms[ type ] ) {
-                // Check against site navigation
-                if ( navi ) {
-                    query.push( prismic.Predicates.at( "document.type", navi.type ) );
-                    query.push( prismic.Predicates.at( "document.id", navi.id ) );
+            if ( navi ) {
+                query.push( prismic.Predicates.at( "document.type", navi.type ) );
+                query.push( prismic.Predicates.at( "document.id", navi.id ) );
 
-                } else {
-                    query.push( prismic.Predicates.at( "document.type", type ) );
-                }
+            } else {
+                query.push( prismic.Predicates.at( "document.type", type ) );
             }
 
             // Custom querying can be done here...
@@ -236,10 +349,10 @@ const getDataForPage = function ( req ) {
         };
 
         getSite().then(() => {
-            const type = (req.params.path || "");
+            const type = (req.params.type || "");
 
             if ( !type ) {
-                resolve( [] );
+                resolve( data );
 
             } else {
                 doQuery( type );
@@ -252,53 +365,24 @@ const getDataForPage = function ( req ) {
 
 /**
  *
- * Handle API requests.
+ * Get valid `ref` for Prismic API data.
  *
  */
-const getApi = function ( req, res ) {
-    getDataForApi( req ).then(( json ) => {
-        const data = {};
+const getRef = function ( req, api ) {
+    let ref = api.master();
 
-        // Single document for /:type/:uid
-        if ( req.params.uid ) {
-            data.document = json.find(( document ) => {
-                return (document.uid === req.params.uid);
-            });
+    if ( req && req.cookies && req.cookies[ prismic.previewCookie ] ) {
+        ref = req.cookies[ prismic.previewCookie ];
+    }
 
-        // All documents for /:type
-        } else {
-            data.documents = json;
-        }
-
-        if ( req.query.format === "html" ) {
-            getPartial( req.params, req.query, data ).then(( html ) => {
-                res.send( html );
-            });
-
-        } else {
-            res.json( data );
-        }
-
-    }).catch(( error ) => {
-        res.json( error );
-    });
+    return ref;
 };
 
 
 
-/**
- *
- * Handle Page requests.
- *
- */
-const getPage = function ( req ) {
-    return new Promise(( resolve, reject ) => {
-        getDataForPage( req ).then(( json ) => {
-            resolve( json );
-
-        }).catch(( error ) => {
-            reject( error );
-        });
+const getDoc = function ( uid, documents ) {
+    return documents.find(( doc ) => {
+        return (doc.uid === uid);
     });
 };
 

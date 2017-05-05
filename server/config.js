@@ -1,5 +1,7 @@
 const path = require( "path" );
 const config = {
+    // Homepage UID
+    homepage: "home",
     // Timestamp ( Will be time app booted )
     timestamp: Date.now(),
     // Environments
@@ -10,7 +12,6 @@ const config = {
     },
     // API CMS config ( Prismic, Contentful )
     api: {
-        types: ["site", "page"],
         // Prismic
         access: "https://clutch.cdn.prismic.io/api",
         adapter: "prismic",

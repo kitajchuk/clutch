@@ -1,5 +1,5 @@
 {
-    "Page Information": {
+    "Information": {
         "title": {
             "type": "Text",
             "fieldset": "Page Title",
@@ -28,24 +28,24 @@
             "config": {
                 "placeholder": "Page Image",
                 "constraint": {
-                    "width": "2400"
+                    "width": 2400
                 },
                 "thumbnails": [
                     {
                         "name": "tablet",
-                        "width": "1600",
-                        "height": "5000"
+                        "width": 1600,
+                        "height": 900
                     },
                     {
                         "name": "mobile",
-                        "width": "800",
-                        "height": "5000"
+                        "width": 800,
+                        "height": 450
                     }
                 ]
             }
         }
     },
-    "Page Content": {
+    "Content": {
         "slices": {
             "type": "Slices",
             "fieldset": "Dynamic Page Content",

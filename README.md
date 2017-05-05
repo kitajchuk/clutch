@@ -1,7 +1,7 @@
-kitajchuk-template-prismic
-==========================
+clutch
+======
 
-> Boilerplate template and scaffold for Prismic.io projects on AWS.
+> A modern headless CMS scaffold.
 
 
 
@@ -31,7 +31,7 @@ Once the [Prismic](http://prismic.io) respository is setup add the models found 
 
 You can add documents as the `Page` type and then link them in the `Site Navigation` from within the `Site` document. The query system will resolve URLs for `Page` documents in a different way then other content types. If you have a `Page` called `foobar` for instance, it will resolve the URL `/foobar` so you don't have to do `/page/foobar`.
 
-The API access endpoint under Settings/API & Security can be added to `server/config.js` by swapping out the url value for the `apiAccess` variable.
+The API access endpoint under Settings/API & Security can be added to `server/config.js` by swapping out the url value for the `config.api.access` property.
 
 Here are some helpful links for working with Prismic API:
 * [Developers Manual](https://prismic.io/docs/old/documentation/developers-manual)

@@ -19,13 +19,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "consolidate": "^0.14.1",
-    "ejs": "^2.5.2",
-    "forever": "^0.15.2",
-    "prismic.io": "^3.5.0",
-    "express": "^4.14.0",
     "compression": "^1.6.2",
+    "consolidate": "^0.14.1",
+    "contentful": "^4.3.0",
     "cookie-parser": "^1.4.3",
-    "node-watch": "^0.5.3"
+    "ejs": "^2.5.2",
+    "express": "^4.14.0",
+    "forever": "^0.15.2",
+    "node-watch": "^0.5.3",
+    "prismic.io": "^3.5.0"
   }
 }

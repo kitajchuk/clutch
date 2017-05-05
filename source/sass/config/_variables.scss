@@ -1,14 +1,14 @@
 /******************************************************************************
  * Fonts
 *******************************************************************************/
-$font-family-serif: Georgia;
-$font-family-sans: Helvetica;
+$font-family-sans: "Helvetica";
 
 
 
 /******************************************************************************
  * Colors
 *******************************************************************************/
+$blue: #1bbcef;
 $black: #000;
 $charcoal: #333;
 $medium: #555;
@@ -32,6 +32,8 @@ $expander-one: 80px;
 $expander-two: 160px;
 $expander-three: 240px;
 $expander-mobile: 40px;
+$padding-index: 10vw;
+$padding-wrap: 5vw;
 
 
 
@@ -39,7 +41,8 @@ $expander-mobile: 40px;
  * Sizes
 *******************************************************************************/
 $wrap-copy: 700px;
-$logo-width: 200px;
+$logo-width: 480px;
+$header-height: 160px;
 
 
 

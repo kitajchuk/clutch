@@ -227,11 +227,18 @@
                                         "label": "Navigation Display Text"
                                     }
                                 },
+                                "slug": {
+                                    "type": "Text",
+                                    "fieldset": "Navigation Slug",
+                                    "config": {
+                                        "label": "Navigation Slug"
+                                    }
+                                },
                                 "page": {
                                     "type": "Link",
-                                    "fieldset": "Navigation Link to a Page",
+                                    "fieldset": "Page to link to?",
                                     "config": {
-                                        "placeholder": "Choose a Page to add to the Navigation",
+                                        "placeholder": "Page to link to?",
                                         "select": "document",
                                         "masks": ["page"]
                                     }

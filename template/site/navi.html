@@ -1,0 +1,11 @@
+<nav class="navi js-navi screen ghost -exp-2 -wrap -fzero">
+    <ul class="navi__ul ghost__child">
+        <% locals.site.getSliceZone( "site.navi" ).value.forEach(( slice ) => { %>
+            <li class="navi__li">
+                <a class="navi__a js-navi-a" href="<%= slice.value.value[ 0 ].data.page ? `/${slice.value.value[ 0 ].data.page.value.document.uid}/` : slice.value.value[ 0 ].data.slug.value %>">
+                    <%= slice.value.value[ 0 ].data.name.value %>
+                </a>
+            </li>
+        <% }) %>
+    </ul>
+</nav>

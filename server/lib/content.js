@@ -17,6 +17,7 @@ const getPage = function ( req, res ) {
     const data = {
         site: null,
         page: page,
+        cache: config.env.production,
         error: null,
         template: `pages/${page}.html`,
         timestamp: config.timestamp,

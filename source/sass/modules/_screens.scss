@@ -5,6 +5,7 @@
     opacity: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    pointer-events: none;
     position: fixed;
     right: 0;
     top: 0;
@@ -16,6 +17,7 @@
 
     &.is-active {
         opacity: 1;
+        pointer-events: auto;
         visibility: visible;
         z-index: $z_layer_infront;
         -webkit-overflow-scrolling: touch;

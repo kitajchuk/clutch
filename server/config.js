@@ -10,7 +10,14 @@ const config = {
     },
     // API CMS config ( Prismic, Contentful )
     api: {
-        access: "https://kitajchuk-template-express.cdn.prismic.io/api"
+        types: ["site", "page"],
+        // Prismic
+        access: "https://clutch.cdn.prismic.io/api",
+        adapter: "prismic",
+        // Contentful
+        // space: "355y876evbep",
+        // access: "47f7655118881af6f0a9ea6f0d99c0d1b136107aa5469aba4aeb9f1e9e5be274",
+        // adapter: "contentful"
     },
     // Deployment config ( AWS etc... )
     deploy: {
@@ -30,6 +37,10 @@ const config = {
     express: {
         port: 8000
     },
+    // Browser-sync config
+    browser: {
+        port: 8001
+    },
     // Static assets config
     static: {
         // One day
@@ -43,7 +54,7 @@ const config = {
         threshold: 0
     },
     // Console log prefix
-    logger: "[@kitajchuk]"
+    logger: "[@clutch]"
 };
 
 

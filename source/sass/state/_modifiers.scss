@@ -14,24 +14,13 @@
     padding-top: $expander-mobile;
     }
 .-wrap {
-    padding-left: $expander-one;
-    padding-right: $expander-one;
-    }
-.-wrap-l {
-    padding-left: $expander-one;
-    }
-.-wrap-r {
-    padding-right: $expander-one;
-    }
-.-wrap-t {
-    padding-top: $expander-one;
-    }
-.-wrap-b {
-    padding-bottom: $expander-one;
+    @include wrap();
     }
 .-wrap-copy {
-    display: inline-block;
-    width: 100%;
+    @include wrap-copy();
+    }
+.-wrap-index {
+    @include wrap-index();
     }
 .-vtop {
     vertical-align: top;
@@ -94,11 +83,6 @@
     }
 .-grey {
     color: $medium;
-
-    a,
-    strong {
-        color: $black;
-        }
     }
 .-fzero {
     font-size: 0;

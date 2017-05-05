@@ -1,8 +1,10 @@
 import $ from "properjs-hobo";
 import PageController from "properjs-pagecontroller";
 import ImageController from "./class/ImageController";
+import AnimateController from "./class/AnimateController";
 import * as core from "./core";
 import views from "./views";
+import navi from "./navi";
 
 
 /**
@@ -181,6 +183,7 @@ const router = {
         core.dom.html.addClass( "is-routing" );
         core.dom.main.addClass( "is-inactive" );
 
+        navi.close();
         this.destroyControllers();
     },
 
@@ -232,11 +235,16 @@ const router = {
      */
     execControllers () {
         this.images = core.dom.main.find( core.config.lazyImageSelector );
+        this.animates = core.dom.main.find( core.config.animSelector );
 
         this.imageController = new ImageController( this.images );
         this.imageController.on( "preloaded", () => {
             core.emitter.fire( "app--intro-teardown" );
         });
+
+        if ( this.animates.length ) {
+            this.animateController = new AnimateController( this.animates );
+        }
     },
 
 
@@ -252,6 +260,11 @@ const router = {
         if ( this.imageController ) {
             this.imageController.destroy();
             this.imageController = null;
+        }
+
+        if ( this.animateController ) {
+            this.animateController.destroy();
+            this.animateController = null;
         }
     }
 };

@@ -3,7 +3,12 @@ const express = require( "express" );
 const expressApp = express();
 const compression = require( "compression" );
 const cookieParser = require( "cookie-parser" );
-const lib = require( "./lib/index" );
+const lib = {
+    watch: require( "./lib/watch" ),
+    query: require( "./lib/query" ),
+    content: require( "./lib/content" ),
+    template: require( "./lib/template" )
+};
 
 
 

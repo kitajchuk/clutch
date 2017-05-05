@@ -6,9 +6,7 @@
         <meta name="description" content="<%= locals.site.data[ 'site.description' ] ? locals.site.data[ 'site.description' ].value : '' %>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="google-site-verification" content="<%= locals.site.data[ 'site.googleVerify' ] ? locals.site.data[ 'site.googleVerify' ].value : '' %>" />
-
         <link rel="shortcut icon" href="<%= locals.site.data[ 'site.appFavicon' ] ? locals.site.data[ 'site.appFavicon' ].value.main.url : '' %>" type="image/x-icon" />
-
         <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= locals.site.data[ 'site.appIOSIcon57x57' ] ? locals.site.data[ 'site.appIOSIcon57x57' ].value.main.url : '' %>" />
         <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= locals.site.data[ 'site.appIOSIcon60x60' ] ? locals.site.data[ 'site.appIOSIcon60x60' ].value.main.url : '' %>" />
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= locals.site.data[ 'site.appIOSIcon72x72' ] ? locals.site.data[ 'site.appIOSIcon72x72' ].value.main.url : '' %>" />
@@ -18,64 +16,38 @@
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= locals.site.data[ 'site.appIOSIcon144x144' ] ? locals.site.data[ 'site.appIOSIcon144x144' ].value.main.url : '' %>" />
         <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= locals.site.data[ 'site.appIOSIcon152x152' ] ? locals.site.data[ 'site.appIOSIcon152x152' ].value.main.url : '' %>" />
         <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<%= locals.site.data[ 'site.appIOSIcon180x180' ] ? locals.site.data[ 'site.appIOSIcon180x180' ].value.main.url : '' %>" />
-
         <link rel="icon" type="image/png" href="<%= locals.site.data[ 'site.appIcon16x16' ] ? locals.site.data[ 'site.appIcon16x16' ].value.main.url : '' %>" sizes="16x16" />
         <link rel="icon" type="image/png" href="<%= locals.site.data[ 'site.appIcon32x32' ] ? locals.site.data[ 'site.appIcon32x32' ].value.main.url : '' %>" sizes="32x32" />
         <link rel="icon" type="image/png" href="<%= locals.site.data[ 'site.appIcon96x96' ] ? locals.site.data[ 'site.appIcon96x96' ].value.main.url : '' %>" sizes="96x96" />
         <link rel="icon" type="image/png" href="<%= locals.site.data[ 'site.appIcon192x192' ] ? locals.site.data[ 'site.appIcon192x192' ].value.main.url : '' %>" sizes="192x192" />
-
         <meta name="application-name" content="<%= locals.site.data[ 'site.appName' ] ? locals.site.data[ 'site.appName' ].value : '' %>" />
         <meta name="msapplication-TileColor" content="<%= locals.site.data[ 'site.appMSTileColor' ] ? locals.site.data[ 'site.appMSTileColor' ].value : '' %>">
         <meta name="msapplication-square70x70logo" content="<%= locals.site.data[ 'site.appMSIcon70x70' ] ? locals.site.data[ 'site.appMSIcon70x70' ].value.main.url : '' %>" />
         <meta name="msapplication-square150x150logo" content="<%= locals.site.data[ 'site.appMSIcon150x150' ] ? locals.site.data[ 'site.appMSIcon150x150' ].value.main.url : '' %>" />
         <meta name="msapplication-wide310x150logo" content="<%= locals.site.data[ 'site.appMSIcon310x150' ] ? locals.site.data[ 'site.appMSIcon310x150' ].value.main.url : '' %>" />
         <meta name="msapplication-square310x310logo" content="<%= locals.site.data[ 'site.appMSIcon310x310' ] ? locals.site.data[ 'site.appMSIcon310x310' ].value.main.url : '' %>" />
-
         <meta property="og:site_name" content="<%= locals.site.data[ 'site.title' ] ? locals.site.data[ 'site.title' ].value : '' %>" />
         <meta property="og:title" content="<%= locals.site.data[ 'site.title' ] ? locals.site.data[ 'site.title' ].value : '' %>" />
         <meta property="og:url" content="<%= locals.site.data[ 'site.url' ] ? locals.site.data[ 'site.url' ].value : '' %>" />
         <meta property="og:type" content="website" />
         <meta property="og:description" content="<%= locals.site.data[ 'site.description' ] ? locals.site.data[ 'site.description' ].value : '' %>" />
         <meta property="og:image" content="<%= locals.site.data[ 'site.appImage' ] ? locals.site.data[ 'site.appImage' ].value.main.url : '' %>" />
-
         <meta itemprop="name" content="<%= locals.site.data[ 'site.title' ] ? locals.site.data[ 'site.title' ].value : '' %>" />
         <meta itemprop="description" content="<%= locals.site.data[ 'site.description' ] ? locals.site.data[ 'site.description' ].value : '' %>" />
         <meta itemprop="url" content="<%= locals.site.data[ 'site.url' ] ? locals.site.data[ 'site.url' ].value : '' %>" />
         <meta itemprop="thumbnailUrl" content="<%= locals.site.data[ 'site.appImage' ] ? locals.site.data[ 'site.appImage' ].value.main.url : '' %>" />
         <meta itemprop="image" content="<%= locals.site.data[ 'site.appImage' ] ? locals.site.data[ 'site.appImage' ].value.main.url : '' %>" />
-
         <link href="<%= locals.stylesheet + '?v=' + locals.timestamp %>" rel="stylesheet" />
     </head>
-    <body class="-fzero">
-        <header class="header js-header"></header>
-        <nav class="navi js-navi -wrap -exp">
-            <a class="h2" href="/">Home</a>
-            <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <a class="h2" href="/foo/">Foo</a>
-            <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <a class="h2" href="/bar/">Bar</a>
-            <% locals.site.getSliceZone( "site.navi" ).value.forEach(function ( slice ) { %>
-                <a class="h2" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                <a class="h2" href="/<%= slice.value.value[ 0 ].data.page.value.document.uid %>/"><%= slice.value.value[ 0 ].data.name.value %></a>
-            <% }) %>
-        </nav>
-        <main class="main js-main">
+    <body>
+        <%- include( 'site/header.html' ) %>
+        <%- include( 'site/navi.html' ) %>
+        <main class="main js-main -fzero">
             <%- include( locals.template ) %>
         </main>
-        <footer class="footer js-footer"></footer>
-        <div class="intro js-intro screen ghost -wrap -text--center is-active">
-            <div class="ghost__child">
-                <img src="<%= locals.site.data[ 'site.appLogo' ] ? locals.site.data[ 'site.appLogo' ].value.main.url : '' %>" class="intro__logo" />
-            </div>
-        </div>
+        <%- include( 'site/footer.html' ) %>
+        <%- include( 'site/intro.html' ) %>
         <script src="<%= locals.javascript + '?v=' + locals.timestamp %>"></script>
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-            ga('create', '<%= locals.site.getText( "site.googleUA" ) %>', 'auto');
-            ga('send', 'pageview');
-        </script>
+        <%- include( 'site/ga.html' ) %>
     </body>
 </html>

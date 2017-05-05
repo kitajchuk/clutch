@@ -1,11 +1,11 @@
 {
-  "title": "Kitajchuk Prismic Template",
-  "name": "kitajchuk-template-prismic",
-  "description": "Boilerplate template and scaffold for Prismic.io projects.",
+  "title": "Clutch",
+  "name": "clutch",
+  "description": "A modern headless CMS scaffold.",
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "start": "echo 'Starting...' && (npm run server & npm run watch)",
+    "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "build": "./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
     "build:staging": "./node_modules/.bin/webpack --env.staging --progress --profile --display-modules --colors -p",
@@ -59,15 +59,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/kitajchuk/kitajchuk-template-prismic.git"
+    "url": "git://github.com/kitajchuk/clutch.git"
   },
   "bugs": {
-    "url": "https://github.com/kitajchuk/kitajchuk-template-prismic/issues"
+    "url": "https://github.com/kitajchuk/clutch/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/kitajchuk/kitajchuk-template-prismic/blob/master/LICENSE"
+      "url": "https://github.com/kitajchuk/clutch/blob/master/LICENSE"
     }
   ],
   "keywords": [],

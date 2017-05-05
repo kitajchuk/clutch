@@ -1,12 +1,80 @@
 /******************************************************************************
  * Classes
 *******************************************************************************/
-.header {}
-.navi {}
-.main {}
+.header {
+    height: $header-height;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: $z_layer_05;
+    }
+.navi {
+    background-color: transparent;
+
+    &.is-active {
+        pointer-events: none;
+
+        .navi__ul {
+            pointer-events: auto;
+            }
+    }
+}
+.navi__a {
+    font-size: 8vw;
+    line-height: 1.5;
+    }
+.main {
+    padding-top: $header-height;
+    transition: opacity $fast-duration $ease;
+
+    &.is-inactive {
+        opacity: 0;
+        pointer-events: none;
+        }
+}
 .footer {}
 .intro {}
 .intro__logo {
-    max-width: $logo-width;
-    width: 100%;
+    width: $logo-width;
+    max-width: 100%;
     }
+.index {}
+.index__col + .index__col {
+    padding-left: $padding-wrap;
+    }
+.index__li {
+    border-top: 1px solid $charcoal;
+    }
+.project {}
+.project__info {
+    left: 0;
+    padding-top: $header-height;
+    position: fixed;
+    top: 0;
+    @include wrap-copy();
+    }
+.project__body {
+    padding-right: $padding-wrap;
+    text-align: right;
+
+    .slices__slice {
+        width: 100%;
+        }
+    .slices__slice + .slices__slice {
+        margin-top: $expander-one;
+        }
+    .slices__text {
+        text-align: left;
+        }
+    .slices__content {
+        display: inline-block;
+        width: calc( 100vw - #{$padding-wrap} - #{$wrap-copy} );
+        }
+}
+.cms {
+    p + p,
+    h1 + p {
+        margin-top: $expander-mobile;
+        }
+}

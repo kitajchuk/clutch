@@ -9,7 +9,7 @@ clutch
 
 * [Quickstart](#quickstart)
 * [Headless](#headless)
-    * [Prismic](#prismic)
+    * [Prismic](#prismicio)
     * [Contentful](#contentful)
 * [Express](#express)
 * [ProperJS](#properjs)
@@ -32,9 +32,9 @@ This will load the Clutch example connected to a Prismic repository.
 Clutch aims to be a simple, adapter-based scaffold for building modern wep applications. It's design uses a simple ORM adapter concept to normalize the high-level data structures. From there the system leaves the doors open for you to build, template and work with your data in its provided service format.
 
 #### Prismic.io
-The Prismic.io adapter works out of the box. Prismic allows `JSON` authoring of content models so its a bit easier to do the initial setup.
+The Prismic adapter works out of the box. Prismic allows `JSON` authoring of content models so its a bit easier to do the initial setup.
 
-* Create your Prismic.io repository
+* Create your Prismic repository
 * Add your repositories API access key to `server/config.js`
 * Make sure the `adapter` property is set to `prismic`
 * In your repository create a single content type called `Site`

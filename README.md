@@ -9,8 +9,8 @@ clutch
 
 * [Quickstart](#quickstart)
 * [Headless](#headless)
-    * [Prismic](#prismicio)
-    * [Contentful](#contentful)
+    * [Prismic :+1:](#prismicio)
+    * [Contentful? :thought_balloon: ](#contentful)
 * [Express](#express)
 * [ProperJS](#properjs)
 * [AWS](#aws)
@@ -67,12 +67,39 @@ The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is d
 The `template` anatomy:
 
 * `template/index.html` — layout
-* `tempsate/pages` — path based templates
+* `template/pages` — path based templates
 * `template/partials` — api partial templates
 * `template/site` — structural layout level partials
 * `template/**?` — you can organize any way you like from here :)
 
-When working with templates you are looking at a normalized Template Context Object. You have normalize `site` and `navi` data structures created from your headless CMS `Site` content type. Depending on your content context you will either have an `item` reference or an `items` reference.
+When working with templates you are looking at a normalized Template Context Object. You have normalized `site` and `navi` data structures created from your headless CMS `Site` content type. Depending on your content context you will either have an `item` object reference or an `items` array reference.
+
+The Template Context Object tree:
+
+```js
+// Tempate Context Object
+{
+    site: {object},
+    navi: [array],
+    page: "string",
+    cache: boolean?,
+    error: "string",
+    timestamp: number,
+    item: {object},
+    items: [array],
+    stylesheet: "string",
+    javascript: "string"
+}
+
+// The navi {object} context
+{
+    id: "string",
+    uid: "string",
+    type: "string",
+    slug: "string",
+    title: "string"
+}
+```
 
 Using the context object with `EJS`:
 

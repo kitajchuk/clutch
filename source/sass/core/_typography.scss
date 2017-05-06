@@ -29,7 +29,7 @@
 .a,
 .cms a {
     border-bottom: 1px solid transparent;
-    transition: border-bottom-color $fast-duration $ease-three;
+    transition: border-bottom-color $fast-duration $ease;
     @include a();
 
     &:hover {

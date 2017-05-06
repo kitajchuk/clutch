@@ -114,24 +114,26 @@ const getSite = function () {
                     let id = null;
                     let uid = null;
                     let type = null;
-                    let slug = "";
+                    let slug = null;
                     const title = slice.value.value[ 0 ].data.name.value;
 
+                    // Handle `slug` manual entry
                     if ( slice.value.value[ 0 ].data.slug ) {
-                        slug = `/${slice.value.value[ 0 ].data.slug.value.replace( /\//g, "" )}/`;
+                        slug = slice.value.value[ 0 ].data.slug.value.replace( /\//g, "" );
 
+                    // Handle Document.link to a Page
                     } else if ( slice.value.value[ 0 ].data.page ) {
                         id = slice.value.value[ 0 ].data.page.value.document.id;
                         uid = slice.value.value[ 0 ].data.page.value.document.uid;
                         type = slice.value.value[ 0 ].data.page.value.document.type;
-                        slug = `/${uid}/`;
+                        slug = uid;
                     }
 
                     navi.items.push({
                         id: id,
-                        uid: uid,
+                        uid: (slug === config.homepage ? slug : uid),
                         type: type,
-                        slug: slug,
+                        slug: (slug === config.homepage ? "/" : `/${slug}/`),
                         title: title
                     });
                 });

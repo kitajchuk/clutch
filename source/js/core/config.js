@@ -13,6 +13,17 @@ const config = {
     /**
      *
      * @public
+     * @member homepage
+     * @memberof core.config
+     * @description The default homepage slug.
+     *
+     */
+    homepage: "home",
+
+
+    /**
+     *
+     * @public
      * @member defaultEasing
      * @memberof core.config
      * @description The default easing function for javascript Tweens.

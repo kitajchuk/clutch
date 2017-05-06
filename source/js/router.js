@@ -164,9 +164,11 @@ const router = {
             core.dom.html.removeClass( `is-${this.view}-page` );
         }
 
-        this.view = (data.request.params.view || "home");
+        this.view = (data.request.params.view || core.config.homepage);
 
         core.dom.html.addClass( `is-${this.view}-page` );
+
+        navi.active( this.view );
     },
 
 

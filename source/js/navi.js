@@ -21,6 +21,7 @@ const navi = {
     init () {
         this.isOpen = false;
         this.element = core.dom.navi;
+        this.items = this.element.find( ".js-navi-a" );
         this.trigger = core.dom.body.find( ".js-controller--navi" );
         this.bind();
     },
@@ -36,12 +37,20 @@ const navi = {
     open () {
         this.isOpen = true;
         this.element.addClass( "is-active" );
+        core.dom.html.addClass( "is-navi-open" );
     },
 
 
     close () {
         this.isOpen = false;
         this.element.removeClass( "is-active" );
+        core.dom.html.removeClass( "is-navi-open" );
+    },
+
+
+    active ( view ) {
+        this.items.removeClass( "is-active" );
+        this.items.filter( `.js-navi--${view}` ).addClass( "is-active" );
     },
 
 

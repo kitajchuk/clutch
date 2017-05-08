@@ -1,7 +1,6 @@
 import $ from "properjs-hobo";
 import PageController from "properjs-pagecontroller";
-import ImageController from "./class/ImageController";
-import AnimateController from "./class/AnimateController";
+import Controllers from "./class/Controllers";
 import * as core from "./core";
 import views from "./views";
 import navi from "./navi";
@@ -26,8 +25,11 @@ const router = {
     init () {
         this.pageClass = "";
         this.pageDuration = core.util.getTransitionDuration( core.dom.main[ 0 ] );
+        this.controllers = new Controllers();
         this.bindEmpty();
         this.initPages();
+
+        core.emitter.on( "app--intro-teardown", () => this.topper() );
 
         core.log( "[Router initialized]" );
     },
@@ -36,29 +38,13 @@ const router = {
     /**
      *
      * @public
-     * @method route
-     * @param {string} path The uri to route to
+     * @method bindEmpty
      * @memberof router
-     * @description Trigger app to route a specific page. [Reference]{@link https://github.com/ProperJS/Router/blob/master/Router.js#L222}
+     * @description Suppress #hash links.
      *
      */
-    route ( path ) {
-        this.controller.getRouter().trigger( path );
-    },
-
-
-    /**
-     *
-     * @public
-     * @method push
-     * @param {string} path The uri to route to
-     * @param {function} cb Optional callback to fire
-     * @memberof router
-     * @description Trigger a silent route with a supplied callback.
-     *
-     */
-    push ( path, cb ) {
-        this.controller.routeSilently( path, (cb || core.util.noop) );
+    bindEmpty () {
+        core.dom.body.on( "click", "[href^='#']", ( e ) => e.preventDefault() );
     },
 
 
@@ -106,7 +92,7 @@ const router = {
      */
     initPage ( data ) {
         this.changeClass( data );
-        this.execControllers();
+        this.controllers.exec();
     },
 
 
@@ -134,19 +120,6 @@ const router = {
             main: main,
             html: main[ 0 ].innerHTML
         };
-    },
-
-
-    /**
-     *
-     * @public
-     * @method bindEmpty
-     * @memberof router
-     * @description Suppress #hash links.
-     *
-     */
-    bindEmpty () {
-        core.dom.body.on( "click", "[href^='#']", ( e ) => e.preventDefault() );
     },
 
 
@@ -186,7 +159,7 @@ const router = {
         core.dom.main.addClass( "is-inactive" );
 
         navi.close();
-        this.destroyControllers();
+        this.controllers.destroy();
     },
 
 
@@ -206,6 +179,9 @@ const router = {
 
         core.emitter.fire( "app--analytics-push" );
 
+        // Ensure topout prior to preload being done...
+        this.topper();
+
         this.changeClass( data );
     },
 
@@ -223,51 +199,48 @@ const router = {
         core.dom.html.removeClass( "is-routing" );
         core.dom.main.removeClass( "is-inactive" );
 
-        this.execControllers();
+        this.controllers.exec();
+    },
+
+    /**
+     *
+     * @public
+     * @method route
+     * @param {string} path The uri to route to
+     * @memberof router
+     * @description Trigger app to route a specific page. [Reference]{@link https://github.com/ProperJS/Router/blob/master/Router.js#L222}
+     *
+     */
+    route ( path ) {
+        this.controller.getRouter().trigger( path );
     },
 
 
     /**
      *
      * @public
-     * @method execControllers
+     * @method push
+     * @param {string} path The uri to route to
+     * @param {function} cb Optional callback to fire
      * @memberof router
-     * @description Run page controllers.
+     * @description Trigger a silent route with a supplied callback.
      *
      */
-    execControllers () {
-        this.images = core.dom.main.find( core.config.lazyImageSelector );
-        this.animates = core.dom.main.find( core.config.animSelector );
-
-        this.imageController = new ImageController( this.images );
-        this.imageController.on( "preloaded", () => {
-            core.emitter.fire( "app--intro-teardown" );
-        });
-
-        if ( this.animates.length ) {
-            this.animateController = new AnimateController( this.animates );
-        }
+    push ( path, cb ) {
+        this.controller.routeSilently( path, (cb || core.util.noop) );
     },
 
 
     /**
      *
      * @public
-     * @method destroyControllers
+     * @method topper
      * @memberof router
-     * @description Kill page controllers.
+     * @description Set scroll position and clear scroll classNames.
      *
      */
-    destroyControllers () {
-        if ( this.imageController ) {
-            this.imageController.destroy();
-            this.imageController = null;
-        }
-
-        if ( this.animateController ) {
-            this.animateController.destroy();
-            this.animateController = null;
-        }
+    topper () {
+        window.scrollTo( 0, 0 );
     }
 };
 

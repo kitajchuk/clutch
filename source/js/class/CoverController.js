@@ -17,9 +17,7 @@ class CoverController extends Controller {
 
         this.element = element;
 
-        if ( this.element.length ) {
-            this.start();
-        }
+        this.start();
     }
 
 

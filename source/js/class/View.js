@@ -1,7 +1,6 @@
-import $ from "properjs-hobo";
 import * as core from "../core";
-import ImageController from "./ImageController";
-import AnimateController from "./AnimateController";
+import $ from "properjs-hobo";
+import Controllers from "./Controllers";
 
 
 /**
@@ -23,6 +22,7 @@ class View {
         this.callback = args.cb;
         this.response = "";
         this.data = {};
+        this.controllers = new Controllers();
 
         this.init();
     }
@@ -92,13 +92,28 @@ class View {
      *
      */
     load () {
-        return $.ajax({
-            url: this.endpoint,
-            dataType: "html",
-            method: "GET",
-            data: {
-                format: "html",
-                template: this.id
+        return new Promise(( resolve ) => {
+            const cache = core.cache.get( `partial--${this.id}` );
+
+            if ( cache ) {
+                resolve( cache );
+
+            } else {
+                $.ajax({
+                    url: this.endpoint,
+                    dataType: "html",
+                    method: "GET",
+                    data: {
+                        format: "html",
+                        template: this.id
+                    }
+
+                }).then(( response ) => {
+                    // Enable client-side partial caching?
+                    // core.cache.set( `partial--${this.id}`, response );
+
+                    resolve( response );
+                });
             }
         });
     }
@@ -126,17 +141,7 @@ class View {
      *
      */
     exec () {
-        this.images = core.dom.main.find( core.config.lazyImageSelector );
-        this.animates = core.dom.main.find( core.config.animSelector );
-
-        this.imageController = new ImageController( this.images );
-        this.imageController.on( "preloaded", () => {
-            core.emitter.fire( "app--intro-teardown" );
-        });
-
-        if ( this.animates.length ) {
-            this.animateController = new AnimateController( this.animates );
-        }
+        this.controllers.exec();
     }
 
 
@@ -149,15 +154,7 @@ class View {
      *
      */
     destroy () {
-        if ( this.imageController ) {
-            this.imageController.destroy();
-            this.imageController = null;
-        }
-
-        if ( this.animateController ) {
-            this.animateController.destroy();
-            this.animateController = null;
-        }
+        this.controllers.destroy();
     }
 }
 

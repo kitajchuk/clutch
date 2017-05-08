@@ -45,7 +45,9 @@ expressApp.get( "/:type/:uid", lib.content.getPage );
  *
  */
 lib.watch.getPages().then(() => {
-    lib.watch.startWatch();
+    if ( config.env.sandbox ) {
+        lib.watch.startWatch();
+    }
 
     expressApp.listen( config.express.port );
 

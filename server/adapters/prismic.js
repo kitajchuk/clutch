@@ -244,22 +244,14 @@ const getDataForApi = function ( req ) {
                     error: error
                 });
             };
-
-            // query
+            const type = req.params.type;
             const query = [];
+            const form = getForm( req, api );
 
-            // form
-            const form = api.form( (api.data.forms[ req.params.type ] ? req.params.type : "everything") );
+            // query: type?
+            query.push( prismic.Predicates.at( "document.type", type ) );
 
-            // ref
-            form.ref( getRef( req, api ) );
-
-            // type
-            if ( !api.data.forms[ req.params.type ] ) {
-                query.push( prismic.Predicates.at( "document.type", req.params.type ) );
-            }
-
-            // query
+            // query?
             if ( query.length ) {
                 form.query( query );
             }
@@ -285,10 +277,6 @@ const getDataForPage = function ( req ) {
         };
         const doQuery = function ( type ) {
             const done = function ( json ) {
-                // Question?
-                // A `single` type should return a pure `result` {object}
-                // A `repeatable` type should return a `results` [array]
-
                 if ( !json.results.length ) {
                     reject( `The page template for "${type}" exists but Prismic has no data for it.` );
 
@@ -311,20 +299,11 @@ const getDataForPage = function ( req ) {
             const fail = function ( error ) {
                 reject( error );
             };
-
-            // query
             const query = [];
-
-            // navi
             const navi = getNavi( type );
+            const form = getForm( req, cache.api );
 
-            // form
-            const form = cache.api.form( "everything" );
-
-            // ref
-            form.ref( getRef( req, cache.api ) );
-
-            // type
+            // query: type?
             if ( navi ) {
                 query.push( prismic.Predicates.at( "document.type", navi.type ) );
                 query.push( prismic.Predicates.at( "document.id", navi.id ) );
@@ -333,22 +312,10 @@ const getDataForPage = function ( req ) {
                 query.push( prismic.Predicates.at( "document.type", type ) );
             }
 
-            // Custom querying can be done here...
-            // Example use of `active` field for querying
-            // if ( type === "${sometype}" ) {
-            //     query.push( prismic.Predicates.has( `my.${type}.active` ) );
-            // }
-
-            // query
+            // query?
             if ( query.length ) {
                 form.query( query );
             }
-
-            // Custom ordering can be done here...
-            // Example use of `order` field for ordering
-            // if ( type === "${sometype}" ) {
-            //     form.orderings( `[my.${type}.order]` );
-            // }
 
             // submit
             form.submit().then( done ).catch( fail );
@@ -390,6 +357,12 @@ const getDoc = function ( uid, documents ) {
     return documents.find(( doc ) => {
         return (doc.uid === uid);
     });
+};
+
+
+
+const getForm = function ( req, api ) {
+    return api.form( "everything" ).pageSize( 100 ).ref( getRef( req, api ) );
 };
 
 

@@ -57,7 +57,7 @@ const getPage = function ( req, res ) {
 
         lib.template.render( config.template.layout, localObject )
             .then(( html ) => {
-                res.send( html );
+                res.status( (context.page === "404" ? 404 : 200) ).send( html );
             })
             .catch(( error ) => {
                 console.log( config.logger, error );

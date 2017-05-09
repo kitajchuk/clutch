@@ -52,11 +52,11 @@ const getApi = function ( req, res ) {
 
         if ( req.query.format === "html" ) {
             getPartial( req.params, req.query, data ).then(( html ) => {
-                res.send( html );
+                res.status( 200 ).send( html );
             });
 
         } else {
-            res.json( data );
+            res.status( 200 ).json( data );
         }
 
     }).catch(( error ) => {

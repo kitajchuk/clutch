@@ -1,6 +1,7 @@
 import * as core from "../core";
 import ImageController from "./ImageController";
 import AnimateController from "./AnimateController";
+import CoverController from "./CoverController";
 
 
 /**
@@ -18,6 +19,7 @@ class Controllers {
     exec () {
         this.images = core.dom.main.find( core.config.lazyImageSelector );
         this.animates = core.dom.main.find( core.config.animSelector );
+        this.cover = core.dom.main.find( core.config.coverSelector );
 
         if ( this.animates.length ) {
             this.animateController = new AnimateController( this.animates );
@@ -27,6 +29,10 @@ class Controllers {
         this.imageController.on( "preloaded", () => {
             core.emitter.fire( "app--intro-teardown" );
         });
+
+        if ( this.cover.length ) {
+            this.coverController = new CoverController( this.cover );
+        }
     }
 
 
@@ -39,6 +45,11 @@ class Controllers {
         if ( this.animateController ) {
             this.animateController.destroy();
             this.animateController = null;
+        }
+
+        if ( this.coverController ) {
+            this.coverController.destroy();
+            this.coverController = null;
         }
     }
 }

@@ -41,9 +41,7 @@ const getApi = function ( req, res ) {
 
         // Single document for /:type/:uid
         if ( req.params.uid ) {
-            data.document = json.find(( document ) => {
-                return (document.uid === req.params.uid);
-            });
+            data.document = getDoc( req.params.uid, json );
 
         // All documents for /:type
         } else {
@@ -283,7 +281,7 @@ const getDataForPage = function ( req ) {
         const doQuery = function ( type ) {
             const done = function ( json ) {
                 if ( !json.results.length ) {
-                    reject( `The page template for "${type}" exists but Prismic has no data for it.` );
+                    reject( `Prismic has no data for the content-type "${type}".` );
 
                 } else {
                     // uid

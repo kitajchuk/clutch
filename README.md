@@ -43,6 +43,8 @@ The Prismic adapter works out of the box. Prismic allows `JSON` authoring of con
 * You can now create your `Site` document and apply its settings
 * You can create `Page` documents and add them to the `Site` navigation as needed
 
+These are some helpful links for working with the Prismic platform.
+
 * [Developers Manual](https://prismic.io/docs/old/documentation/developers-manual)
 * [API Documentation](https://prismic.io/docs/old/documentation/api-documentation)
 * [Previews docs](https://prismic.io/docs/in-website-preview#?lang=javascript)
@@ -97,7 +99,8 @@ The Template Context Object tree:
     uid: "string",
     type: "string",
     slug: "string",
-    title: "string"
+    title: "string",
+    style: "string"
 }
 ```
 

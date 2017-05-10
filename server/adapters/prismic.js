@@ -115,18 +115,22 @@ const getSite = function () {
                     let uid = null;
                     let type = null;
                     let slug = null;
+                    const style = slice.value.value[ 0 ].data.style.value.toLowerCase();
                     const title = slice.value.value[ 0 ].data.name.value;
 
-                    // Handle `slug` manual entry
-                    if ( slice.value.value[ 0 ].data.slug ) {
-                        slug = slice.value.value[ 0 ].data.slug.value.replace( /\//g, "" );
-
                     // Handle Document.link to a Page
-                    } else if ( slice.value.value[ 0 ].data.page ) {
+                    if ( slice.value.value[ 0 ].data.page ) {
                         id = slice.value.value[ 0 ].data.page.value.document.id;
                         uid = slice.value.value[ 0 ].data.page.value.document.uid;
                         type = slice.value.value[ 0 ].data.page.value.document.type;
                         slug = uid;
+
+                    // Handle `slug` manual entry
+                    } else {
+                        slug = slice.value.value[ 0 ].data.slug.value.replace( /\//g, "" );
+                        id = slug;
+                        uid = slug;
+                        type = slug;
                     }
 
                     navi.items.push({
@@ -134,7 +138,8 @@ const getSite = function () {
                         uid: (slug === config.homepage ? slug : uid),
                         type: type,
                         slug: (slug === config.homepage ? "/" : `/${slug}/`),
-                        title: title
+                        title: title,
+                        style: style
                     });
                 });
 

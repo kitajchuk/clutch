@@ -11,20 +11,27 @@
 *******************************************************************************/
 @import "core/fonts";
 @import "core/reset";
-@import "core/icons";
 @import "core/document";
 @import "core/typography";
-@import "core/images";
 
 
 
 /******************************************************************************
  * Modules
 *******************************************************************************/
+@import "modules/cms";
+@import "modules/main";
+@import "modules/navi";
+@import "modules/grid";
+@import "modules/icons";
+@import "modules/intro";
+@import "modules/images";
+@import "modules/header";
 @import "modules/screens";
-@import "modules/anims";
-@import "modules/classes";
-@import "core/grid";
+@import "modules/animate";
+
+// Project specific:
+
 
 
 

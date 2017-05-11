@@ -2,7 +2,7 @@
 
 
 
-const config = require( "../config" );
+const config = require( "../core/config" );
 
 
 

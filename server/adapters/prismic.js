@@ -13,6 +13,7 @@
  * getNavi: Function
  * getPreview: Function
  * getPartial: Function
+ * getWebhook: Function
  *
  * Different Headless CMS will require slightly different internal approaches
  * Whatever means necessary is A-OK as long as the data resolves to the ORM format
@@ -20,11 +21,15 @@
  *
  */
 const path = require( "path" );
-const config = require( "../config" );
 const prismic = require( "prismic.io" );
-const cache = {};
-const lib = {
-    template: require( "../lib/template" )
+const cache = {
+    site: null,
+    navi: null,
+    client: null
+};
+const core = {
+    config: require( "../core/config" ),
+    template: require( "../core/template" )
 };
 const ContextObject = require( "../class/ContextObject" );
 
@@ -35,30 +40,34 @@ const ContextObject = require( "../class/ContextObject" );
  * Handle API requests.
  *
  */
-const getApi = function ( req, res ) {
-    getDataForApi( req ).then(( json ) => {
-        const data = {};
+const getApi = function ( req, res, handle ) {
+    return new Promise(( resolve, reject ) => {
+        getDataForApi( req, handle ).then(( json ) => {
+            const data = {};
 
-        // Single document for /:type/:uid
-        if ( req.params.uid ) {
-            data.document = getDoc( req.params.uid, json );
+            // Single document for /:type/:uid
+            if ( req.params.uid ) {
+                data.document = getDoc( req.params.uid, json );
 
-        // All documents for /:type
-        } else {
-            data.documents = json;
-        }
+            // All documents for /:type
+            } else {
+                data.documents = json;
+            }
 
-        if ( req.query.format === "html" ) {
-            getPartial( req.params, req.query, data ).then(( html ) => {
-                res.status( 200 ).send( html );
-            });
+            // Render partial for ?format=html&template=foo
+            if ( req.query.format === "html" ) {
+                getPartial( req.params, req.query, data ).then(( html ) => {
+                    resolve( data );
+                });
 
-        } else {
-            res.status( 200 ).json( data );
-        }
+            } else {
+                resolve( data );
+            }
 
-    }).catch(( error ) => {
-        res.json( error );
+        }).catch(( error ) => {
+            // Resolve error as JSON result
+            resolve( error );
+        });
     });
 };
 
@@ -69,9 +78,9 @@ const getApi = function ( req, res ) {
  * Handle Page requests.
  *
  */
-const getPage = function ( req ) {
+const getPage = function ( req, res, handle ) {
     return new Promise(( resolve, reject ) => {
-        getDataForPage( req ).then(( json ) => {
+        getDataForPage( req, handle ).then(( json ) => {
             resolve( json );
 
         }).catch(( error ) => {
@@ -84,13 +93,85 @@ const getPage = function ( req ) {
 
 /**
  *
+ * Handle preview URLs from Prismic for draft content.
+ *
+ */
+const getPreview = function ( req, res ) {
+    return new Promise(( resolve, reject ) => {
+        const previewToken = req.query.token;
+        const linkResolver = function ( doc ) {
+            return `/${doc.type}/${doc.uid}/`;
+        };
+
+        prismic.api( core.config.api.access, null ).then(( client ) => {
+            client.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
+                res.cookie( prismic.previewCookie, previewToken, {
+                    maxAge: 60 * 30 * 1000,
+                    path: "/",
+                    httpOnly: false
+                });
+
+                resolve( redirectUrl );
+            });
+        });
+    });
+};
+
+
+
+/**
+ *
+ * Handle webhook POST URLs from Prismic for content changes.
+ *
+ */
+const getWebhook = function ( req, res ) {
+
+};
+
+
+
+/**
+ *
+ * Handle partial rendering.
+ *
+ */
+const getPartial = function ( params, query, data ) {
+    return new Promise(( resolve, reject ) => {
+        const partial = (query.template || params.type);
+        const localObject = {
+            context: new ContextObject( partial )
+        };
+        const template = path.join( core.config.template.partialsDir, `${partial}.html` );
+
+        if ( data.document ) {
+            localObject.context.set( "item", data.document );
+        }
+
+        if ( data.documents ) {
+            localObject.context.set( "items", data.documents );
+        }
+
+        lib.template.render( template, localObject )
+            .then(( html ) => {
+                resolve( html );
+            })
+            .catch(( error ) => {
+                reject( error );
+            });
+    });
+};
+
+
+
+/**
+ *
  * Load the Site context model.
  *
  */
 const getSite = function () {
     return new Promise(( resolve, reject ) => {
-        prismic.api( config.api.access, null ).then(( api ) => {
-            api.getSingle( "site" ).then(( document ) => {
+        prismic.api( core.config.api.access, null ).then(( client ) => {
+            client.getSingle( "site" ).then(( document ) => {
                 const navi = {
                     items: []
                 };
@@ -133,15 +214,15 @@ const getSite = function () {
 
                     navi.items.push({
                         id: id,
-                        uid: (slug === config.homepage ? slug : uid),
+                        uid: (slug === core.config.homepage ? slug : uid),
                         type: type,
-                        slug: (slug === config.homepage ? "/" : `/${slug}/`),
+                        slug: (slug === core.config.homepage ? "/" : `/${slug}/`),
                         title: title,
                         style: style
                     });
                 });
 
-                cache.api = api;
+                cache.client = client;
                 cache.site = site;
                 cache.navi = navi;
 
@@ -174,71 +255,12 @@ const getNavi = function ( type ) {
 
 /**
  *
- * Handle preview URLs from Prismic for draft content.
- *
- */
-const getPreview = function ( req, res ) {
-    const previewToken = req.query.token;
-    const linkResolver = function ( doc ) {
-        return `/${doc.type}/${doc.uid}/`;
-    };
-
-    prismic.api( config.api.access, null ).then(( api ) => {
-        api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
-            res.cookie( prismic.previewCookie, previewToken, {
-                maxAge: 60 * 30 * 1000,
-                path: "/",
-                httpOnly: false
-            });
-
-            res.redirect( redirectUrl );
-        });
-    });
-};
-
-
-
-/**
- *
- * Handle partial rendering.
- *
- */
-const getPartial = function ( params, query, data ) {
-    return new Promise(( resolve, reject ) => {
-        const partial = (query.template || params.type);
-        const localObject = {
-            context: new ContextObject( partial )
-        };
-        const template = path.join( config.template.partialsDir, `${partial}.html` );
-
-        if ( data.document ) {
-            localObject.context.set( "item", data.document );
-        }
-
-        if ( data.documents ) {
-            localObject.context.set( "items", data.documents );
-        }
-
-        lib.template.render( template, localObject )
-            .then(( html ) => {
-                resolve( html );
-            })
-            .catch(( error ) => {
-                reject( error );
-            });
-    });
-};
-
-
-
-/**
- *
  * Load data for API response. Resolve RAW from Service.
  *
  */
-const getDataForApi = function ( req ) {
+const getDataForApi = function ( req, handle ) {
     return new Promise(( resolve, reject ) => {
-        prismic.api( config.api.access, null ).then(( api ) => {
+        prismic.api( core.config.api.access, null ).then(( client ) => {
             const done = function ( json ) {
                 resolve( json.results );
             };
@@ -248,11 +270,16 @@ const getDataForApi = function ( req ) {
                 });
             };
             const type = req.params.type;
-            const query = [];
-            const form = getForm( req, api );
+            const form = getForm( req, client );
+            let query = [];
 
             // query: type?
             query.push( prismic.Predicates.at( "document.type", type ) );
+
+            // query: pubsub?
+            if ( handle ) {
+                query = handle.handler( cache.client, query, req );
+            }
 
             // query?
             if ( query.length ) {
@@ -272,7 +299,7 @@ const getDataForApi = function ( req ) {
  * Load data for Page response.
  *
  */
-const getDataForPage = function ( req ) {
+const getDataForPage = function ( req, handle ) {
     return new Promise(( resolve, reject ) => {
         const data = {
             item: null,
@@ -302,9 +329,9 @@ const getDataForPage = function ( req ) {
             const fail = function ( error ) {
                 reject( error );
             };
-            const query = [];
             const navi = getNavi( type );
-            const form = getForm( req, cache.api );
+            const form = getForm( req, cache.client );
+            let query = [];
 
             // query: type?
             if ( navi ) {
@@ -315,10 +342,17 @@ const getDataForPage = function ( req ) {
                 query.push( prismic.Predicates.at( "document.type", type ) );
             }
 
+            // query: pubsub?
+            if ( handle ) {
+                query = handle.handler( cache.client, query, req );
+            }
+
             // query?
             if ( query.length ) {
                 form.query( query );
             }
+
+            // ordering?
 
             // submit
             form.submit().then( done ).catch( fail );
@@ -344,8 +378,8 @@ const getDataForPage = function ( req ) {
  * Get valid `ref` for Prismic API data.
  *
  */
-const getRef = function ( req, api ) {
-    let ref = api.master();
+const getRef = function ( req, client ) {
+    let ref = client.master();
 
     if ( req && req.cookies && req.cookies[ prismic.previewCookie ] ) {
         ref = req.cookies[ prismic.previewCookie ];
@@ -374,8 +408,8 @@ const getDoc = function ( uid, documents ) {
  * Get the stub of the search form.
  *
  */
-const getForm = function ( req, api ) {
-    return api.form( "everything" ).pageSize( 100 ).ref( getRef( req, api ) );
+const getForm = function ( req, client ) {
+    return client.form( "everything" ).pageSize( 100 ).ref( getRef( req, client ) );
 };
 
 
@@ -384,5 +418,6 @@ module.exports = {
     cache,
     getApi,
     getPage,
-    getPreview
+    getPreview,
+    getWebhook
 };

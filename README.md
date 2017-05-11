@@ -35,7 +35,7 @@ Clutch aims to be a simple, adapter-based scaffold for building modern wep appli
 The Prismic adapter works out of the box. Prismic allows `JSON` authoring of content models so its a bit easier to do the initial setup.
 
 * Create your Prismic repository
-* Add your repositories API access key to `server/config.js`
+* Add your repositories API access key to `server/core/config.js`
 * Make sure the `adapter` property is set to `prismic`
 * In your repository create a single content type called `Site`
 * In your repository create a repeatable content type called `Page`
@@ -61,10 +61,35 @@ The Contentful adapter is in progess so hopefully its ready really soon ;)
 The Clutch node server is designed to access data in a convention over configuration approach. The format is `:type/:uid`. As long as you have content in your CMS for the types and UIDs your content will be loaded.
 
 #### API
-The Clutch node server also operates as a `JSON` API for your data. The format is `api/:type/:uid`. You can use the API for partial renderings if you pass `?format=html` along with your request. Partials are loaded out of the `template/partials` directory.
+The Clutch node server also operates as a `JSON` API for your data. The format is `api/:type/:uid`. You can use the API for partial renderings if you pass `?format=html&template=yourtemplate` along with your request. Partials are loaded out of the `template/partials` directory.
+
+#### Pub/Sub
+The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to `:type/:uid` requests and modify the `query` in any way you need or like. You can subscribe to either `api` or `page` request types. The `client` and `query` objects passed to your handlers will be representative of the CMS you are using. Currently only [Prismic](#prismicio) has a working adapter for Clutch.
+
+The default `server/app.js` has a couple basic examples.
+
+```js
+const router = require( "./router" );
+
+// :req, :type, :uid, :callback
+router.on( "page", "example", null, ( client, query, req ) => {
+    // Modify query?
+
+    // MUST return {query} for final client data fetch
+    return query;
+});
+
+// :req, :type, :uid, :callback
+router.on( "api", "page", null, ( client, query, req ) => {
+    // Modify query?
+
+    // MUST return {query} for final client data fetch
+    return query;
+});
+```
 
 #### Template
-The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `server/config.js` editing the `template.module` and `template.requires` fields.
+The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `server/core/config.js` editing the `template.module` and `template.requires` fields.
 
 The `template` anatomy:
 

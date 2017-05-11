@@ -1,7 +1,7 @@
 const path = require( "path" );
 const root = path.resolve( __dirname );
 const source = path.join( root, "source" );
-const config = require( "./server/config" );
+const config = require( "./server/core/config" );
 const nodeModules = "node_modules";
 const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );

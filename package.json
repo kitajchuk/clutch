@@ -10,7 +10,7 @@
     "build": "./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
     "build:staging": "./node_modules/.bin/webpack --env.staging --progress --profile --display-modules --colors -p",
     "build:production": "./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
-    "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/nodemon server/server.js",
+    "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/nodemon server/app.js",
     "postinstall": "mkdir local ; mkdir template/partials ; touch .notes ; cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not attr filter detach remove append' ; cd ../../server && npm install",
     "deploy:staging": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
     "deploy:production": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",

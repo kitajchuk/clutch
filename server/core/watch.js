@@ -1,7 +1,9 @@
 const fs = require( "fs" );
-const config = require( "../config" );
+const config = require( "./config" );
 const watch = require( "node-watch" );
-const cache = {};
+const cache = {
+    pages: null
+};
 
 
 

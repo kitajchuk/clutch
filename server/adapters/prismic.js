@@ -57,7 +57,7 @@ const getApi = function ( req, res, handle ) {
             // Render partial for ?format=html&template=foo
             if ( req.query.format === "html" ) {
                 getPartial( req.params, req.query, data ).then(( html ) => {
-                    resolve( data );
+                    resolve( html );
                 });
 
             } else {
@@ -151,7 +151,7 @@ const getPartial = function ( params, query, data ) {
             localObject.context.set( "items", data.documents );
         }
 
-        lib.template.render( template, localObject )
+        core.template.render( template, localObject )
             .then(( html ) => {
                 resolve( html );
             })
@@ -260,35 +260,39 @@ const getNavi = function ( type ) {
  */
 const getDataForApi = function ( req, handle ) {
     return new Promise(( resolve, reject ) => {
-        prismic.api( core.config.api.access, null ).then(( client ) => {
-            const done = function ( json ) {
-                resolve( json.results );
-            };
-            const fail = function ( error ) {
-                resolve({
-                    error: error
-                });
-            };
-            const type = req.params.type;
-            const form = getForm( req, client );
-            let query = [];
+        const doQuery = function ( type ) {
+            prismic.api( core.config.api.access, null ).then(( client ) => {
+                const done = function ( json ) {
+                    resolve( json.results );
+                };
+                const fail = function ( error ) {
+                    resolve({
+                        error: error
+                    });
+                };
+                const type = req.params.type;
+                const form = getForm( req, client );
+                let query = [];
 
-            // query: type?
-            query.push( prismic.Predicates.at( "document.type", type ) );
+                // query: type?
+                query.push( prismic.Predicates.at( "document.type", type ) );
 
-            // query: pubsub?
-            if ( handle ) {
-                query = handle.handler( cache.client, query, req );
-            }
+                // query: pubsub?
+                if ( handle ) {
+                    query = handle.handler( cache.client, query, req );
+                }
 
-            // query?
-            if ( query.length ) {
-                form.query( query );
-            }
+                // query?
+                if ( query.length ) {
+                    form.query( query );
+                }
 
-            // submit
-            form.submit().then( done ).catch( fail );
-        });
+                // submit
+                form.submit().then( done ).catch( fail );
+            });
+        };
+
+        doQuery( req.params.type );
     });
 };
 
@@ -359,7 +363,7 @@ const getDataForPage = function ( req, handle ) {
         };
 
         getSite().then(() => {
-            const type = (req.params.type || "");
+            const type = req.params.type;
 
             if ( !type ) {
                 resolve( data );

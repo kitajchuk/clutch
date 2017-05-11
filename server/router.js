@@ -50,8 +50,13 @@ const getKey = function ( type, uid ) {
 const getApi = function ( req, res ) {
     const key = getKey( req.params.type, req.params.uid );
 
-    core.query.getApi( req, res, handlers.api[ key ] ).then(( data ) => {
-        res.status( 200 ).json( data );
+    core.query.getApi( req, res, handlers.api[ key ] ).then(( result ) => {
+        if ( req.query.format === "html" ) {
+            res.status( 200 ).send( result );
+
+        } else {
+            res.status( 200 ).json( result );
+        }
     });
 };
 const getPage = function ( req, res ) {
@@ -131,7 +136,7 @@ module.exports = {
             expressApp.listen( core.config.express.port );
 
             console.log( core.config.logger, `Express server started` );
-            console.log( core.config.logger, `Access URL — http://localhost:${core.config.express.port}` );
+            console.log( core.config.logger, `Access URL — http://localhost:${core.config.browser.port}` );
         });
     }
 };

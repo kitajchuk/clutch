@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Express.js app server.",
   "private": true,
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "start:staging": "export NODE_ENV=staging ; ./node_modules/.bin/forever start app.js",
     "start:production": "export NODE_ENV=production ; ./node_modules/.bin/forever start app.js",

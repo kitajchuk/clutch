@@ -2,6 +2,7 @@ import * as core from "../core";
 import ImageController from "./ImageController";
 import AnimateController from "./AnimateController";
 import CoverController from "./CoverController";
+import QueryController from "./QueryController";
 
 
 /**
@@ -33,6 +34,8 @@ class Controllers {
         if ( this.cover.length ) {
             this.coverController = new CoverController( this.cover );
         }
+
+        this.queryController = new QueryController();
     }
 
 
@@ -50,6 +53,11 @@ class Controllers {
         if ( this.coverController ) {
             this.coverController.destroy();
             this.coverController = null;
+        }
+
+        if ( this.queryController ) {
+            this.queryController.destroy();
+            this.queryController = null;
         }
     }
 }

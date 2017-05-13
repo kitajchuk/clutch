@@ -134,12 +134,21 @@ const router = {
      */
     changeClass ( data ) {
         if ( this.view ) {
-            core.dom.html.removeClass( `is-${this.view}-page` );
+            core.dom.html.removeClass( `is-${this.view}-page is-uid-page` );
+        }
+
+        if ( this.uid ) {
+            core.dom.html.removeClass( "is-uid-page" );
         }
 
         this.view = (data.request.params.view || core.config.homepage);
+        this.uid = (data.request.params.uid || null);
 
         core.dom.html.addClass( `is-${this.view}-page` );
+
+        if ( this.uid ) {
+            core.dom.html.addClass( "is-uid-page" );
+        }
 
         navi.active( this.view );
     },

@@ -12,13 +12,20 @@ import paramalama from "paramalama";
  */
 class QueryController {
     constructor () {
-        this.query = paramalama( window.location.search );
+        if ( window.location.search ) {
+            this.query();
+        }
+    }
+
+
+    query () {
+        this.params = paramalama( window.location.search );
         this.classNames = ["is-query"];
 
         // Gather classNames for query params
         // Stuff like ?category=foo&tag=bar
-        for ( const prop in this.query ) {
-            if ( this.query.hasOwnProperty( prop ) ) {
+        for ( const prop in this.params ) {
+            if ( this.params.hasOwnProperty( prop ) ) {
                 this.classNames.push( `is-query--${prop}` );
             }
         }
@@ -36,7 +43,9 @@ class QueryController {
      *
      */
     destroy () {
-        core.dom.html.removeClass( this.classNames.join( " " ) );
+        if ( this.params ) {
+            core.dom.html.removeClass( this.classNames.join( " " ) );
+        }
     }
 }
 

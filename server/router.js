@@ -6,10 +6,7 @@ const express = require( "express" );
 const expressApp = express();
 const compression = require( "compression" );
 const cookieParser = require( "cookie-parser" );
-const handlers = {
-    api: {},
-    page: {}
-};
+const listeners = {};
 const core = {
     watch: require( "./core/watch" ),
     query: require( "./core/query" ),
@@ -38,19 +35,15 @@ expressApp.use( express.static( core.config.template.staticDir, {
  * Configure Express Routes.
  *
  */
-const getKey = function ( type, uid ) {
+const getKey = function ( type ) {
     let key = type;
 
-    if ( uid ) {
-        key = `${key}--${uid}`;
-    }
-
-    return key;
+    return key || core.config.homepage;
 }
 const getApi = function ( req, res ) {
-    const key = getKey( req.params.type, req.params.uid );
+    const key = getKey( req.params.type );
 
-    core.query.getApi( req, res, handlers.api[ key ] ).then(( result ) => {
+    core.query.getApi( req, res, listeners[ key ] ).then(( result ) => {
         if ( req.query.format === "html" ) {
             res.status( 200 ).send( result );
 
@@ -60,9 +53,9 @@ const getApi = function ( req, res ) {
     });
 };
 const getPage = function ( req, res ) {
-    const key = getKey( req.params.type, req.params.uid );
+    const key = getKey( req.params.type );
 
-    core.content.getPage( req, res, handlers.page[ key ] ).then(( callback ) => {
+    core.content.getPage( req, res, listeners[ key ] ).then(( callback ) => {
         // Handshake callback :-P
         callback(( status, html ) => {
             res.status( status ).send( html );
@@ -108,15 +101,14 @@ module.exports = {
      * Handle router subscribe.
      *
      */
-    on ( lane, type, uid, handler ) {
-        const key = getKey( type, uid );
+    on ( type, handlers ) {
+        const key = getKey( type );
 
         // One handler per route
-        if ( !handlers[ lane ][ key ] ) {
-            handlers[ lane ][ key ] = {
-                uid: uid,
+        if ( !listeners[ key ] ) {
+            listeners[ key ] = {
                 type: type,
-                handler: handler
+                handlers: handlers
             };
         }
     },

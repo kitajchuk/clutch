@@ -64,28 +64,38 @@ The Clutch node server is designed to access data in a convention over configura
 The Clutch node server also operates as a `JSON` API for your data. The format is `api/:type/:uid`. You can use the API for partial renderings if you pass `?format=html&template=yourtemplate` along with your request. Partials are loaded out of the `template/partials` directory.
 
 #### Pub/Sub
-The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to `:type/:uid` requests and modify the `query` in any way you need or like. You can subscribe to either `api` or `page` request types. The `client` and `query` objects passed to your handlers will be representative of the CMS you are using. Currently only [Prismic](#prismicio) has a working adapter for Clutch.
+The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to content-type requests and modify the `query` and `context` in any way you need. The `client`, `api`, and `query` objects passed to your `query` handlers will be representative of the CMS you are using. Currently only [Prismic](#prismicio) has a working adapter for Clutch. The `context` passed to your `context` handlers is the [ContextObject](https://github.com/kitajchuk/clutch/blob/master/server/class/ContextObject.js) instance.
 
-The default `server/app.js` has a couple basic examples.
+The default `server/app.js` has a couple basic examples. You have to return either the `query` or a new `Promise` for your query handlers. When returning with a Promise you must resolve with an object that as a `results` Array or reject with an error message. For your `context` handlers you have to return the `context`.
 
 ```js
+const config = require( "./core/config" );
 const router = require( "./router" );
 
-// :req, :type, :uid, :callback
-router.on( "page", "example", null, ( client, query, req ) => {
-    // Modify query?
 
-    // MUST return {query} for final client data fetch
-    return query;
+
+// :type, :handlers
+router.on( "example", {
+    query ( client, api, query, cache, req ) {
+        // Must return either {query} OR Promise.
+        // Promise must resolve with {results: [...]} or reject with "error"
+        // return new Promise(( resolve, reject ) => {
+        //     resolve({
+        //         results: []
+        //     });
+        // });
+        return query;
+    },
+    context ( context, cache, req ) {
+        // Must return context. You can add to the context...
+        // context.set( "foo", "bar" );
+        return context;
+    }
 });
 
-// :req, :type, :uid, :callback
-router.on( "api", "page", null, ( client, query, req ) => {
-    // Modify query?
 
-    // MUST return {query} for final client data fetch
-    return query;
-});
+
+router.init();
 ```
 
 #### Template

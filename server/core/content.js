@@ -14,7 +14,7 @@ const ContextObject = require( "../class/ContextObject" );
  * Load the data for the given request.
  *
  */
-const getPage = function ( req, res, handle ) {
+const getPage = function ( req, res, listener ) {
     return new Promise(( resolve, reject ) => {
         const page = (req.params.type ? req.params.type : core.config.homepage);
         const context = new ContextObject( page );
@@ -37,6 +37,11 @@ const getPage = function ( req, res, handle ) {
 
             } else if ( data.items ) {
                 context.set( "items", data.items );
+            }
+
+            // context?
+            if ( listener && listener.handlers.context ) {
+                context = listener.handlers.context( context, core.query.cache, req );
             }
 
             done();
@@ -69,7 +74,7 @@ const getPage = function ( req, res, handle ) {
             });
         };
 
-        core.query.getPage( req, res, handle ).then( check ).catch( fail );
+        core.query.getPage( req, res, listener ).then( check ).catch( fail );
     });
 };
 

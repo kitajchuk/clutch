@@ -3,20 +3,23 @@ const router = require( "./router" );
 
 
 
-// :req, :type, :uid, :callback
-router.on( "page", "example", null, ( client, query, req ) => {
-    console.log( config.logger, "Example page pubsub" );
-
-    // MUST return {query} for final client data fetch
-    return query;
-});
-
-// :req, :type, :uid, :callback
-router.on( "api", "page", null, ( client, query, req ) => {
-    console.log( config.logger, "Example api pubsub" );
-
-    // MUST return {query} for final client data fetch
-    return query;
+// :type, :handlers
+router.on( "example", {
+    query ( client, api, query, cache, req ) {
+        // Must return either {query} OR Promise.
+        // Promise must resolve with {results: [...]} or reject with "error"
+        // return new Promise(( resolve, reject ) => {
+        //     resolve({
+        //         results: []
+        //     });
+        // });
+        return query;
+    },
+    context ( context, cache, req ) {
+        // Must return context. You can add to the context...
+        // context.set( "foo", "bar" );
+        return context;
+    }
 });
 
 

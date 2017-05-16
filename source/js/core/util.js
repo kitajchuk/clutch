@@ -104,6 +104,14 @@ const loadImages = function ( images, handler ) {
     images = (images || $( config.lazyImageSelector ));
 
     // Hook here to determine image variant sizes to load ?
+    // images.forEach(( image, i ) => {
+    //     const data = images.eq( i ).data();
+    //
+    //     // data-img-size="[width, height]"
+    //     if ( data.imgSize ) {
+    //         image.className += ` image--${data.imgSize[ 0 ] > data.imgSize[ 1 ] ? "wide" : "tall"}`;
+    //     }
+    // });
 
     return new ImageLoader({
         elements: images,

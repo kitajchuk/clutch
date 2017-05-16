@@ -17,7 +17,7 @@ const ContextObject = require( "../class/ContextObject" );
 const getPage = function ( req, res, listener ) {
     return new Promise(( resolve, reject ) => {
         const page = (req.params.type ? req.params.type : core.config.homepage);
-        const context = new ContextObject( page );
+        let context = new ContextObject( page );
         const check = function ( data ) {
             context.set({
                 site: core.query.cache.site,

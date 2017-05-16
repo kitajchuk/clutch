@@ -36,7 +36,7 @@ expressApp.use( express.static( core.config.template.staticDir, {
  *
  */
 const getKey = function ( type ) {
-    let key = type;
+    const key = type;
 
     return key || core.config.homepage;
 }

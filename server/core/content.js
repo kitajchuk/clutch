@@ -1,3 +1,7 @@
+"use strict";
+
+
+
 const path = require( "path" );
 const core = {
     watch: require( "./watch" ),
@@ -19,11 +23,6 @@ const getPage = function ( req, res, listener ) {
         const page = (req.params.type ? req.params.type : core.config.homepage);
         let context = new ContextObject( page );
         const check = function ( data ) {
-            context.set({
-                site: core.query.cache.site,
-                navi: core.query.cache.navi
-            });
-
             // 0.0 => Missing template file
             // 0.1 => Single ContentItem
             // 0.2 => Multiple ContentItems(s)
@@ -32,24 +31,25 @@ const getPage = function ( req, res, listener ) {
 
                 fail( `The template file for this path is missing at "${file}".` );
 
-            } else if ( data.item ) {
-                context.set( "item", data.item );
+            } else {
+                if ( data.item ) {
+                    context.set( "item", data.item );
+                }
 
-            } else if ( data.items ) {
-                context.set( "items", data.items );
+                if ( data.items ) {
+                    context.set( "items", data.items );
+                }
+
+                // context?
+                if ( listener && listener.handlers.context ) {
+                    context = listener.handlers.context( context, core.query.cache, req );
+                }
+
+                done();
             }
-
-            // context?
-            if ( listener && listener.handlers.context ) {
-                context = listener.handlers.context( context, core.query.cache, req );
-            }
-
-            done();
         };
         const fail = function ( error ) {
             context.set({
-                navi: core.query.cache.navi,
-                site: core.query.cache.site,
                 page: core.config.notfound,
                 error: error
             });
@@ -57,6 +57,11 @@ const getPage = function ( req, res, listener ) {
             done();
         };
         const done = function () {
+            context.set({
+                navi: core.query.cache.navi,
+                site: core.query.cache.site
+            });
+
             resolve(( callback ) => {
                 render( callback );
             });

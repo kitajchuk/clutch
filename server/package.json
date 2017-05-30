@@ -27,6 +27,7 @@
     "express": "^4.14.0",
     "forever": "^0.15.2",
     "node-watch": "^0.5.3",
-    "prismic.io": "^3.5.0"
+    "prismic.io": "^3.5.0",
+    "properjs-lager": "^0.1.0"
   }
 }

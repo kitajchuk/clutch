@@ -2,7 +2,7 @@
 <html lang="en" class="">
     <head>
         <meta charset="utf-8" />
-        <title><%= locals.context.get( 'site' ).data.title %></title>
+        <title><%= locals.context.getPageTitle() %></title>
         <meta name="description" content="<%= locals.context.get( 'site' ).data.description %>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="google-site-verification" content="<%= locals.context.get( 'site' ).data.googleVerify %>" />
@@ -42,7 +42,7 @@
     <body>
         <%- include( 'site/header.html' ) %>
         <%- include( 'site/navi.html' ) %>
-        <main class="main js-main -fzero">
+        <main class="main js-main -fzero" data-title="<%= locals.context.getPageTitle() %>">
             <%- include( locals.context.getTemplate() ) %>
         </main>
         <%- include( 'site/footer.html' ) %>

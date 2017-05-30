@@ -24,14 +24,32 @@ class Analytics {
      * @public
      * @method track
      * @memberof core.Analytics
+     * @param {object} doc The doc object created by router {$doc, $page, pageData, pageHtml}
      * @description Track Squarespace Metrics since we are ajax-routing.
      *
      */
-    track () {
+    track ( doc ) {
         log( "Analytics pageview", window.location.href );
 
         // Google Analytics
         window.ga( "send", "pageview", window.location.href );
+
+        // Document title
+        this.setDocumentTitle( doc.data.title );
+    }
+
+
+    /**
+     *
+     * @public
+     * @method setDocumentTitle
+     * @param {string} title The new title for the document
+     * @memberof class.Analytics
+     * @description Update the documents title.
+     *
+     */
+    setDocumentTitle ( title ) {
+        document.title = title;
     }
 }
 

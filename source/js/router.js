@@ -118,7 +118,8 @@ const router = {
         return {
             doc: doc,
             main: main,
-            html: main[ 0 ].innerHTML
+            html: main[ 0 ].innerHTML,
+            data: main.data()
         };
     },
 
@@ -186,7 +187,7 @@ const router = {
 
         core.dom.main[ 0 ].innerHTML = doc.html;
 
-        core.emitter.fire( "app--analytics-push" );
+        core.emitter.fire( "app--analytics-pageview", doc );
 
         // Ensure topout prior to preload being done...
         this.topper();

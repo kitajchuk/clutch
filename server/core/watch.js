@@ -1,4 +1,5 @@
 const fs = require( "fs" );
+const lager = require( "properjs-lager" );
 const config = require( "./config" );
 const watch = require( "node-watch" );
 const cache = {
@@ -37,7 +38,8 @@ const getPages = function () {
 const startWatch = function () {
     watch( config.template.dir, { recursive: true, filter: /\.html$/ }, ( event, filename ) => {
         getPages().then(( files ) => {
-            console.log( config.logger, `Updated pages list`, JSON.stringify( files, null, 4 ) );
+            lager.template( `Updated pages list` );
+            lager.template( JSON.stringify( files, null, 4 ) );
         });
     });
 };

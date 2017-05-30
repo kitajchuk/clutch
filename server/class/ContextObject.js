@@ -43,6 +43,14 @@ class ContextObject {
     getTemplate () {
         return `pages/${this.page}.html`;
     }
+
+    // Prismic specific with `getText`... tsk tsk...?
+    getPageTitle () {
+        const item = this.get( "item" );
+        const title = this.get( "site" ).data.title;
+
+        return (item ? item.getText( `${item.type}.title` ) + ` — ${title}` : title);
+    }
 }
 
 

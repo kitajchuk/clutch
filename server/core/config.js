@@ -56,9 +56,7 @@ const config = {
     compression: {
         level: 9,
         threshold: 0
-    },
-    // Console log prefix
-    logger: "[@clutch]"
+    }
 };
 
 

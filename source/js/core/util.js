@@ -163,20 +163,23 @@ const getElementsInView = function ( $nodes, executor ) {
 /**
  *
  * @description Get the applied transition duration from CSS
- * @method getTransitionDuration
+ * @method getElementDuration
  * @param {object} el The DOMElement
+ * @param {string} key The duration type to get eg `transition` or `animation`
  * @memberof util
  * @returns {number}
  *
  */
-const getTransitionDuration = function ( el ) {
+const getElementDuration = function ( el, key ) {
     let ret = 0;
     let duration = null;
     let isSeconds = false;
     let multiplyBy = 1000;
 
+    key = key || "transition";
+
     if ( el ) {
-        duration = getComputedStyle( el )[ detect.getPrefixed( "transition-duration" ) ];
+        duration = getComputedStyle( el )[ detect.getPrefixed( `${key}-duration` ) ];
         isSeconds = duration.indexOf( "ms" ) === -1;
         multiplyBy = isSeconds ? 1000 : 1;
 
@@ -199,5 +202,5 @@ export {
     isElementLoadable,
     isElementVisible,
     getElementsInView,
-    getTransitionDuration
+    getElementDuration
 };

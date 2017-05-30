@@ -22,20 +22,19 @@ class App {
         this.intro = intro;
         this.router = router;
 
-        this.initModules();
+        this.bind();
+        this.init();
     }
 
 
-    /**
-     *
-     * @public
-     * @instance
-     * @method initModules
-     * @memberof App
-     * @description Initialize application modules.
-     *
-     */
-    initModules () {
+    bind () {
+        this.core.emitter.on( "app--intro-teardown", () => {
+            this.core.log( "App Intro Teardown" );
+        });
+    }
+
+
+    init () {
         // Core
         this.core.detect.init();
 

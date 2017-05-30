@@ -24,12 +24,12 @@ const router = {
      */
     init () {
         this.pageClass = "";
-        this.pageDuration = core.util.getTransitionDuration( core.dom.main[ 0 ] );
+        this.pageDuration = core.util.getElementDuration( core.dom.main[ 0 ] );
         this.controllers = new Controllers();
         this.bindEmpty();
         this.initPages();
 
-        core.emitter.on( "app--intro-teardown", () => this.topper() );
+        core.emitter.on( "app--page-teardown", () => this.topper() );
 
         core.log( "[Router initialized]" );
     },

@@ -22,20 +22,20 @@ class Controllers {
         this.animates = core.dom.main.find( core.config.animSelector );
         this.cover = core.dom.main.find( core.config.coverSelector );
 
-        if ( this.animates.length ) {
-            this.animateController = new AnimateController( this.animates );
-        }
-
         this.imageController = new ImageController( this.images );
         this.imageController.on( "preloaded", () => {
-            core.emitter.fire( "app--intro-teardown" );
+            if ( this.animates.length ) {
+                this.animateController = new AnimateController( this.animates );
+            }
+
+            if ( this.cover.length ) {
+                this.coverController = new CoverController( this.cover );
+            }
+
+            this.queryController = new QueryController();
+
+            core.emitter.fire( "app--page-teardown" );
         });
-
-        if ( this.cover.length ) {
-            this.coverController = new CoverController( this.cover );
-        }
-
-        this.queryController = new QueryController();
     }
 
 

@@ -51,6 +51,15 @@ class ContextObject {
 
         return (item ? item.getText( `${item.type}.title` ) + ` — ${title}` : title);
     }
+
+    // Prismic specific with `getImage`... tsk tsk...?
+    getPageImage () {
+        const item = this.get( "item" );
+        const appImage = this.get( "site" ).data.appImage;
+        const pageImage = item ? item.getImage( `${item.type}.image` ) : "";
+
+        return (pageImage ? pageImage.url : appImage);
+    }
 }
 
 

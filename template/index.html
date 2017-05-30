@@ -31,12 +31,12 @@
         <meta property="og:url" content="<%= locals.context.get( 'site' ).data.url %>" />
         <meta property="og:type" content="website" />
         <meta property="og:description" content="<%= locals.context.get( 'site' ).data.description %>" />
-        <meta property="og:image" content="<%= locals.context.get( 'site' ).data.appImage %>" />
+        <meta property="og:image" content="<%= locals.context.getPageImage() %>" />
         <meta itemprop="name" content="<%= locals.context.get( 'site' ).data.title %>" />
         <meta itemprop="description" content="<%= locals.context.get( 'site' ).data.description %>" />
         <meta itemprop="url" content="<%= locals.context.get( 'site' ).data.url %>" />
-        <meta itemprop="thumbnailUrl" content="<%= locals.context.get( 'site' ).data.appImage %>" />
-        <meta itemprop="image" content="<%= locals.context.get( 'site' ).data.appImage %>" />
+        <meta itemprop="thumbnailUrl" content="<%= locals.context.getPageImage() %>" />
+        <meta itemprop="image" content="<%= locals.context.getPageImage() %>" />
         <link href="<%= locals.context.get( 'stylesheet' ) + '?v=' + locals.context.get( 'timestamp' ) %>" rel="stylesheet" />
     </head>
     <body>

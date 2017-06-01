@@ -70,7 +70,8 @@ const getPreview = function ( req, res ) {
 };
 const getWebhook = function ( req, res ) {
     core.query.getWebhook( req, res ).then(( data ) => {
-        console.log( core.config.logger, "Webhook data", data );
+        lager.server( "Webhook data" );
+        lager.data( data );
     });
 };
 

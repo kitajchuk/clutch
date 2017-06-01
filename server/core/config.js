@@ -63,7 +63,7 @@ const config = {
 
 // Serves assets from either CDN or App Server...
 config.static.js = (config.env.production && config.deploy.cdnURL) ? `${config.deploy.cdnURL}${config.static.endJS}` : config.static.endJS;
-config.static.css = (config.env.production && config.deploy.cdnURL) ? `${config.deploy.cdURL}${config.static.endCSS}` : config.static.endCSS;
+config.static.css = (config.env.production && config.deploy.cdnURL) ? `${config.deploy.cdnURL}${config.static.endCSS}` : config.static.endCSS;
 
 
 

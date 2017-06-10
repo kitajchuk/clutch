@@ -24,8 +24,6 @@ class App {
 
         this.bind();
         this.init();
-
-        console.log( "hoot" );
     }
 
 

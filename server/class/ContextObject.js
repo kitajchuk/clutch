@@ -2,7 +2,7 @@
 
 
 
-const config = require( "../core/config" );
+const config = require( "../../clutch.config" );
 
 
 

@@ -1,6 +1,6 @@
 const fs = require( "fs" );
 const lager = require( "properjs-lager" );
-const config = require( "./config" );
+const config = require( "../../clutch.config" );
 const watch = require( "node-watch" );
 const cache = {
     pages: null

@@ -1,5 +1,5 @@
 const path = require( "path" );
-const root = path.join( __dirname, "../../" );
+const root = __dirname;
 const config = {
     // Homepage UID
     homepage: "home",
@@ -30,7 +30,6 @@ const config = {
     // Templating config
     template: {
         module: "ejs",
-        require: require( "ejs" ),
         dir: path.join( root, "template" ),
         layout: path.join( root, "template/index.html" ),
         pagesDir: path.join( root, "template", "pages" ),
@@ -62,8 +61,9 @@ const config = {
 
 
 // Serves assets from either CDN or App Server...
-config.static.js = (config.env.production && config.deploy.cdnURL) ? `${config.deploy.cdnURL}${config.static.endJS}` : config.static.endJS;
-config.static.css = (config.env.production && config.deploy.cdnURL) ? `${config.deploy.cdnURL}${config.static.endCSS}` : config.static.endCSS;
+config.deploy.cdnEnabled = (!config.env.sandbox && config.deploy.cdnURL);
+config.static.js = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}${config.static.endJS}` : config.static.endJS;
+config.static.css = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}${config.static.endCSS}` : config.static.endCSS;
 
 
 

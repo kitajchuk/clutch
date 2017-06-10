@@ -11,7 +11,7 @@ const listeners = {};
 const core = {
     watch: require( "./core/watch" ),
     query: require( "./core/query" ),
-    config: require( "./core/config" ),
+    config: require( "../clutch.config" ),
     content: require( "./core/content" ),
     template: require( "./core/template" )
 };

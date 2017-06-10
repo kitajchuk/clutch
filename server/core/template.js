@@ -1,4 +1,4 @@
-const config = require( "./config" );
+const config = require( "../../clutch.config" );
 const consolidate = require( "consolidate" );
 
 
@@ -8,7 +8,7 @@ const consolidate = require( "consolidate" );
  * Template adapter setup.
  *
  */
-consolidate.requires[ config.template.module ] = config.template.require;
+consolidate.requires[ config.template.module ] = require( `${config.template.module}` );
 
 
 

@@ -1,4 +1,4 @@
-const config = require( "./core/config" );
+const config = require( "../clutch.config" );
 const router = require( "./router" );
 
 

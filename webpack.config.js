@@ -37,7 +37,7 @@ const webpackConfig = {
             const prefix = config.deploy.cdnEnabled ? config.deploy.cdnURL : "";
             const command = `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*`;
 
-            lager.cache( "Generating appcache-manifest" );
+            lager.cache( "Clutch generating appcache-manifest" );
 
             child_process.execSync( command );
         })

@@ -13,7 +13,6 @@
  * getNavi: Function
  * getPreview: Function
  * getPartial: Function
- * getWebhook: Function
  *
  * Different Headless CMS will require slightly different internal approaches
  * Whatever means necessary is A-OK as long as the data resolves to the ORM format
@@ -116,17 +115,6 @@ const getPreview = function ( req, res ) {
             });
         });
     });
-};
-
-
-
-/**
- *
- * Handle webhook POST URLs from Prismic for content changes.
- *
- */
-const getWebhook = function ( req, res ) {
-
 };
 
 
@@ -446,6 +434,5 @@ module.exports = {
     cache,
     getApi,
     getPage,
-    getPreview,
-    getWebhook
+    getPreview
 };

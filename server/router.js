@@ -68,18 +68,11 @@ const getPreview = function ( req, res ) {
         res.redirect( url );
     });
 };
-const getWebhook = function ( req, res ) {
-    core.query.getWebhook( req, res ).then(( data ) => {
-        lager.server( "Webhook data" );
-        lager.data( data );
-    });
-};
 
 
 
 // SYSTEM
 expressApp.get( "/preview", getPreview );
-expressApp.post( "/webhook", getWebhook );
 
 // API => JSON
 expressApp.get( "/api/:type", getApi );
@@ -129,8 +122,8 @@ module.exports = {
 
             expressApp.listen( core.config.express.port );
 
-            lager.server( `Express server started` );
-            lager.server( `Access URL — http://localhost:${core.config.browser.port}` );
+            lager.server( `Clutch Express server started` );
+            lager.server( `Clutch access URL — http://localhost:${core.config.browser.port}` );
         });
     }
 };

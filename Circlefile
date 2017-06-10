@@ -63,12 +63,24 @@
 
 
 deploy_staging:
+		########################################################################
+		## S3 Bucket Sync
+		########################################################################
+		#./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
+		########################################################################
+		## Rsync + Restart App Server
+		########################################################################
 		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_STAGING_HOST):$(AWS_DEST)
-		./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
 		@ssh $(AWS_USER)@$(AWS_STAGING_HOST) 'cd $(AWS_DEST)server/ ; sudo npm install ; sudo npm run stop ; sudo npm run start:staging'
 
 
 deploy_production:
+		########################################################################
+		## S3 Bucket Sync
+		########################################################################
+		#./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
+		########################################################################
+		## Rsync + Restart App Server
+		########################################################################
 		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_PRODUCTION_HOST):$(AWS_DEST)
-		./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
 		@ssh $(AWS_USER)@$(AWS_PRODUCTION_HOST) 'cd $(AWS_DEST)server/ ; sudo npm install ; sudo npm run stop ; sudo npm run start:production'

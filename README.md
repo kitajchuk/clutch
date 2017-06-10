@@ -12,6 +12,7 @@ clutch
     * [Prismic :+1:](#prismicio)
     * [Contentful? :thought_balloon: ](#contentful)
 * [Express](#express)
+* [Static](#static)
 * [ProperJS](#properjs)
 * [AWS](#aws)
 * [Circle CI](#circle-ci)
@@ -184,6 +185,15 @@ Clutch utilizes a 3 environment system to differentiate between local and remote
 * sandbox
 * staging
 * production
+
+
+
+### Static
+The `static` directory is the default static directory for the Express app. You can serve anything from here including `css`, `js`, `fonts`, `images` and so forth. The build pipeline distributes the `css` and `js` here by default as well. The static assets can be served by your app in one of three ways:
+
+* From static directory on your Express app server ( this is the default )
+* From an AWS S3 bucket synced with your static directory
+* From an AWS CloudFront CDN in front of an AWS S3 bucket
 
 
 

@@ -7,6 +7,7 @@ const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
+const sassFontPath = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}/fonts/` : "/fonts/";
 
 
 
@@ -56,7 +57,7 @@ const webpackConfig = {
             { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: ["eslint-loader"], enforce: "pre" },
             { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: [{ loader: "babel-loader", options: { presets: ["es2015"] } }] },
             { test: /(hobo|hobo.build)\.js$/, use: ["expose-loader?hobo"] },
-            { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", "sass-loader"] }
+            { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", {loader: "sass-loader", options: { data: '$font-path: "' + sassFontPath + '";' }}] }
         ]
     }
 };

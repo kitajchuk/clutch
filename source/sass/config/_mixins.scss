@@ -10,8 +10,8 @@
 /******************************************************************************
  * Fonts: Styles
 *******************************************************************************/
-@mixin font-sans() {
-    font-family: $font-family-sans;
+@mixin font-family() {
+    font-family: $font-family;
     @include font-normal();
 }
 
@@ -22,42 +22,42 @@
 @mixin p() {
     font-size: $p-size;
     line-height: $p-line;
-    @include font-sans();
+    @include font-family();
 }
 @mixin a() {
     display: inline;
     text-decoration: none;
-    @include font-sans();
+    @include font-family();
 }
 @mixin h1() {
     font-size: $h1-size;
     line-height: $h1-line;
-    @include font-sans();
+    @include font-family();
 }
 @mixin h2() {
     font-size: $h2-size;
     line-height: $h2-line;
-    @include font-sans();
+    @include font-family();
 }
 @mixin h3() {
     font-size: $h3-size;
     line-height: $h3-line;
-    @include font-sans();
+    @include font-family();
 }
 @mixin h4() {
     font-size: $h4-size;
     line-height: $h4-line;
-    @include font-sans();
+    @include font-family();
 }
 @mixin h5() {
     font-size: $h5-size;
     line-height: $h5-line;
-    @include font-sans();
+    @include font-family();
 }
 @mixin h6() {
     font-size: $h6-size;
     line-height: $h6-line;
-    @include font-sans();
+    @include font-family();
 }
 
 

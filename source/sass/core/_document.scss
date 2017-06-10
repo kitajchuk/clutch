@@ -12,7 +12,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
     -webkit-touch-callout: none;
-    @include font-sans();
+    @include font-family();
     }
 // html,
 // body {

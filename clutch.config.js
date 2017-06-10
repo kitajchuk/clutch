@@ -1,5 +1,5 @@
 const path = require( "path" );
-const root = __dirname;
+const root = path.resolve( __dirname );
 const config = {
     // Homepage UID
     homepage: "home",

@@ -16,6 +16,7 @@ tmp
 local
 static/js
 static/css
+static/cache.manifest
 
 
 # Node / NPM

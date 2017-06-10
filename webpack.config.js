@@ -2,11 +2,14 @@ const path = require( "path" );
 const root = path.resolve( __dirname );
 const source = path.join( root, "source" );
 const config = require( "./clutch.config" );
+const lager = require( "properjs-lager" );
 const nodeModules = "node_modules";
 const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );
+const child_process = require( "child_process" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
+const OnBuildWebpackPlugin = require( "on-build-webpack" );
 const sassFontPath = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}/fonts/` : "/fonts/";
 
 
@@ -21,16 +24,22 @@ const webpackConfig = {
             host: "localhost",
             port: config.browser.port,
             proxy: `http://localhost:${config.express.port}`,
-            // files: [
-            //     "source/**/*.js",
-            //     "source/**/*.scss",
-            //     "template/**/*.html"
-            // ]
+            files: [
+                "template/**/*.html"
+            ]
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
                 postcss: [autoprefixer( { browsers: ["last 2 versions"] } )]
             }
+        }),
+        new OnBuildWebpackPlugin(() => {
+            const prefix = config.deploy.cdnEnabled ? config.deploy.cdnURL : "";
+            const command = `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*`;
+
+            lager.cache( "Generating appcache-manifest" );
+
+            child_process.execSync( command );
         })
     ],
 

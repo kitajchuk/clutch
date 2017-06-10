@@ -7,17 +7,18 @@
   "scripts": {
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
+    "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/nodemon server/app.js",
     "build": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
     "build:staging": "export NODE_ENV=staging ; ./node_modules/.bin/webpack --env.staging --progress --profile --display-modules --colors -p",
     "build:production": "export NODE_ENV=production ; ./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
-    "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/nodemon server/app.js",
-    "postinstall": "mkdir local ; mkdir template/partials ; touch .notes ; cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not attr filter detach remove append' ; cd ../../server && npm install",
     "deploy:staging": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
     "deploy:production": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
     "connect:staging": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]",
-    "connect:production": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]"
+    "connect:production": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]",
+    "postinstall": "mkdir local ; mkdir template/partials ; touch .notes ; cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not attr filter detach remove append' ; cd ../../server && npm install"
   },
   "devDependencies": {
+    "appcache-manifest": "^2.1.0",
     "autoprefixer": "^6.7.6",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
@@ -34,6 +35,7 @@
     "hammerjs": "^2.0.8",
     "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
+    "on-build-webpack": "^0.1.0",
     "paramalama": "~0.2",
     "postcss": "^5.2.15",
     "postcss-cssnext": "^2.9.0",
@@ -44,6 +46,7 @@
     "properjs-easing": "~0.2",
     "properjs-hobo": "^0.3.10",
     "properjs-imageloader": ">=0.3.1",
+    "properjs-lager": "^0.1.2",
     "properjs-mediabox": "~0.3",
     "properjs-pagecontroller": "~0.4",
     "properjs-resizecontroller": "~0.2",

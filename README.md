@@ -7,6 +7,9 @@ clutch
 
 ## TOC
 
+* [Setup](#setup)
+    * [AWS](#aws)
+    * [Circle CI](#circle-ci)
 * [Quickstart](#quickstart)
 * [Headless](#headless)
     * [Prismic :+1:](#prismicio)
@@ -14,9 +17,41 @@ clutch
 * [Express](#express)
 * [Static](#static)
 * [ProperJS](#properjs)
-* [AWS](#aws)
-* [Circle CI](#circle-ci)
 * [Resources](#resources)
+
+
+
+
+### Setup
+First setup the **Clutch Stack** on AWS OpsWorks as defined [here](https://github.com/kitajchuk/clutch-chef). The `clutch-chef` repository is a Chef cookbook that configures the AWS EC2 instances for you.
+
+#### AWS
+Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project. You will replace the following `npm-config` values in the `package.json`:
+
+* [aws_ec2_pem_file]
+* [aws_ec2_staging_host]
+* [aws_ec2_production_host]
+
+This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your `sandbox`, it is recommended to utilize the Circle CI configuration for streamlined Continuous Integration and Deployment. See the [section on Circle CI](#circle-ci) for this.
+
+Here are some useful links for setting up other services on AWS.
+* [S3 Buckets](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html)
+* [IAM Users/Groups](http://docs.aws.amazon.com/IAM/latest/UserGuide/getting-setup.html)
+* [CloudFront CDN](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GettingStarted.html)
+
+
+
+#### Circle CI
+The Clutch scaffold is designed to provide [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) and [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) using [Circle CI](http://circleci.com). In the project settings on Circle CI add the `clutch` SSH key for your instances. You can also input all the needed environment variables in Circle CI used in the `Circlefile`. The default list included is as follows:
+
+* AWS_USER — `ec2-user` by default
+* AWS_DEST — `/var/www/html/` by default
+* AWS_STAGING_HOST — IP for staging instance
+* AWS_PRODUCTION_HOST — IP for production instance
+* S3_BUCKET — The name of the S3 bucket
+* S3_REGION — The region field for the S3 bucket
+* S3_ACCESS_KEY — The IAM role access key
+* S3_SECRET_KEY — The IAM role secret key
 
 
 
@@ -199,36 +234,6 @@ The `static` directory is the default static directory for the Express app. You 
 
 ### ProperJS
 Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS) web app architecture. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
-
-
-
-### AWS
-The Clutch scaffold is designed to integrate with your AWS environments setup utilizing the [clutch-chef](https://github.com/kitajchuk/clutch-chef) AWS OpsWorks configuration. Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project. You will replace the following `npm-config` values in the `package.json`:
-
-* [aws_ec2_pem_file]
-* [aws_ec2_staging_host]
-* [aws_ec2_production_host]
-
-This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your sandbox, it is recommended to utilize the Circle CI integration for streamlined Continuous Integration and Deployment. See the [section on Circle CI](#circle-ci) for this.
-
-Here are some useful links for setting up other services on AWS.
-* [S3 Buckets](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html)
-* [IAM Users/Groups](http://docs.aws.amazon.com/IAM/latest/UserGuide/getting-setup.html)
-* [CloudFront CDN](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GettingStarted.html)
-
-
-
-### Circle CI
-The Clutch scaffold is designed to provide [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) and [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) using [Circle CI](http://circleci.com). In the project settings on Circle CI add the `clutch` SSH key for your instances. You can also input all the needed environment variables in Circle CI used in the `Circlefile`. The default list included is as follows:
-
-* AWS_USER — `ec2-user` by default
-* AWS_DEST — `/var/www/html/` by default
-* AWS_STAGING_HOST — IP for staging instance
-* AWS_PRODUCTION_HOST — IP for production instance
-* S3_BUCKET — The name of the S3 bucket
-* S3_REGION — The region field for the S3 bucket
-* S3_ACCESS_KEY — The IAM role access key
-* S3_SECRET_KEY — The IAM role secret key
 
 
 

@@ -42,7 +42,8 @@ const config = {
     },
     // Browser-sync config
     browser: {
-        port: 8001
+        port: 8001,
+        hobo: "is eq not attr filter detach remove append"
     },
     // Static assets config
     static: {

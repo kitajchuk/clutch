@@ -17,8 +17,13 @@ local
 static/js
 static/css
 static/cache.manifest
+static/json
+static/svg
+static/touch
 
 
 # Node / NPM
 node_modules
 npm-debug.log
+package-lock.json
+*.log

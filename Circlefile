@@ -64,23 +64,23 @@
 
 deploy_staging:
 		########################################################################
-		## S3 Bucket Sync
+		## S3 Bucket Sync ( Uncomment if using S3 bucket )
 		########################################################################
 		#./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
 		########################################################################
 		## Rsync + Restart App Server
 		########################################################################
-		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_STAGING_HOST):$(AWS_DEST)
-		@ssh $(AWS_USER)@$(AWS_STAGING_HOST) 'cd $(AWS_DEST)server/ ; sudo rm -rf node_modules ; sudo rm -rf package-lock.json ; sudo npm install ; sudo npm run stop ; sudo npm run start:staging'
+		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template clutch.config.js $(AWS_USER)@$(AWS_STAGING_HOST):$(AWS_DEST)
+		@ssh $(AWS_USER)@$(AWS_STAGING_HOST) 'cd $(AWS_DEST)server/ ; sudo npm run install:staging'
 
 
 deploy_production:
 		########################################################################
-		## S3 Bucket Sync
+		## S3 Bucket Sync ( Uncomment if using S3 bucket )
 		########################################################################
 		#./node_modules/.bin/properjs-s3 --key $(S3_ACCESS_KEY) --secret $(S3_SECRET_KEY) --region "$(S3_REGION)" --bucket "$(S3_BUCKET)" --prefix "static" --directory "static"
 		########################################################################
 		## Rsync + Restart App Server
 		########################################################################
-		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_PRODUCTION_HOST):$(AWS_DEST)
-		@ssh $(AWS_USER)@$(AWS_PRODUCTION_HOST) 'cd $(AWS_DEST)server/ ; sudo rm -rf node_modules ; sudo rm -rf package-lock.json ; sudo npm install ; sudo npm run stop ; sudo npm run start:production'
+		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template skylab.config.js $(AWS_USER)@$(AWS_PRODUCTION_HOST):$(AWS_DEST)
+		@ssh $(AWS_USER)@$(AWS_PRODUCTION_HOST) 'cd $(AWS_DEST)server/ ; sudo npm run install:production'

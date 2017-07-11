@@ -8,7 +8,9 @@
   "scripts": {
     "start:staging": "export NODE_ENV=staging ; ./node_modules/.bin/forever -a -l forever.log -o out.log -e err.log start app.js",
     "start:production": "export NODE_ENV=production ; ./node_modules/.bin/forever -a -l forever.log -o out.log -e err.log start app.js",
-    "stop": "./node_modules/.bin/forever stop app.js"
+    "install:staging": "export NODE_ENV=staging ; node app.install.js",
+    "install:production": "export NODE_ENV=production ; node app.install.js",
+    "stop": "./node_modules/.bin/forever stopall"
   },
   "contributors": [
     {

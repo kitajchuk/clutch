@@ -203,19 +203,15 @@ Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS) web app
 
 
 ### AWS
-Clutch will integrate well with AWS if you want it to.
+The Clutch scaffold is designed to integrate with your AWS environments setup utilizing the [clutch-chef](https://github.com/kitajchuk/clutch-chef) AWS OpsWorks configuration. Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project. You will replace the following `npm-config` values in the `package.json`:
 
-#### Setup
-You can take advantage of this as much or as little as you want. At the grandest level Clutch will gzip the static directory and deploy it to an S3 bucket. Optionally, you can have that bucket origin attached to a CloudFront CDN.
+* [aws_ec2_pem_file]
+* [aws_ec2_staging_host]
+* [aws_ec2_production_host]
 
-But you can do as little as just configure an EC2 instance to deploy your app to. If you don't hook up S3, Clutch serves everything out of the static directory where your app is running minified and gzipped.
+This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your sandbox, it is recommended to utilize the Circle CI integration for streamlined Continuous Integration and Deployment. See the [section on Circle CI](#circle-ci) for this.
 
-Here are some useful links for working on AWS Linux boxes.
-* [NGINX setup on EC2](https://gist.github.com/dragonjet/270cf0139df45d1b7690)
-* [Node.js setup on EC2](https://codeforgeek.com/2015/05/setup-node-development-environment-amazon-ec2)
-* [Node.js port forwarding](https://gist.github.com/kentbrew/776580)
-
-Here are some useful links for setting up services on AWS.
+Here are some useful links for setting up other services on AWS.
 * [S3 Buckets](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html)
 * [IAM Users/Groups](http://docs.aws.amazon.com/IAM/latest/UserGuide/getting-setup.html)
 * [CloudFront CDN](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GettingStarted.html)
@@ -223,16 +219,16 @@ Here are some useful links for setting up services on AWS.
 
 
 ### Circle CI
-If your project is on Github or BitBucket you can connect it to [Circle CI](http://circleci.com) by adding it as a build. In the project settings on Circle CI add the SSH key for your EC2 instances. You can also input all the needed environment variables in Circle CI used in the `Circlefile`. The default list included is as follows:
+The Clutch scaffold is designed to provide [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) and [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) using [Circle CI](http://circleci.com). In the project settings on Circle CI add the `clutch` SSH key for your instances. You can also input all the needed environment variables in Circle CI used in the `Circlefile`. The default list included is as follows:
 
-* AWS_USER
-* AWS_DEST
-* AWS_STAGING_HOST
-* AWS_PRODUCTION_HOST
-* S3_BUCKET
-* S3_REGION
-* S3_ACCESS_KEY
-* S3_SECRET_KEY
+* AWS_USER — `ec2-user` by default
+* AWS_DEST — `/var/www/html/` by default
+* AWS_STAGING_HOST — IP for staging instance
+* AWS_PRODUCTION_HOST — IP for production instance
+* S3_BUCKET — The name of the S3 bucket
+* S3_REGION — The region field for the S3 bucket
+* S3_ACCESS_KEY — The IAM role access key
+* S3_SECRET_KEY — The IAM role secret key
 
 
 

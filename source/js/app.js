@@ -31,6 +31,10 @@ class App {
         this.core.emitter.on( "app--intro-teardown", () => {
             this.core.log( "App Intro Teardown" );
         });
+
+        this.core.emitter.on( "app--page-teardown", () => {
+            this.core.log( "App Page Teardown" );
+        });
     }
 
 

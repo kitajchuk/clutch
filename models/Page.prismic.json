@@ -1,10 +1,11 @@
 {
     "Information": {
         "title": {
-            "type": "Text",
-            "fieldset": "Page Title",
+            "type": "StructuredText",
             "config": {
-                "label": "Page Title"
+            "single": "heading1, heading2, heading3, heading4, heading5, heading6",
+            "label": "Page Title",
+                "placeholder": "Page Title"
             }
         },
         "uid" : {

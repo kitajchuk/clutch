@@ -4,6 +4,12 @@
   "description": "A modern headless CMS scaffold.",
   "private": true,
   "version": "0.1.0",
+  "config": {
+    "aws_ec2_pem_file": "[aws_ec2_pem_file]",
+    "aws_ec2_staging_host": "[aws_ec2_staging_host]",
+    "aws_ec2_production_host": "[aws_ec2_production_host]",
+    "aws_ec2_web_root": "/var/www/html/"
+  },
   "scripts": {
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
@@ -11,10 +17,10 @@
     "build": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
     "build:staging": "export NODE_ENV=staging ; ./node_modules/.bin/webpack --env.staging --progress --profile --display-modules --colors -p",
     "build:production": "export NODE_ENV=production ; ./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
-    "deploy:staging": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
-    "deploy:production": "rsync -av -e 'ssh -i ./local/[PEM_FILE_HERE]' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@[EC2_IP_HERE]:/var/www/html/",
-    "connect:staging": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]",
-    "connect:production": "ssh ec2-user@[EC2_IP_HERE] -i ./local/[PEM_FILE_HERE]",
+    "deploy:staging": "rsync -av -e 'ssh -i $npm_package_config_aws_ec2_pem_file' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@$npm_package_config_aws_ec2_staging_host:$npm_package_config_aws_ec2_web_root",
+    "deploy:production": "rsync -av -e 'ssh -i $npm_package_config_aws_ec2_pem_file' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@$npm_package_config_aws_ec2_production_host:$npm_package_config_aws_ec2_web_root",
+    "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host -i $npm_package_config_aws_ec2_pem_file",
+    "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host -i $npm_package_config_aws_ec2_pem_file",
     "postinstall": "mkdir local ; mkdir template/partials ; touch .notes ; cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not attr filter detach remove append' ; cd ../../server && npm install"
   },
   "devDependencies": {

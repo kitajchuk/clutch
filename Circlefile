@@ -71,7 +71,7 @@ deploy_staging:
 		## Rsync + Restart App Server
 		########################################################################
 		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_STAGING_HOST):$(AWS_DEST)
-		@ssh $(AWS_USER)@$(AWS_STAGING_HOST) 'cd $(AWS_DEST)server/ ; sudo npm install ; sudo npm run stop ; sudo npm run start:staging'
+		@ssh $(AWS_USER)@$(AWS_STAGING_HOST) 'cd $(AWS_DEST)server/ ; sudo rm -rf node_modules ; sudo rm -rf package-lock.json ; sudo npm install ; sudo npm run stop ; sudo npm run start:staging'
 
 
 deploy_production:
@@ -83,4 +83,4 @@ deploy_production:
 		## Rsync + Restart App Server
 		########################################################################
 		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template $(AWS_USER)@$(AWS_PRODUCTION_HOST):$(AWS_DEST)
-		@ssh $(AWS_USER)@$(AWS_PRODUCTION_HOST) 'cd $(AWS_DEST)server/ ; sudo npm install ; sudo npm run stop ; sudo npm run start:production'
+		@ssh $(AWS_USER)@$(AWS_PRODUCTION_HOST) 'cd $(AWS_DEST)server/ ; sudo rm -rf node_modules ; sudo rm -rf package-lock.json ; sudo npm install ; sudo npm run stop ; sudo npm run start:production'

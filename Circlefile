@@ -55,6 +55,17 @@
 #
 # Note: Run make with the "-e" flag to ensure environment variables
 # take precedence over these definitions.
+#
+# These are the variables you define for Clutch:
+#
+# AWS_USER — `ec2-user` by default
+# AWS_DEST — `/var/www/html/` by default
+# AWS_STAGING_HOST — IP for staging instance
+# AWS_PRODUCTION_HOST — IP for production instance
+# S3_BUCKET — The name of the S3 bucket
+# S3_REGION — The region field for the S3 bucket
+# S3_ACCESS_KEY — The IAM role access key
+# S3_SECRET_KEY — The IAM role secret key
 
 
 # TARGETS

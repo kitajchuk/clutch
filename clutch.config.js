@@ -5,7 +5,7 @@ const config = {
     homepage: "home",
     // Page Not Found — 404
     notfound: "404",
-    // Timestamp ( Will be time app booted )
+    // Timestamp ( Stamp of instantiation )
     timestamp: Date.now(),
     // Environments
     env: {
@@ -15,15 +15,15 @@ const config = {
     },
     // API CMS config ( Prismic, Contentful )
     api: {
-        // Prismic
+        // Contentful only
+        space: "",
+        // Content API endpoint
         access: "https://clutch.cdn.prismic.io/api",
-        adapter: "prismic",
-        // Contentful
-        // space: "",
-        // access: "",
-        // adapter: "contentful"
+        // Headless service ( prismic, contentful )
+        adapter: "prismic"
     },
     // Deployment config ( AWS etc... )
+    // Would be nice to include Heroku here...?
     deploy: {
         cdnURL: "",
     },

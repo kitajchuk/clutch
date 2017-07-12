@@ -7,6 +7,7 @@ clutch
 
 ## TOC
 
+* [Example](#example)
 * [Setup](#setup)
     * [AWS](#aws)
     * [Circle CI](#circle-ci)
@@ -19,6 +20,11 @@ clutch
 * [ProperJS](#properjs)
 * [Resources](#resources)
 
+
+
+
+### Example
+This `clutch` scaffold is currently testing against a `staging` environment at [clutch.kitajchuk.com](http://clutch.kitajchuk.com/).
 
 
 

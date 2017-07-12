@@ -93,5 +93,5 @@ deploy_production:
 		########################################################################
 		## Rsync + Restart App Server
 		########################################################################
-		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template skylab.config.js $(AWS_USER)@$(AWS_PRODUCTION_HOST):$(AWS_DEST)
+		@rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template clutch.config.js $(AWS_USER)@$(AWS_PRODUCTION_HOST):$(AWS_DEST)
 		@ssh $(AWS_USER)@$(AWS_PRODUCTION_HOST) 'cd $(AWS_DEST)server/ ; sudo npm run install:production'

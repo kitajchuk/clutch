@@ -14,6 +14,7 @@
 .notes
 tmp
 local
+sandbox
 static/js
 static/css
 static/cache.manifest

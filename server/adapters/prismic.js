@@ -265,11 +265,14 @@ const getDataForApi = function ( req, listener ) {
                     });
                 };
                 const type = req.params.type;
-                const form = getForm( req, api );
+                const form = getForm( req, api, type );
                 let query = [];
 
                 // query: type?
-                query.push( prismic.Predicates.at( "document.type", type ) );
+                if ( !api.data.forms[ type ] ) {
+                    // Only if type? is NOT a search form collection
+                    query.push( prismic.Predicates.at( "document.type", type ) );
+                }
 
                 // query: pubsub?
                 if ( listener && listener.handlers.query ) {
@@ -340,7 +343,7 @@ const getDataForPage = function ( req, listener ) {
                 reject( error );
             };
             const navi = getNavi( type );
-            const form = getForm( req, cache.api );
+            const form = getForm( req, cache.api, type );
             let query = [];
 
             // query: type?
@@ -348,7 +351,8 @@ const getDataForPage = function ( req, listener ) {
                 query.push( prismic.Predicates.at( "document.type", navi.type ) );
                 query.push( prismic.Predicates.at( "document.id", navi.id ) );
 
-            } else {
+            } else if ( !cache.api.data.forms[ type ] ) {
+                // Only if type? is NOT a search form collection
                 query.push( prismic.Predicates.at( "document.type", type ) );
             }
 
@@ -424,8 +428,10 @@ const getDoc = function ( uid, documents ) {
  * Get the stub of the search form.
  *
  */
-const getForm = function ( req, api ) {
-    return api.form( "everything" ).pageSize( 100 ).ref( getRef( req, api ) );
+const getForm = function ( req, api, collection ) {
+    const form = api.data.forms[ collection ] ? collection : "everything";
+
+    return api.form( form ).pageSize( 100 ).ref( getRef( req, api ) );
 };
 
 

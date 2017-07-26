@@ -6,7 +6,7 @@
   "version": "0.1.0",
   "config": {
     "aws_ec2_pem_file": "./sandbox/clutch.pem",
-    "aws_ec2_staging_host": "34.208.156.88",
+    "aws_ec2_staging_host": "34.209.179.25",
     "aws_ec2_production_host": "[aws_ec2_production_host]",
     "aws_ec2_web_root": "/var/www/html/"
   },

@@ -162,7 +162,7 @@ const getPartial = function ( req, data, listener ) {
  * Load the Site context model.
  *
  */
-const getSite = function () {
+const getSite = function ( req ) {
     return new Promise(( resolve, reject ) => {
         prismic.api( core.config.api.access, null ).then(( api ) => {
             api.getSingle( "site" ).then(( document ) => {
@@ -378,7 +378,7 @@ const getDataForPage = function ( req, listener ) {
             }
         };
 
-        getSite().then(() => {
+        getSite( req ).then(() => {
             const type = req.params.type;
 
             if ( !type ) {

@@ -63,7 +63,7 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 
 ### Quickstart
 * Download this template
-* CD into the directory and run `npm install`
+* CD into the directory and run `npm run bootstrap`
 * Now run `npm start`
 
 This will load the Clutch example connected to a Prismic repository.

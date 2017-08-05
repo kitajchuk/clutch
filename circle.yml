@@ -19,9 +19,8 @@ dependencies:
     override:
         # Manually clear node_modules cacge...
         - rm -rf node_modules
-        - npm update properjs-hobo
-        - npm install
         - npm rebuild node-sass
+        - npm run bootstrap
 
 test:
     override:

@@ -56,6 +56,13 @@ const config = {
     compression: {
         level: 9,
         threshold: 0
+    },
+    // CMS key references
+    refs: {
+        mainForm: "sitewide",
+        naviFrag: "site.navi",
+        siteType: "site",
+        mainType: ""
     }
 };
 

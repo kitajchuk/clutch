@@ -21,7 +21,7 @@
     "deploy:production": "rsync -av -e 'ssh -i $npm_package_config_aws_ec2_pem_file' --rsync-path 'sudo rsync' --exclude 'server/node_modules' server static template ec2-user@$npm_package_config_aws_ec2_production_host:$npm_package_config_aws_ec2_web_root",
     "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host -i $npm_package_config_aws_ec2_pem_file",
     "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host -i $npm_package_config_aws_ec2_pem_file",
-    "postinstall": "node clutch.install.js"
+    "bootstrap": "node clutch.install.js"
   },
   "devDependencies": {
     "appcache-manifest": "^2.1.0",

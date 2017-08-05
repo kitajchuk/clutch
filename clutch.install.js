@@ -17,7 +17,22 @@ const config = require( "./clutch.config" );
 // The ultimate resolve was to trash the `.npm` cache
 
 
-// 0.0 Create sandbox
+
+console.log( "Installing node_modules..." );
+
+
+// 1.0: No `node_modules`
+if ( !fs.existsSync( rootNodeModules ) ) {
+    child_process.execSync( "npm install" );
+
+// 2.0 Reset `node_modules` cache
+} else {
+    child_process.execSync( `rm -rf ${rootNodeModules}` );
+    child_process.execSync( "npm install" );
+}
+
+
+// 3.0 Create sandbox
 console.log( "Creating sandbox..." );
 
 if ( !fs.existsSync( rootSandbox ) ) {
@@ -25,7 +40,7 @@ if ( !fs.existsSync( rootSandbox ) ) {
 }
 
 
-// 1.0 Create template partials
+// 4.0 Create template partials
 console.log( "Creating template partials..." );
 
 if ( !fs.existsSync( rootTemplatePartials ) ) {
@@ -33,7 +48,7 @@ if ( !fs.existsSync( rootTemplatePartials ) ) {
 }
 
 
-// 2.0 Create notes
+// 5.0 Create notes
 console.log( "Creating notes..." );
 
 if ( !fs.existsSync( rootNotes ) ) {
@@ -41,24 +56,24 @@ if ( !fs.existsSync( rootNotes ) ) {
 }
 
 
-// 3.0 Hobo.js build
+// 6.0 Hobo.js build
 console.log( "Building properjs-hobo..." );
 
 child_process.execSync( `cd ${rootHobo} && npm install && npm run build -- '${config.browser.hobo}'` );
 
 
-// 4.0 server install
+// 7.0 server install
 console.log( "Installing server node_modules..." );
 
 child_process.execSync( `cd ${rootServer} && npm install` );
 
 
-// 4.0 tasks install
+// 8.0 tasks install
 console.log( "Installing tasks node_modules..." );
 
 if ( fs.existsSync( rootTasks ) ) {
     child_process.execSync( `cd ${rootTasks} && npm install` );
 }
 
-// 5.0 done
+// 9.0 done
 console.log( "Done!" );

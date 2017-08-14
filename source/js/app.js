@@ -17,7 +17,7 @@ import Analytics from "properjs-app/source/js/class/Analytics";
  * @classdesc Load the App application Class to handle it ALL.
  *
  */
-export default class App {
+class App {
     constructor () {
         this.core = core;
         this.navi = navi;
@@ -57,3 +57,11 @@ export default class App {
         this.analytics = new Analytics();
     }
 }
+
+
+// Create {app} instance
+window.app = new App();
+
+
+// Export {app} instance
+export default window.app;

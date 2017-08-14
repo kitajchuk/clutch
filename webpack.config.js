@@ -57,7 +57,7 @@ const webpackConfig = {
 
     output: {
         path: path.resolve( __dirname, "static/js" ),
-        filename: "[name].js"
+        filename: "app.js"
     },
 
 

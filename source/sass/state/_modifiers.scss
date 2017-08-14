@@ -19,8 +19,8 @@
 .-wrap-copy {
     @include wrap-copy();
     }
-.-wrap-index {
-    @include wrap-index();
+.-wrap-dub {
+    @include wrap-dub();
     }
 .-vtop {
     vertical-align: top;

@@ -73,7 +73,7 @@
     max-width: $wrap-copy;
     width: 100%;
 }
-@mixin wrap-index () {
-    padding-left: $padding-index;
-    padding-right: $padding-index;
+@mixin wrap-dub () {
+    padding-left: $padding-wrap-dub;
+    padding-right: $padding-wrap-dub;
 }

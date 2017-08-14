@@ -60,6 +60,16 @@ class ContextObject {
 
         return (pageImage ? pageImage.url : appImage);
     }
+
+    // Prismic specific... tsk tsk...?
+    getUrl ( item ) {
+        return `/${item.type}/${item.uid}/`;
+    }
+
+    // Prismic specific... tsk tsk...?
+    getMediaAspect ( media ) {
+        return `${media.height / media.width * 100}%`;
+    }
 }
 
 

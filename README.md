@@ -239,7 +239,7 @@ The `static` directory is the default static directory for the Express app. You 
 
 
 ### ProperJS
-Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS) web app architecture. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
+Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS/app) web app architecture. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
 
 
 

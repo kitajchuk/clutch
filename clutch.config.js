@@ -16,15 +16,15 @@ const config = {
     // API CMS config ( Prismic, Contentful )
     api: {
         // Prismic
-        // adapter: "prismic",
-        // access: "https://clutch.cdn.prismic.io/api", // This is your API URL
-        // token: null // This is your optional API access token
+        adapter: "prismic",
+        access: "https://clutch.cdn.prismic.io/api", // This is your API URL
+        token: null // This is your optional API access token
 
         // Contentful
-        adapter: "contentful",
-        access: "355y876evbep", // This is your space ID
-        token: "8520d90818ee9a87c3cc1275c617ed7254d881f6d24178a4401d9b0cb39640d3", // This is your main CDN token
-        preview: "0276a23aa96144f7fdaa7108bd7ba3fe9555107673f84d6c58dc42e0f33eda4a" // This is your main Preview token
+        // adapter: "contentful",
+        // access: "355y876evbep", // This is your space ID
+        // token: "8520d90818ee9a87c3cc1275c617ed7254d881f6d24178a4401d9b0cb39640d3", // This is your main CDN token
+        // preview: "0276a23aa96144f7fdaa7108bd7ba3fe9555107673f84d6c58dc42e0f33eda4a" // This is your main Preview token
     },
     // Deployment config ( AWS etc... )
     // Would be nice to include Heroku here...?

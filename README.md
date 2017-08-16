@@ -66,7 +66,7 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 * CD into the directory and run `npm run bootstrap`
 * Now run `npm start`
 
-This will load the Clutch example connected to a Prismic repository.
+This will load the Clutch example connected to a Prismic repository. Optionally, you can toggle the `api` config in `./clutch.config.js` to see it work with a Contentful space. Magic...
 
 The following section will cover the differences between getting started with either [Prismic](#prismicio) or [Contentful](#contentful).
 

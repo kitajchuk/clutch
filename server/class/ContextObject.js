@@ -23,6 +23,7 @@ class ContextObject {
         this.items = null;
         this.stylesheet = config.static.css;
         this.javascript = config.static.js;
+        this.config = config;
     }
 
     set ( prop, value ) {
@@ -44,19 +45,31 @@ class ContextObject {
         return `pages/${this.page}.html`;
     }
 
-    // Prismic specific with `getText`... tsk tsk...?
     getPageTitle () {
         const item = this.get( "item" );
-        const title = this.get( "site" ).data.title;
+        let title = this.get( "site" ).data.title;
 
-        return (item ? item.getText( `${item.type}.title` ) + ` — ${title}` : title);
+        if ( config.api.adapter === "prismic" ) {
+            title = (item ? item.getText( `${item.type}.title` ) + ` — ${title}` : title);
+
+        } else if ( config.api.adapter === "contentful" ) {
+            title = (item ? `${item.fields.title} — ${title}` : title);
+        }
+
+        return title;
     }
 
-    // Prismic specific with `getImage`... tsk tsk...?
     getPageImage () {
         const item = this.get( "item" );
         const appImage = this.get( "site" ).data.appImage;
-        const pageImage = item ? item.getImage( `${item.type}.image` ) : "";
+        let pageImage = "";
+
+        if ( config.api.adapter === "prismic" ) {
+            pageImage = item ? item.getImage( `${item.type}.image` ) : "";
+
+        } else if ( config.api.adapter === "contentful" ) {
+            pageImage = item ? item.fields.image.fields.file.url : "";
+        }
 
         return (pageImage ? pageImage.url : appImage);
     }

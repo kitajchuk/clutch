@@ -35,11 +35,15 @@ const webpackConfig = {
         }),
         new OnBuildWebpackPlugin(() => {
             const prefix = config.deploy.cdnEnabled ? config.deploy.cdnURL : "";
-            const command = `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*`;
 
+            // Generate cache manifest
             lager.cache( "Clutch generating appcache-manifest" );
+                child_process.execSync( `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*` );
 
-            child_process.execSync( command );
+            // Merge local CSS with ProperJS/app CSS
+            // Note that you can remove this if you don't use ProperJS/app CSS.
+            lager.cache( "Clutch merging css files" );
+                child_process.execSync( "cat ./static/css/app.css >> ./static/css/screen.css" );
         })
     ],
 
@@ -66,7 +70,7 @@ const webpackConfig = {
             { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: ["eslint-loader"], enforce: "pre" },
             { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: [{ loader: "babel-loader", options: { presets: ["es2015"] } }] },
             { test: /(hobo|hobo.build)\.js$/, use: ["expose-loader?hobo"] },
-            { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", {loader: "sass-loader", options: { data: '$font-path: "' + sassFontPath + '";' }}] }
+            { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", {loader: "sass-loader", options: { outputStyle: "compressed", data: '$font-path: "' + sassFontPath + '";' }}] }
         ]
     }
 };

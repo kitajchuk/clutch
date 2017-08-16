@@ -5,7 +5,7 @@ clutch
 
 
 
-## TOC
+### Outline
 
 * [Example](#example)
 * [Setup](#setup)
@@ -13,8 +13,8 @@ clutch
     * [Circle CI](#circle-ci)
 * [Quickstart](#quickstart)
 * [Headless](#headless)
-    * [Prismic :+1:](#prismicio)
-    * [Contentful? :thought_balloon: ](#contentful)
+    * [Prismic](#prismicio)
+    * [Contentful](#contentful)
 * [Express](#express)
 * [Static](#static)
 * [ProperJS](#properjs)
@@ -68,32 +68,44 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 
 This will load the Clutch example connected to a Prismic repository.
 
+The following section will cover the differences between getting started with either [Prismic](#prismicio) or [Contentful](#contentful).
 
 
-### Headless
+
+### Headless CMS
 Clutch aims to be a simple, adapter-based scaffold for building modern wep applications. It's design uses a simple ORM adapter concept to normalize the high-level data structures. From there the system leaves the doors open for you to build, template and work with your data in its provided service format.
 
 #### Prismic.io
-The Prismic adapter works out of the box. Prismic allows `JSON` authoring of content models so its a bit easier to do the initial setup.
+Prismic does not have a CMS API so you have to manually paste the initial content-type JSON yourself in the CMS:
 
 * Create your Prismic repository
-* Add your repositories API access key to `server/core/config.js`
+* Add your api url and access token info to `clutch.config.js`
 * Make sure the `adapter` property is set to `prismic`
 * In your repository create a single content type called `Site`
 * In your repository create a repeatable content type called `Page`
 * Using the `JSON` editor paste in the respective contents of the files in `models`
 * You can now create your `Site` document and apply its settings
 * You can create `Page` documents and add them to the `Site` navigation as needed
+* Now go to town and make something cool...
 
-These are some helpful links for working with the Prismic platform.
-
-* [Developers Manual](https://prismic.io/docs/old/documentation/developers-manual)
-* [API Documentation](https://prismic.io/docs/old/documentation/api-documentation)
-* [Previews docs](https://prismic.io/docs/in-website-preview#?lang=javascript)
-* [Previews blog](https://prismic.io/blog/preview-content-changes-in-your-website)
+To create your first sandbox `preview` site go to Settings -> Previews. Use `localhost` for the Site name and `http://localhost:8001/preview/` for the Preview URL.
 
 #### Contentful
-The Contentful adapter is in progess so hopefully its ready really soon ;)
+Contentful has a CMS API and does not have manual JSON entry for creating content-types.
+
+* Create your Contentful space
+* Create a new Content delivery/preview token set called `Clutch`
+* Add your space, CDN and preview token info to `clutch.config.js`
+* Create a new Content management token called `Clutch`
+* Copy your CMT token and put it in a file at `./sandbox/contentful.management.token`
+* Make sure the `adapter` property is set to `contentful`
+* Execute `npm run bootstrap:contentful` to create the initial `Site` and `Page` content-types
+* Now in Contentful you need to go into each content-type and click the Save button to activate them
+* You can now create your `Site` entry and apply its settings
+* You can create `Page` entries and add them to the `Site` navigation as needed
+* Now go to town and make something cool...
+
+To create your first sandbox `preview` site go to Settings -> Content preview. Use `localhost` for the Name and `http://localhost:8001/preview/?type=page&uid={entry_field.uid}` for the Preview URLs for your content-types, replacing `type=page` with the appropriate content-type for each checkbox.
 
 
 
@@ -111,7 +123,7 @@ The Clutch node server implements a pub/sub model for interacting with requests.
 The default `server/app.js` has a couple basic examples. You have to return either the `query` or a new `Promise` for your query handlers. When returning with a Promise you must resolve with an object that as a `results` Array or reject with an error message. For your `context` handlers you have to return the `context`.
 
 ```js
-const config = require( "./core/config" );
+const config = require( "../clutch.config" );
 const router = require( "./router" );
 
 

@@ -1,8 +1,14 @@
-// Load the SASS
+// Load the ProperJS/app SASS
 require( "properjs-app/source/sass/screen.scss" );
 
 
-// Load the JS
+// Load the local project SASS
+// Note that rather than load all ProperJS/app SASS,
+// you can optionally import just what you want in app.scss.
+require( "../sass/app.scss" );
+
+
+// Load the ProperJS/app JavaScript
 import router from "properjs-app/source/js/router";
 import * as core from "properjs-app/source/js/core";
 import navi from "properjs-app/source/js/navi";

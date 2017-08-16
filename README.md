@@ -11,7 +11,7 @@ clutch
 * [Setup](#setup)
     * [AWS](#aws)
     * [Circle CI](#circle-ci)
-* [Quickstart](#quickstart)
+* [Sandbox](#sandbox)
 * [Headless](#headless)
     * [Prismic](#prismicio)
     * [Contentful](#contentful)
@@ -61,12 +61,12 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 
 
 
-### Quickstart
+### Sandbox
 * Download this template
 * CD into the directory and run `npm run bootstrap`
 * Now run `npm start`
 
-This will load the Clutch example connected to a Prismic repository. Optionally, you can toggle the `api` config in `./clutch.config.js` to see it work with a Contentful space. Magic...
+This will load the Clutch example connected to a Prismic repository. Optionally, you can toggle the `api` config in `clutch.config.js` to see it work with a Contentful space. Magic...
 
 The following section will cover the differences between getting started with either [Prismic](#prismicio) or [Contentful](#contentful).
 
@@ -112,13 +112,13 @@ To create your first sandbox `preview` site go to Settings -> Content preview. U
 ### Express
 
 #### URL
-The Clutch node server is designed to access data in a convention over configuration approach. The format is `:type/:uid`. As long as you have content in your CMS for the types and UIDs your content will be loaded.
+The Clutch node server is designed to access data in a convention over configuration approach. The format is `:type/:uid`. As long as you have posts in your CMS for the content-types and corresponding UIDs the system will successfully load your pages.
 
 #### API
 The Clutch node server also operates as a `JSON` API for your data. The format is `api/:type/:uid`. You can use the API for partial renderings if you pass `?format=html&template=yourtemplate` along with your request. Partials are loaded out of the `template/partials` directory.
 
 #### Pub/Sub
-The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to content-type requests and modify the `query` and `context` in any way you need. The `client`, `api`, and `query` objects passed to your `query` handlers will be representative of the CMS you are using. Currently only [Prismic](#prismicio) has a working adapter for Clutch. The `context` passed to your `context` handlers is the [ContextObject](https://github.com/kitajchuk/clutch/blob/master/server/class/ContextObject.js) instance.
+The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to content-type requests and modify the `query` and `context` in any way you need. The `client`, `api`, and `query` objects passed to your `query` handlers will be representative of the CMS you are using. The `context` passed to your `context` handlers is the [ContextObject](https://github.com/kitajchuk/clutch/blob/master/server/class/ContextObject.js) instance.
 
 The default `server/app.js` has a couple basic examples. You have to return either the `query` or a new `Promise` for your query handlers. When returning with a Promise you must resolve with an object that as a `results` Array or reject with an error message. For your `context` handlers you have to return the `context`.
 
@@ -153,7 +153,7 @@ router.init();
 ```
 
 #### Template
-The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `server/core/config.js` editing the `template.module` and `template.requires` fields.
+The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `clutch.config.js` editing the `template.module` field.
 
 The `template` anatomy:
 
@@ -179,7 +179,8 @@ The Template Context Object tree:
     item: {object},
     items: [array],
     stylesheet: "string",
-    javascript: "string"
+    javascript: "string",
+    config: {object}
 }
 
 // The navi {object} context
@@ -246,7 +247,7 @@ The `static` directory is the default static directory for the Express app. You 
 
 * From static directory on your Express app server ( this is the default )
 * From an AWS S3 bucket synced with your static directory
-* From an AWS CloudFront CDN in front of an AWS S3 bucket
+* From an AWS CloudFront CDN in front of an AWS S3 bucket synced with your static directory
 
 
 

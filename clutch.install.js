@@ -1,3 +1,7 @@
+"use strict";
+
+
+
 const fs = require( "fs" );
 const path = require( "path" );
 const root = __dirname;
@@ -6,11 +10,12 @@ const rootPackageLock = path.join( root, "package-lock.json" );
 const rootSandbox = path.join( root, "sandbox" );
 const rootTemplatePartials = path.join( root, "template", "partials" );
 const rootNotes = path.join( root, ".notes" );
-const rootHobo = path.join( rootNodeModules, "properjs-app", "node_modules", "properjs-hobo" );
 const rootServer = path.join( root, "server" );
 const rootTasks = path.join( root, "tasks" );
 const child_process = require( "child_process" );
 const config = require( "./clutch.config" );
+let rootHobo = path.join( rootNodeModules, "properjs-app", "node_modules", "properjs-hobo" );
+
 
 
 // Note that with `npm@5` there have been some hiccups
@@ -51,7 +56,14 @@ if ( !fs.existsSync( rootNotes ) ) {
 
 
 // 5.0 Hobo.js build
+// Account for different @npm versions... :(
+// Default is to assume @npm 5+
+// But if that architecture fails, assume earlier version...
 console.log( "Building properjs-hobo..." );
+
+if ( !fs.existsSync( rootHobo ) ) {
+    rootHobo = path.join( rootNodeModules, "properjs-hobo" );
+}
 
 child_process.execSync( `cd ${rootHobo} && npm install && npm run build -- '${config.browser.hobo}'` );
 

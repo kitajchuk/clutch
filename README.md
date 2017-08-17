@@ -171,7 +171,6 @@ When working with templates you are looking at a normalized Template Context Obj
 The Template Context Object tree:
 
 ```js
-// Tempate Context Object
 {
     site: {object},
     navi: [array],
@@ -185,8 +184,11 @@ The Template Context Object tree:
     javascript: "string",
     config: {object}
 }
+```
 
-// The navi {object} context
+The Navi Context Object tree:
+
+```js
 {
     id: "string",
     uid: "string",
@@ -197,44 +199,7 @@ The Template Context Object tree:
 }
 ```
 
-Using the context object with `EJS`:
 
-```html
-<!-- The default intro template -->
-<div class="intro js-intro screen ghost -wrap -fzero -text--center is-active">
-    <div class="ghost__child">
-        <img src="<%= locals.context.get( 'site' ).data.appLogo %>" class="intro__logo" />
-    </div>
-</div>
-
-<!-- The default navi template -->
-<nav class="navi js-navi screen ghost -exp-2 -wrap -fzero">
-    <ul class="navi__ul ghost__child">
-        <% locals.context.get( 'navi' ).items.forEach(( item ) => { %>
-            <li class="navi__li">
-                <a class="navi__a js-navi-a" href="<%= item.slug %>">
-                    <%= item.title %>
-                </a>
-            </li>
-        <% }) %>
-    </ul>
-</nav>
-
-<!-- The default page example template -->
-<!--
-    Note that this example here is using Prismic document refs
-    The portion `getText( 'page.title' )` is specific to the Prismic API
-    Those CMS specific refs would be different if you used Contentful
--->
-<div class="example -wrap -exp">
-    <h1 class="h1"><%- locals.context.get( 'item' ).getText( 'page.title' ) %></h2>
-    <p class="p -wrap-copy">
-        <br />
-        <br />
-        <%- locals.context.get( 'item' ).getText( 'page.description' ) %>
-    </p>
-</div>
-```
 
 #### Environments
 Clutch utilizes a 3 environment system to differentiate between local and remote instances.

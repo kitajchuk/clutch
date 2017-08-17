@@ -20,4 +20,4 @@
 
 # Rsync + SSH and Restart App Server
 rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template clutch.config.js ${AWS_USER}@${AWS_HOST}:${AWS_DEST}
-ssh ${AWS_USER}@${AWS_HOST} 'cd ${AWS_DEST}server/ ; sudo npm run install:${NODE_ENV}'
+ssh ${AWS_USER}@${AWS_HOST} "cd ${AWS_DEST}server/ ; sudo npm run install:${NODE_ENV}"

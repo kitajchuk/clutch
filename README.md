@@ -32,13 +32,16 @@ This `clutch` scaffold is currently testing against a `staging` environment at [
 First setup the **Clutch Stack** on AWS OpsWorks as defined [here](https://github.com/kitajchuk/clutch-chef). The `clutch-chef` repository is a Chef cookbook that configures the AWS EC2 instances for you.
 
 #### AWS
-Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project. You will replace the following `npm-config` values in the `package.json`:
+Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project under the `config` property:
 
-* [aws_ec2_pem_file]
-* [aws_ec2_staging_host]
-* [aws_ec2_production_host]
+```js
+"config": {
+    "aws_ec2_staging_host": "[Elastic IP]",
+    "aws_ec2_production_host": "[Elastic IP]"
+}
+```
 
-This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your `sandbox`, it is recommended to utilize the Circle CI configuration for streamlined Continuous Integration and Deployment. See the [section on Circle CI](#circle-ci) for this.
+This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your `sandbox`, it is recommended to utilize the Circle CI configuration for streamlined Continuous Integration and Deployment. Checkout the `npm-scripts` in the `package.json` and see the [section on Circle CI](#circle-ci) for this.
 
 Here are some useful links for setting up other services on AWS.
 * [S3 Buckets](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html)

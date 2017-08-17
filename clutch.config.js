@@ -26,10 +26,10 @@ const config = {
         // token: "8520d90818ee9a87c3cc1275c617ed7254d881f6d24178a4401d9b0cb39640d3", // This is your main CDN token
         // preview: "0276a23aa96144f7fdaa7108bd7ba3fe9555107673f84d6c58dc42e0f33eda4a" // This is your main Preview token
     },
-    // Deployment config ( AWS etc... )
-    // Would be nice to include Heroku here...?
-    deploy: {
-        cdnURL: "",
+    // Deployment config ( AWS )
+    aws: {
+        cdn: "",
+        cdnOn: false // Turn on to use CloudFront CDN
     },
     // Templating config
     template: {
@@ -66,9 +66,8 @@ const config = {
 
 
 // Serves assets from either CDN or App Server...
-config.deploy.cdnEnabled = (!config.env.sandbox && config.deploy.cdnURL);
-config.static.js = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}${config.static.endJS}` : config.static.endJS;
-config.static.css = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}${config.static.endCSS}` : config.static.endCSS;
+config.static.js = config.aws.cdnOn ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
+config.static.css = config.aws.cdnOn ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
 
 
 

@@ -10,7 +10,7 @@ const child_process = require( "child_process" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
 const OnBuildWebpackPlugin = require( "on-build-webpack" );
-const sassFontPath = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}/fonts/` : "/fonts/";
+const sassFontPath = config.aws.cdnOn ? `${config.aws.cdn}/fonts/` : "/fonts/";
 
 
 
@@ -19,6 +19,22 @@ const webpackConfig = {
 
 
     plugins: [
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: [autoprefixer( { browsers: ["last 2 versions"] } )]
+            }
+        }),
+        new OnBuildWebpackPlugin(() => {
+            const prefix = config.aws.cdnOn ? config.aws.cdn : "";
+
+            // Generate cache manifest
+            lager.cache( "Clutch generating appcache-manifest" );
+                child_process.execSync( `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*` );
+
+            // Merge CSS...
+            lager.cache( "Clutch merging CSS" );
+                child_process.execSync( "cat ./static/css/app.css >> ./static/css/screen.css" );
+        }),
         new BrowserSyncPlugin({
             open: true,
             host: "localhost",
@@ -27,18 +43,6 @@ const webpackConfig = {
             files: [
                 "template/**/*.html"
             ]
-        }),
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                postcss: [autoprefixer( { browsers: ["last 2 versions"] } )]
-            }
-        }),
-        new OnBuildWebpackPlugin(() => {
-            const prefix = config.deploy.cdnEnabled ? config.deploy.cdnURL : "";
-
-            // Generate cache manifest
-            lager.cache( "Clutch generating appcache-manifest" );
-                child_process.execSync( `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*` );
         })
     ],
 

@@ -5,12 +5,12 @@
   "private": true,
   "version": "0.1.0",
   "config": {
-    "aws_ec2_pem_file": "./sandbox/clutch.pem",
     "aws_ec2_staging_host": "34.209.179.25",
-    "aws_ec2_production_host": "[aws_ec2_production_host]",
-    "aws_ec2_web_root": "/var/www/html/"
+    "aws_ec2_production_host": "[aws_ec2_production_host]"
   },
   "scripts": {
+    "bootstrap": "node clutch.install.js",
+    "bootstrap:contentful": "node ./server/adapters/contentful.bootstrap.js",
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/nodemon server/app.js",
@@ -20,12 +20,10 @@
     "postbuild:staging": "cat ./static/css/app.css >> ./static/css/screen.css",
     "build:production": "export NODE_ENV=production ; ./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
     "postbuild:production": "cat ./static/css/app.css >> ./static/css/screen.css",
-    "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host -i $npm_package_config_aws_ec2_pem_file",
-    "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host -i $npm_package_config_aws_ec2_pem_file",
-    "bootstrap": "node clutch.install.js",
-    "bootstrap:contentful": "node ./server/adapters/contentful.bootstrap.js",
+    "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host -i ~/.ssh/clutch.pem",
+    "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host -i ~/.ssh/clutch.pem",
     "deploy:staging": "export NODE_ENV=staging ; node clutch.deploy.js",
-    "deploy:production": "export NODE_ENV=production ; node clutch.deploy.js",
+    "deploy:production": "export NODE_ENV=production ; node clutch.deploy.js"
   },
   "devDependencies": {
     "appcache-manifest": "^2.1.0",

@@ -22,8 +22,8 @@
     "postbuild:production": "cat ./static/css/app.css >> ./static/css/screen.css",
     "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host -i ~/.ssh/clutch.pem",
     "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host -i ~/.ssh/clutch.pem",
-    "deploy:staging": "export NODE_ENV=staging ; node clutch.deploy.js",
-    "deploy:production": "export NODE_ENV=production ; node clutch.deploy.js"
+    "deploy:staging": "export NODE_ENV=staging ; export AWS_HOST=${AWS_STAGING_HOST} ; ./clutch.deploy",
+    "deploy:production": "export NODE_ENV=production ; export AWS_HOST=${AWS_PRODUCTION_HOST} ; ./clutch.deploy"
   },
   "devDependencies": {
     "appcache-manifest": "^2.1.0",

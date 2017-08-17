@@ -24,7 +24,7 @@ if ( process.env.NODE_ENV === "staging" ) {
 
     // Rsync + Restart App Server
     child_process.execSync( `rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "${deployExclude}" ${deployTargets} ${process.env.AWS_USER}@${process.env.AWS_STAGING_HOST}:${process.env.AWS_DEST}` );
-    child_process.execSync( `ssh ${process.env.AWS_USER}@${process.env.AWS_STAGING_HOST} 'cd ${process.env.AWS_DEST}server/ ; sudo npm run install:staging'` );
+    child_process.execSync( `ssh ${process.env.AWS_USER}@${process.env.AWS_STAGING_HOST} 'cd ${process.env.AWS_DEST}server/ ; echo ${Date.now()} > clutch.timestap ; sudo npm run install:staging'` );
 
 } else if ( process.env.NODE_ENV === "production" ) {
     // S3 Bucket Sync ( Uncomment if using S3 bucket )
@@ -32,5 +32,5 @@ if ( process.env.NODE_ENV === "staging" ) {
 
     // Rsync + Restart App Server
     child_process.execSync( `rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "${deployExclude}" ${deployTargets} ${process.env.AWS_USER}@${process.env.AWS_PRODUCTION_HOST}:${process.env.AWS_DEST}` );
-    child_process.execSync( `ssh ${process.env.AWS_USER}@${process.env.AWS_PRODUCTION_HOST} 'cd ${process.env.AWS_DEST}server/ ; sudo npm run install:staging'` );
+    child_process.execSync( `ssh ${process.env.AWS_USER}@${process.env.AWS_PRODUCTION_HOST} 'cd ${process.env.AWS_DEST}server/ ; echo ${Date.now()} > clutch.timestap ; sudo npm run install:staging'` );
 }

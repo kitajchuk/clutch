@@ -31,9 +31,9 @@ deployment:
         branch: dev
         commands:
             - npm run build:staging
-            - make -ef Circlefile deploy_staging
+            - npm run deploy:staging
     production:
         branch: master
         commands:
             - npm run build:production
-            - make -ef Circlefile deploy_production
+            - npm run deploy:production

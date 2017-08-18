@@ -47,7 +47,8 @@ const config = {
     // Browser-sync config
     browser: {
         port: 8001,
-        hobo: "is eq not attr filter detach remove append"
+        hobo: "is eq not attr filter detach remove append",
+        appcache: true
     },
     // Static assets config
     static: {

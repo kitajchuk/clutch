@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+###
+#
+# These are the variables you define for Clutch:
+#
+# AWS_USER — `ec2-user` by default
+# AWS_DEST — `/var/www/html/` by default
+# AWS_STAGING_HOST — Elastic IP for staging instance
+# AWS_PRODUCTION_HOST — Elastic IP for production instance
+# S3_BUCKET — The name of the S3 bucket
+# S3_REGION — The region field for the S3 bucket
+# S3_ACCESS_KEY — The IAM role access key
+# S3_SECRET_KEY — The IAM role secret key
+#
+###
+
+# S3 Bucket Sync ( Uncomment if using S3 bucket )
+#./node_modules/.bin/properjs-s3 --key ${S3_ACCESS_KEY} --secret ${S3_SECRET_KEY} --region "${S3_REGION}" --bucket "${S3_BUCKET}" --prefix "static" --directory "static"
+
+# Rsync + SSH and Restart App Server
+rsync -av -e "ssh" --rsync-path "sudo rsync" --exclude "server/node_modules" server static template clutch.config.js ${AWS_USER}@${AWS_HOST}:${AWS_DEST}
+ssh ${AWS_USER}@${AWS_HOST} "cd ${AWS_DEST}server/ ; sudo npm run install:${NODE_ENV}"

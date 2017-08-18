@@ -1,8 +1,18 @@
 <div class="example -wrap -exp">
-    <h1 class="h1"><%- locals.context.get( 'item' ).getText( 'page.title' ) %></h2>
+    <h1 class="h1">
+        <% if ( locals.context.get( 'config' ).api.adapter === 'prismic' ) { %>
+            <%- locals.context.get( 'item' ).getText( 'page.title' ) %>
+        <% } else { %>
+            <%- locals.context.get( 'item' ).fields.title %>
+        <% } %>
+    </h1>
     <p class="p -wrap-copy">
         <br />
         <br />
-        <%- locals.context.get( 'item' ).getText( 'page.description' ) %>
+        <% if ( locals.context.get( 'config' ).api.adapter === 'prismic' ) { %>
+            <%- locals.context.get( 'item' ).getText( 'page.description' ) %>
+        <% } else { %>
+            <%- locals.context.get( 'item' ).fields.description %>
+        <% } %>
     </p>
 </div>

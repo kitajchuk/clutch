@@ -1,11 +1,19 @@
-require( "../sass/screen.scss" );
+// Load the ProperJS/app SASS
+require( "properjs-app/source/sass/screen.scss" );
 
 
-import router from "./router";
-import * as core from "./core";
-import navi from "./navi";
-import intro from "./intro";
-import Analytics from "./class/Analytics";
+// Load the local project SASS
+// Note that rather than load all ProperJS/app SASS,
+// you can optionally import just what you want in app.scss.
+require( "../sass/app.scss" );
+
+
+// Load the ProperJS/app JavaScript
+import router from "properjs-app/source/js/router";
+import * as core from "properjs-app/source/js/core";
+import navi from "properjs-app/source/js/navi";
+import intro from "properjs-app/source/js/intro";
+import Analytics from "properjs-app/source/js/class/Analytics";
 
 
 /**
@@ -57,13 +65,9 @@ class App {
 }
 
 
-/******************************************************************************
- * Expose
-*******************************************************************************/
+// Create {app} instance
 window.app = new App();
 
 
-/******************************************************************************
- * Export
-*******************************************************************************/
+// Export {app} instance
 export default window.app;

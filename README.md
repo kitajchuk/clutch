@@ -1,19 +1,20 @@
 clutch
 ======
 
-> A modern headless CMS scaffold.
+> A modern headless CMS scaffold for Prismic and Contentful.
 
 
 
-## TOC
+### Outline
 
+* [Example](#example)
 * [Setup](#setup)
     * [AWS](#aws)
     * [Circle CI](#circle-ci)
-* [Quickstart](#quickstart)
+* [Sandbox](#sandbox)
 * [Headless](#headless)
-    * [Prismic :+1:](#prismicio)
-    * [Contentful? :thought_balloon: ](#contentful)
+    * [Prismic](#prismicio)
+    * [Contentful](#contentful)
 * [Express](#express)
 * [Static](#static)
 * [ProperJS](#properjs)
@@ -22,17 +23,25 @@ clutch
 
 
 
+### Example
+This `clutch` scaffold is currently testing against a `staging` environment at [clutch.kitajchuk.com](http://clutch.kitajchuk.com/).
+
+
+
 ### Setup
 First setup the **Clutch Stack** on AWS OpsWorks as defined [here](https://github.com/kitajchuk/clutch-chef). The `clutch-chef` repository is a Chef cookbook that configures the AWS EC2 instances for you.
 
 #### AWS
-Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project. You will replace the following `npm-config` values in the `package.json`:
+Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project under the `config` property:
 
-* [aws_ec2_pem_file]
-* [aws_ec2_staging_host]
-* [aws_ec2_production_host]
+```js
+"config": {
+    "aws_ec2_staging_host": "[Elastic IP]",
+    "aws_ec2_production_host": "[Elastic IP]"
+}
+```
 
-This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your `sandbox`, it is recommended to utilize the Circle CI configuration for streamlined Continuous Integration and Deployment. See the [section on Circle CI](#circle-ci) for this.
+This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your `sandbox`, it is recommended to utilize the Circle CI configuration for streamlined Continuous Integration and Deployment. Checkout the `npm-scripts` in the `package.json` and see the [section on Circle CI](#circle-ci) for this.
 
 Here are some useful links for setting up other services on AWS.
 * [S3 Buckets](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html)
@@ -55,57 +64,69 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 
 
 
-### Quickstart
+### Sandbox
 * Download this template
-* CD into the directory and run `npm install`
+* CD into the directory and run `npm run bootstrap`
 * Now run `npm start`
 
-This will load the Clutch example connected to a Prismic repository.
+This will load the Clutch example connected to a Prismic repository. Optionally, you can toggle the `api` config in `clutch.config.js` to see it work with a Contentful space. Magic...
+
+The following section will cover the differences between getting started with either [Prismic](#prismicio) or [Contentful](#contentful).
 
 
 
-### Headless
+### Headless CMS
 Clutch aims to be a simple, adapter-based scaffold for building modern wep applications. It's design uses a simple ORM adapter concept to normalize the high-level data structures. From there the system leaves the doors open for you to build, template and work with your data in its provided service format.
 
 #### Prismic.io
-The Prismic adapter works out of the box. Prismic allows `JSON` authoring of content models so its a bit easier to do the initial setup.
+Prismic does not have a CMS API so you have to manually paste the initial content-type JSON yourself in the CMS:
 
 * Create your Prismic repository
-* Add your repositories API access key to `server/core/config.js`
+* Add your api url and access token info to `clutch.config.js`
 * Make sure the `adapter` property is set to `prismic`
 * In your repository create a single content type called `Site`
 * In your repository create a repeatable content type called `Page`
 * Using the `JSON` editor paste in the respective contents of the files in `models`
 * You can now create your `Site` document and apply its settings
 * You can create `Page` documents and add them to the `Site` navigation as needed
+* Now go to town and make something cool...
 
-These are some helpful links for working with the Prismic platform.
-
-* [Developers Manual](https://prismic.io/docs/old/documentation/developers-manual)
-* [API Documentation](https://prismic.io/docs/old/documentation/api-documentation)
-* [Previews docs](https://prismic.io/docs/in-website-preview#?lang=javascript)
-* [Previews blog](https://prismic.io/blog/preview-content-changes-in-your-website)
+To create your first sandbox `preview` site go to Settings -> Previews. Use `localhost` for the Site name and `http://localhost:8001/preview/` for the Preview URL.
 
 #### Contentful
-The Contentful adapter is in progess so hopefully its ready really soon ;)
+Contentful has a CMS API and does not have manual JSON entry for creating content-types.
+
+* Create your Contentful space
+* Create a new Content delivery/preview token set called `Clutch`
+* Add your space, CDN and preview token info to `clutch.config.js`
+* Create a new Content management token called `Clutch`
+* Copy your CMT token and put it in a file at `./sandbox/contentful.management.token`
+* Make sure the `adapter` property is set to `contentful`
+* Execute `npm run bootstrap:contentful` to create the initial `Site` and `Page` content-types
+* Now in Contentful you need to go into each content-type and click the Save button to activate them
+* You can now create your `Site` entry and apply its settings
+* You can create `Page` entries and add them to the `Site` navigation as needed
+* Now go to town and make something cool...
+
+To create your first sandbox `preview` site go to Settings -> Content preview. Use `localhost` for the Name and `http://localhost:8001/preview/?type=page&uid={entry_field.uid}` for the Preview URLs for your content-types, replacing `type=page` with the appropriate content-type for each checkbox.
 
 
 
 ### Express
 
 #### URL
-The Clutch node server is designed to access data in a convention over configuration approach. The format is `:type/:uid`. As long as you have content in your CMS for the types and UIDs your content will be loaded.
+The Clutch node server is designed to access data in a convention over configuration approach. The format is `:type/:uid`. As long as you have posts in your CMS for the content-types and corresponding UIDs the system will successfully load your pages.
 
 #### API
 The Clutch node server also operates as a `JSON` API for your data. The format is `api/:type/:uid`. You can use the API for partial renderings if you pass `?format=html&template=yourtemplate` along with your request. Partials are loaded out of the `template/partials` directory.
 
 #### Pub/Sub
-The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to content-type requests and modify the `query` and `context` in any way you need. The `client`, `api`, and `query` objects passed to your `query` handlers will be representative of the CMS you are using. Currently only [Prismic](#prismicio) has a working adapter for Clutch. The `context` passed to your `context` handlers is the [ContextObject](https://github.com/kitajchuk/clutch/blob/master/server/class/ContextObject.js) instance.
+The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to content-type requests and modify the `query` and `context` in any way you need. The `client`, `api`, and `query` objects passed to your `query` handlers will be representative of the CMS you are using. The `context` passed to your `context` handlers is the [ContextObject](https://github.com/kitajchuk/clutch/blob/master/server/class/ContextObject.js) instance.
 
 The default `server/app.js` has a couple basic examples. You have to return either the `query` or a new `Promise` for your query handlers. When returning with a Promise you must resolve with an object that as a `results` Array or reject with an error message. For your `context` handlers you have to return the `context`.
 
 ```js
-const config = require( "./core/config" );
+const config = require( "../clutch.config" );
 const router = require( "./router" );
 
 
@@ -135,7 +156,7 @@ router.init();
 ```
 
 #### Template
-The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `server/core/config.js` editing the `template.module` and `template.requires` fields.
+The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `clutch.config.js` editing the `template.module` field.
 
 The `template` anatomy:
 
@@ -150,7 +171,6 @@ When working with templates you are looking at a normalized Template Context Obj
 The Template Context Object tree:
 
 ```js
-// Tempate Context Object
 {
     site: {object},
     navi: [array],
@@ -161,10 +181,14 @@ The Template Context Object tree:
     item: {object},
     items: [array],
     stylesheet: "string",
-    javascript: "string"
+    javascript: "string",
+    config: {object}
 }
+```
 
-// The navi {object} context
+The Navi Context Object tree:
+
+```js
 {
     id: "string",
     uid: "string",
@@ -175,44 +199,7 @@ The Template Context Object tree:
 }
 ```
 
-Using the context object with `EJS`:
 
-```html
-<!-- The default intro template -->
-<div class="intro js-intro screen ghost -wrap -fzero -text--center is-active">
-    <div class="ghost__child">
-        <img src="<%= locals.context.get( 'site' ).data.appLogo %>" class="intro__logo" />
-    </div>
-</div>
-
-<!-- The default navi template -->
-<nav class="navi js-navi screen ghost -exp-2 -wrap -fzero">
-    <ul class="navi__ul ghost__child">
-        <% locals.context.get( 'navi' ).items.forEach(( item ) => { %>
-            <li class="navi__li">
-                <a class="navi__a js-navi-a" href="<%= item.slug %>">
-                    <%= item.title %>
-                </a>
-            </li>
-        <% }) %>
-    </ul>
-</nav>
-
-<!-- The default page example template -->
-<!--
-    Note that this example here is using Prismic document refs
-    The portion `getText( 'page.title' )` is specific to the Prismic API
-    Those CMS specific refs would be different if you used Contentful
--->
-<div class="example -wrap -exp">
-    <h1 class="h1"><%- locals.context.get( 'item' ).getText( 'page.title' ) %></h2>
-    <p class="p -wrap-copy">
-        <br />
-        <br />
-        <%- locals.context.get( 'item' ).getText( 'page.description' ) %>
-    </p>
-</div>
-```
 
 #### Environments
 Clutch utilizes a 3 environment system to differentiate between local and remote instances.
@@ -228,12 +215,12 @@ The `static` directory is the default static directory for the Express app. You 
 
 * From static directory on your Express app server ( this is the default )
 * From an AWS S3 bucket synced with your static directory
-* From an AWS CloudFront CDN in front of an AWS S3 bucket
+* From an AWS CloudFront CDN in front of an AWS S3 bucket synced with your static directory
 
 
 
 ### ProperJS
-Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS) web app architecture. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
+Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS/app) web app architecture. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
 
 
 

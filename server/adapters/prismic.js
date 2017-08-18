@@ -4,18 +4,26 @@
 
 /**
  *
- * Adapter for Prismic.io
- * Every adapter must have a common ORM format exposed to the scaffold:
- * cache: { site: Object, navi: Object }
+ * Adapter for Prismic
+ * https://prismic.io
+ *
+ * Every adapter must have a common, public `cache` object:
+ * cache: Object { api: Object, site: Object, navi: Object }
+ *
+ * Every adapter must have common, public `ORM` functions:
  * getApi: Function
  * getPage: Function
+ * getPreview: Function
+ *
+ * Every adapter must have common, private `ORM` functions:
  * getSite: Function
  * getNavi: Function
- * getPreview: Function
  * getPartial: Function
+ * getDataForApi: Function
+ * getDataForPage: Function
  *
- * Different Headless CMS will require slightly different internal approaches
- * Whatever means necessary is A-OK as long as the data resolves to the ORM format
+ * Different Headless CMS require slightly different approaches here.
+ * Any means necessary is A-OK as long as the data resolves to the ORM format.
  *
  *
  */
@@ -93,7 +101,7 @@ const getPage = function ( req, res, listener ) {
 
 /**
  *
- * Handle preview URLs from Prismic for draft content.
+ * Handle preview URLs for draft content.
  *
  */
 const getPreview = function ( req, res ) {
@@ -103,7 +111,7 @@ const getPreview = function ( req, res ) {
             return `/${doc.type}/${doc.uid}/`;
         };
 
-        prismic.api( core.config.api.access, null ).then(( api ) => {
+        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
             api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
                 res.cookie( prismic.previewCookie, previewToken, {
                     maxAge: 60 * 30 * 1000,
@@ -162,9 +170,9 @@ const getPartial = function ( req, data, listener ) {
  * Load the Site context model.
  *
  */
-const getSite = function () {
+const getSite = function ( req ) {
     return new Promise(( resolve, reject ) => {
-        prismic.api( core.config.api.access, null ).then(( api ) => {
+        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
             api.getSingle( "site" ).then(( document ) => {
                 const navi = {
                     items: []
@@ -255,7 +263,7 @@ const getNavi = function ( type ) {
 const getDataForApi = function ( req, listener ) {
     return new Promise(( resolve, reject ) => {
         const doQuery = function ( type ) {
-            prismic.api( core.config.api.access, null ).then(( api ) => {
+            prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
                 const done = function ( json ) {
                     resolve( json.results );
                 };
@@ -264,12 +272,14 @@ const getDataForApi = function ( req, listener ) {
                         error: error
                     });
                 };
-                const type = req.params.type;
-                const form = getForm( req, api );
+                const form = getForm( req, api, type );
                 let query = [];
 
                 // query: type?
-                query.push( prismic.Predicates.at( "document.type", type ) );
+                if ( !api.data.forms[ type ] ) {
+                    // Only if type? is NOT a search form collection
+                    query.push( prismic.Predicates.at( "document.type", type ) );
+                }
 
                 // query: pubsub?
                 if ( listener && listener.handlers.query ) {
@@ -340,7 +350,7 @@ const getDataForPage = function ( req, listener ) {
                 reject( error );
             };
             const navi = getNavi( type );
-            const form = getForm( req, cache.api );
+            const form = getForm( req, cache.api, type );
             let query = [];
 
             // query: type?
@@ -348,7 +358,8 @@ const getDataForPage = function ( req, listener ) {
                 query.push( prismic.Predicates.at( "document.type", navi.type ) );
                 query.push( prismic.Predicates.at( "document.id", navi.id ) );
 
-            } else {
+            } else if ( !cache.api.data.forms[ type ] ) {
+                // Only if type? is NOT a search form collection
                 query.push( prismic.Predicates.at( "document.type", type ) );
             }
 
@@ -374,7 +385,7 @@ const getDataForPage = function ( req, listener ) {
             }
         };
 
-        getSite().then(() => {
+        getSite( req ).then(() => {
             const type = req.params.type;
 
             if ( !type ) {
@@ -391,7 +402,7 @@ const getDataForPage = function ( req, listener ) {
 
 /**
  *
- * Get valid `ref` for Prismic API data.
+ * Get valid `ref` for Prismic API data ( handles previews ).
  *
  */
 const getRef = function ( req, api ) {
@@ -424,8 +435,10 @@ const getDoc = function ( uid, documents ) {
  * Get the stub of the search form.
  *
  */
-const getForm = function ( req, api ) {
-    return api.form( "everything" ).pageSize( 100 ).ref( getRef( req, api ) );
+const getForm = function ( req, api, collection ) {
+    const form = api.data.forms[ collection ] ? collection : "everything";
+
+    return api.form( form ).pageSize( 100 ).ref( getRef( req, api ) );
 };
 
 

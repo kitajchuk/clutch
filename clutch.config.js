@@ -3,7 +3,7 @@ const root = path.resolve( __dirname );
 const config = {
     // Homepage UID
     homepage: "home",
-    // Page Not Found — 404
+    // Page Not Found UID — 404
     notfound: "404",
     // Timestamp ( Stamp of instantiation )
     timestamp: Date.now(),
@@ -15,17 +15,21 @@ const config = {
     },
     // API CMS config ( Prismic, Contentful )
     api: {
-        // Contentful only
-        space: "",
-        // Content API endpoint
-        access: "https://clutch.cdn.prismic.io/api",
-        // Headless service ( prismic, contentful )
-        adapter: "prismic"
+        // Prismic
+        adapter: "prismic",
+        access: "https://clutch.cdn.prismic.io/api", // This is your API URL
+        token: null // This is your optional API access token
+
+        // Contentful
+        // adapter: "contentful",
+        // access: "355y876evbep", // This is your space ID
+        // token: "8520d90818ee9a87c3cc1275c617ed7254d881f6d24178a4401d9b0cb39640d3", // This is your main CDN token
+        // preview: "0276a23aa96144f7fdaa7108bd7ba3fe9555107673f84d6c58dc42e0f33eda4a" // This is your main Preview token
     },
-    // Deployment config ( AWS etc... )
-    // Would be nice to include Heroku here...?
-    deploy: {
-        cdnURL: "",
+    // Deployment config ( AWS )
+    aws: {
+        cdn: "",
+        cdnOn: false // Turn on to use CloudFront CDN
     },
     // Templating config
     template: {
@@ -43,7 +47,8 @@ const config = {
     // Browser-sync config
     browser: {
         port: 8001,
-        hobo: "is eq not attr filter detach remove append"
+        hobo: "is eq not attr filter detach remove append",
+        appcache: true
     },
     // Static assets config
     static: {
@@ -62,9 +67,8 @@ const config = {
 
 
 // Serves assets from either CDN or App Server...
-config.deploy.cdnEnabled = (!config.env.sandbox && config.deploy.cdnURL);
-config.static.js = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}${config.static.endJS}` : config.static.endJS;
-config.static.css = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}${config.static.endCSS}` : config.static.endCSS;
+config.static.js = config.aws.cdnOn ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
+config.static.css = config.aws.cdnOn ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
 
 
 

@@ -10,7 +10,7 @@ const child_process = require( "child_process" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
 const OnBuildWebpackPlugin = require( "on-build-webpack" );
-const sassFontPath = config.deploy.cdnEnabled ? `${config.deploy.cdnURL}/fonts/` : "/fonts/";
+const sassFontPath = config.aws.cdnOn ? `${config.aws.cdn}/fonts/` : "/fonts/";
 
 
 
@@ -19,6 +19,22 @@ const webpackConfig = {
 
 
     plugins: [
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: [autoprefixer( { browsers: ["last 2 versions"] } )]
+            }
+        }),
+        new OnBuildWebpackPlugin(() => {
+            const prefix = config.aws.cdnOn ? config.aws.cdn : "";
+
+            // Generate cache manifest
+            lager.cache( "Clutch generating appcache-manifest" );
+                child_process.execSync( `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*` );
+
+            // Merge CSS...
+            lager.cache( "Clutch merging CSS" );
+                child_process.execSync( "cat ./static/css/app.css >> ./static/css/screen.css" );
+        }),
         new BrowserSyncPlugin({
             open: true,
             host: "localhost",
@@ -27,19 +43,6 @@ const webpackConfig = {
             files: [
                 "template/**/*.html"
             ]
-        }),
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                postcss: [autoprefixer( { browsers: ["last 2 versions"] } )]
-            }
-        }),
-        new OnBuildWebpackPlugin(() => {
-            const prefix = config.deploy.cdnEnabled ? config.deploy.cdnURL : "";
-            const command = `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*`;
-
-            lager.cache( "Clutch generating appcache-manifest" );
-
-            child_process.execSync( command );
         })
     ],
 
@@ -57,16 +60,16 @@ const webpackConfig = {
 
     output: {
         path: path.resolve( __dirname, "static/js" ),
-        filename: "[name].js"
+        filename: "app.js"
     },
 
 
     module: {
         rules: [
-            { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: ["eslint-loader"], enforce: "pre" },
-            { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: [{ loader: "babel-loader", options: { presets: ["es2015"] } }] },
+            { test: /source\/js\/.*\.js$/, /*exclude: /node_modules/,*/ use: ["eslint-loader"], enforce: "pre" },
+            { test: /source\/js\/.*\.js$/, /*exclude: /node_modules/,*/ use: [{ loader: "babel-loader", options: { presets: ["es2015"] } }] },
             { test: /(hobo|hobo.build)\.js$/, use: ["expose-loader?hobo"] },
-            { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", {loader: "sass-loader", options: { data: '$font-path: "' + sassFontPath + '";' }}] }
+            { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", {loader: "sass-loader", options: { outputStyle: "compressed", data: '$font-path: "' + sassFontPath + '";' }}] }
         ]
     }
 };

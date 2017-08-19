@@ -11,7 +11,7 @@ clutch
 * [Setup](#setup)
     * [AWS](#aws)
     * [Circle CI](#circle-ci)
-* [Sandbox](#sandbox)
+* [Install](#install)
 * [Headless](#headless)
     * [Prismic](#prismicio)
     * [Contentful](#contentful)
@@ -25,6 +25,8 @@ clutch
 
 ### Example
 This `clutch` scaffold is currently testing against a `staging` environment at [clutch.kitajchuk.com](http://clutch.kitajchuk.com/).
+
+If you want to streamline the install you can use the [clutch-cli](https://github.com/kitajchuk/clutch-cli);
 
 
 
@@ -64,7 +66,7 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 
 
 
-### Sandbox
+### Install
 * Download this template
 * CD into the directory and run `npm run bootstrap`
 * Now run `npm start`

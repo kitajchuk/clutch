@@ -5,6 +5,11 @@ clutch
 
 
 
+### CLI
+If you want to streamline the install you can use the [clutch-cli](https://github.com/kitajchuk/clutch-cli).
+
+
+
 ### Outline
 
 * [Example](#example)
@@ -25,8 +30,6 @@ clutch
 
 ### Example
 This `clutch` scaffold is currently testing against a `staging` environment at [clutch.kitajchuk.com](http://clutch.kitajchuk.com/).
-
-If you want to streamline the install you can use the [clutch-cli](https://github.com/kitajchuk/clutch-cli);
 
 
 

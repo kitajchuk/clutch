@@ -12,9 +12,9 @@ const rootTemplatePartials = path.join( root, "template", "partials" );
 const rootNotes = path.join( root, ".notes" );
 const rootServer = path.join( root, "server" );
 const rootTasks = path.join( root, "tasks" );
+const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 const child_process = require( "child_process" );
 const config = require( "./clutch.config" );
-const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 
 
 

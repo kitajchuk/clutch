@@ -8,15 +8,17 @@ const headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
 };
 const version = "1.0.0";
-const zipFile = path.join( process.cwd(), "properjsapp.zip" );
-const outPath = path.join( process.cwd(), "app-master" );
-const destPath = path.join( process.cwd(), "source" );
+const zipFile = path.join( __dirname, "properjsapp.zip" );
+const outPath = path.join( __dirname, "app-master" );
+const destPath = path.join( __dirname, "source" );
 const releaseUrl = "https://github.com/ProperJS/app/archive/master.zip";
 const downloadDelay = 500;
 
 
 
 lager.info( `Clutch: Downloading ProperJS/app...` );
+
+child_process.execSync( `rm -rf ${destPath}` );
 
 progress( request.get( releaseUrl, { headers } ) )
     .on( "progress", ( state ) => {

@@ -30,6 +30,12 @@ console.log( `Stopping ${process.env.NODE_ENV} server...` );
 child_process.execSync( "npm run stop" );
 
 
+console.log( `Forwarding port 80 to port 8000...` );
+
+// 4.0 Make sure ports are forwarded for node
+child_process.execSync( "iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000" );
+
+
 console.log( `Starting ${process.env.NODE_ENV} server...` );
 
 // 4.0 Start `environment` server

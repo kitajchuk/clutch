@@ -5,13 +5,18 @@ clutch
 
 
 
+### CLI
+If you want to streamline the install you can use the [clutch-cli](https://github.com/kitajchuk/clutch-cli).
+
+
+
 ### Outline
 
 * [Example](#example)
 * [Setup](#setup)
     * [AWS](#aws)
     * [Circle CI](#circle-ci)
-* [Sandbox](#sandbox)
+* [Install](#install)
 * [Headless](#headless)
     * [Prismic](#prismicio)
     * [Contentful](#contentful)
@@ -64,7 +69,7 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 
 
 
-### Sandbox
+### Install
 * Download this template
 * CD into the directory and run `npm run bootstrap`
 * Now run `npm start`

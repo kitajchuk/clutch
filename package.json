@@ -3,7 +3,7 @@
   "name": "clutch",
   "description": "A modern headless CMS scaffold for Prismic and Contentful.",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "config": {
     "aws_ec2_staging_host": "34.209.179.25",
     "aws_ec2_production_host": "[aws_ec2_production_host]"

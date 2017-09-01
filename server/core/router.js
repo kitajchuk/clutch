@@ -9,11 +9,11 @@ const cookieParser = require( "cookie-parser" );
 const lager = require( "properjs-lager" );
 const listeners = {};
 const core = {
-    watch: require( "./core/watch" ),
-    query: require( "./core/query" ),
-    config: require( "../clutch.config" ),
-    content: require( "./core/content" ),
-    template: require( "./core/template" )
+    watch: require( "./watch" ),
+    query: require( "./query" ),
+    config: require( "../../clutch.config" ),
+    content: require( "./content" ),
+    template: require( "./template" )
 };
 
 

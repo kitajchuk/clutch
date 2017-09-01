@@ -140,6 +140,11 @@ const getPartial = function ( req, data, listener ) {
         };
         const template = path.join( core.config.template.partialsDir, `${partial}.html` );
 
+        localObject.context.set({
+            site: cache.site,
+            navi: cache.navi
+        });
+
         if ( data.document ) {
             localObject.context.set( "item", data.document );
         }

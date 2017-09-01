@@ -6,7 +6,6 @@ const lager = require( "properjs-lager" );
 const nodeModules = "node_modules";
 const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );
-const child_process = require( "child_process" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
 const OnBuildWebpackPlugin = require( "on-build-webpack" );
@@ -25,11 +24,7 @@ const webpackConfig = {
             }
         }),
         new OnBuildWebpackPlugin(() => {
-            const prefix = config.aws.cdnOn ? config.aws.cdn : "";
-
-            // Generate cache manifest
-            lager.cache( "Clutch generating appcache-manifest" );
-                child_process.execSync( `./node_modules/.bin/appcache-manifest -p ${prefix} -o ./static/cache.manifest --stamp --network-star ./static/**/*` );
+            lager.cache( "Webpack build complete" );
         }),
         new BrowserSyncPlugin({
             open: true,

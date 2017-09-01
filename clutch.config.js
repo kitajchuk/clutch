@@ -1,6 +1,8 @@
 const path = require( "path" );
 const root = path.resolve( __dirname );
 const config = {
+    // The URL of your actual site
+    url: "http://clutch.kitajchuk.com",
     // Homepage UID
     homepage: "home",
     // Page Not Found UID — 404
@@ -61,6 +63,16 @@ const config = {
     compression: {
         level: 9,
         threshold: 0
+    },
+    // Generators config ( sitemap, robots, cache manifest )
+    generate: {
+        sitemap: {
+            site: false
+        },
+        robots: {
+            site: false,
+            page: false
+        }
     }
 };
 

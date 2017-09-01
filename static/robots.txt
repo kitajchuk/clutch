@@ -1,4 +1,0 @@
-# Clutch Robots Txt
-
-User-agent: *
-Disallow: /api/

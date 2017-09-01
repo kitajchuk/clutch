@@ -31,15 +31,9 @@ deployment:
         branch: dev
         commands:
             - npm run build:staging
-            - npm run generate:sitemap
-            - npm run generate:robots
-            - npm run generate:appcache
             - npm run deploy:staging
     production:
         branch: master
         commands:
             - npm run build:production
-            - npm run generate:sitemap
-            - npm run generate:robots
-            - npm run generate:appcache
             - npm run deploy:production

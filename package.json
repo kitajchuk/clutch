@@ -10,7 +10,7 @@
   },
   "scripts": {
     "bootstrap": "node clutch.install.js",
-    "postbootstrap": "node properjsapp.install.js",
+    "postbootstrap": "node properjs.install.js",
     "bootstrap:contentful": "node ./server/adapters/contentful.bootstrap.js",
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",

@@ -23,10 +23,9 @@ const config = require( "./clutch.config" );
 
 
 
+// 1.0: Fresh `node_modules`
 console.log( "Installing node_modules..." );
 
-
-// 1.0: Fresh `node_modules`
 child_process.execSync( `rm -rf ${rootNodeModules}` );
 child_process.execSync( "npm install" );
 
@@ -39,7 +38,7 @@ if ( !fs.existsSync( rootSandbox ) ) {
 }
 
 
-// 2.0 Create template partials
+// 3.0 Create template partials
 console.log( "Creating template partials..." );
 
 if ( !fs.existsSync( rootTemplatePartials ) ) {

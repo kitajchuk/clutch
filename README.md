@@ -6,7 +6,7 @@ clutch
 
 
 ### CLI
-If you want to streamline the install you can use the [clutch-cli](https://github.com/kitajchuk/clutch-cli).
+Use the [clutch-cli](https://github.com/kitajchuk/clutch-cli) to install your copy of Clutch as this will bootstrap [ProperJS/app](https://github.com/ProperJS/app) for you as your `source` directory. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
 
 
 
@@ -22,7 +22,6 @@ If you want to streamline the install you can use the [clutch-cli](https://githu
     * [Contentful](#contentful)
 * [Express](#express)
 * [Static](#static)
-* [ProperJS](#properjs)
 * [Resources](#resources)
 
 
@@ -221,11 +220,6 @@ The `static` directory is the default static directory for the Express app. You 
 * From static directory on your Express app server ( this is the default )
 * From an AWS S3 bucket synced with your static directory
 * From an AWS CloudFront CDN in front of an AWS S3 bucket synced with your static directory
-
-
-
-### ProperJS
-Clutch bootstraps with the basic [ProperJS](https://github.com/ProperJS/app) web app architecture. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
 
 
 

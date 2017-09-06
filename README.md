@@ -6,7 +6,7 @@ clutch
 
 
 ### CLI
-Use the [clutch-cli](https://github.com/kitajchuk/clutch-cli) to install your copy of Clutch as this will bootstrap [ProperJS/app](https://github.com/ProperJS/app) for you as your `source` directory. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs). This is all just preferred, you can use anything you like to build your web app.
+Use the [clutch-cli](https://github.com/kitajchuk/clutch-cli) to install your copy of Clutch as this will bootstrap [ProperJS/app](https://github.com/ProperJS/app) for you as your `source` directory. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs) and [Github](https://github.com/ProperJS). This is all just preferred, you can use anything you like to build your web app.
 
 
 

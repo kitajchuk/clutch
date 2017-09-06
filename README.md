@@ -5,8 +5,10 @@ clutch
 
 
 
-### CLI
-Use the [clutch-cli](https://github.com/kitajchuk/clutch-cli) to install your copy of Clutch as this will bootstrap [ProperJS/app](https://github.com/ProperJS/app) for you as your `source` directory. You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs) and [Github](https://github.com/ProperJS). This is all just preferred, you can use anything you like to build your web app.
+### Install
+Use the [clutch-cli](https://github.com/kitajchuk/clutch-cli) to install your copy of Clutch as this will bootstrap [ProperJS/app](https://github.com/ProperJS/app) for you as your `source` directory. With your copy of Clutch installed and bootstrapped you can run either `clutch start` or `npm run start` from your project's root directory.
+
+You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs) and [Github](https://github.com/ProperJS).
 
 
 
@@ -16,7 +18,6 @@ Use the [clutch-cli](https://github.com/kitajchuk/clutch-cli) to install your co
 * [Setup](#setup)
     * [AWS](#aws)
     * [Circle CI](#circle-ci)
-* [Install](#install)
 * [Headless](#headless)
     * [Prismic](#prismicio)
     * [Contentful](#contentful)
@@ -65,17 +66,6 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 * S3_REGION — The region field for the S3 bucket
 * S3_ACCESS_KEY — The IAM role access key
 * S3_SECRET_KEY — The IAM role secret key
-
-
-
-### Install
-* Download this template
-* CD into the directory and run `npm run bootstrap`
-* Now run `npm start`
-
-This will load the Clutch example connected to a Prismic repository. Optionally, you can toggle the `api` config in `clutch.config.js` to see it work with a Contentful space. Magic...
-
-The following section will cover the differences between getting started with either [Prismic](#prismicio) or [Contentful](#contentful).
 
 
 

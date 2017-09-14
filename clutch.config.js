@@ -72,6 +72,12 @@ const config = {
         robots: {
             site: false,
             page: false
+        },
+        mappings: {
+            // Useful for prismic collection forms
+            // contentType => collectionId
+            // e.g. casestudy: "work"
+            // Ensures you get /work/:uid rather than /casestudy/:uid
         }
     }
 };

@@ -90,7 +90,7 @@ const createSitemap = () => {
                     // Clutch lets pages be special
                     // e.g /page/foobar => /foobar
                     if ( doc.type !== "page" ) {
-                        loc = `${loc}/${doc.type}`;
+                        loc = `${loc}/${config.generate.mappings[ doc.type ] ? config.generate.mappings[ doc.type ] : doc.type}`;
                     }
 
                     loc = `${loc}/${doc.uid}/`;

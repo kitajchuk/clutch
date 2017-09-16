@@ -68,6 +68,11 @@ const getPreview = function ( req, res ) {
         res.redirect( url );
     });
 };
+const setReq = function ( req, res, next ) {
+    req.params.type = req.params.type || core.config.homepage;
+
+    next();
+};
 
 
 
@@ -75,13 +80,13 @@ const getPreview = function ( req, res ) {
 expressApp.get( "/preview", getPreview );
 
 // API => JSON
-expressApp.get( "/api/:type", getApi );
-expressApp.get( "/api/:type/:uid", getApi );
+expressApp.get( "/api/:type", setReq, getApi );
+expressApp.get( "/api/:type/:uid", setReq, getApi );
 
 // URI => HTML
-expressApp.get( "/", getPage );
-expressApp.get( "/:type", getPage );
-expressApp.get( "/:type/:uid", getPage );
+expressApp.get( "/", setReq, getPage );
+expressApp.get( "/:type", setReq, getPage );
+expressApp.get( "/:type/:uid", setReq, getPage );
 
 
 

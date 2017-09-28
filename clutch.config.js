@@ -50,7 +50,7 @@ const config = {
     browser: {
         port: 8001,
         hobo: "is eq not attr filter detach remove append",
-        appcache: true
+        appcache: (process.env.NODE_ENV === "production")
     },
     // Static assets config
     static: {

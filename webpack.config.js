@@ -69,15 +69,15 @@ const webpackConfig = {
 
 module.exports = ( env ) => {
     // You can enable gzip compression here...
-    // if ( env.staging || env.production ) {
-    //     webpackConfig.plugins.push(new CompressionPlugin({
-    //         asset: "[path]",
-    //         algorithm: "gzip",
-    //         test: /\.(js|css)$/,
-    //         threshold: 0,
-    //         minRatio: 0.8
-    //     }));
-    // }
+    if ( env.production ) {
+        webpackConfig.plugins.push(new CompressionPlugin({
+            asset: "[path]",
+            algorithm: "gzip",
+            test: /\.(js|css)$/,
+            threshold: 0,
+            minRatio: 0.8
+        }));
+    }
 
     return webpackConfig;
 };

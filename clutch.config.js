@@ -31,7 +31,7 @@ const config = {
     // Deployment config ( AWS )
     aws: {
         cdn: "",
-        cdnOn: false // Turn on to use CloudFront CDN
+        cdnOn: false // Turn on to use CDN ( You can just use S3 or add CloudFront if you want )
     },
     // Templating config
     template: {
@@ -84,9 +84,9 @@ const config = {
 
 
 
-// Serves assets from either CDN or App Server...
-config.static.js = (config.aws.cdnOn && !config.env.sandbox && !config.env.staging) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
-config.static.css = (config.aws.cdnOn && !config.env.sandbox && !config.env.staging) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
+// Serves assets from either CDN ( production ) or App Server ( sandbox + staging )...
+config.static.js = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
+config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
 
 
 

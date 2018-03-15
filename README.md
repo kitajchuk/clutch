@@ -1,7 +1,7 @@
 clutch
 ======
 
-> A modern headless CMS scaffold for Prismic and Contentful.
+> A modern headless CMS SDK for Prismic and Contentful.
 
 
 

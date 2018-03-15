@@ -1,0 +1,35 @@
+version: 2
+
+jobs:
+    build:
+        node:
+            version: 8.10.0
+        timezone:
+            America/Los_Angeles
+        branches:
+            only:
+                - dev
+                - master
+        steps:
+            - checkout
+            # - run: node --version
+            # - run: npm --version
+            # - run: rm -rf node_modules
+            - run:
+                name: Rebuild node-sass
+                command: npm rebuild node-sass
+            - run:
+                name: Clutch Bootstrap
+                command: npm run bootstrap
+            - deploy:
+                name: Staging Deploy
+                command: |
+                    if [ "${CIRCLE_BRANCH}" == "dev" ]; then
+                        npm run deploy:staging
+                    fi
+            - deploy:
+                name: Production Deploy
+                command: |
+                    if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        npm run deploy:production
+                    fi

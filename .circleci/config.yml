@@ -32,10 +32,16 @@ jobs:
             - run:
                 name: Clutch Bootstrap
                 command: npm run bootstrap
+            - persist_to_workspace:
+                root: $CIRCLE_WORKING_DIRECTORY
+                paths:
+                    - *
     deploy-staging:
         machine:
             enabled: true
         steps:
+            - attach_workspace:
+                at: $CIRCLE_WORKING_DIRECTORY
             - run:
                 name: Staging Deploy ( dev branch )
                 command: npm run deploy:staging
@@ -43,6 +49,8 @@ jobs:
         machine:
             enabled: true
         steps:
+            - attach_workspace:
+                at: $CIRCLE_WORKING_DIRECTORY
             - run:
                 name: Production Deploy ( master branch )
                 command: npm run deploy:production

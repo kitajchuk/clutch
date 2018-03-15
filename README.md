@@ -29,7 +29,7 @@ You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/p
 
 
 ### Example
-This `clutch` scaffold is currently testing against a `staging` environment at [clutch.kitajchuk.com](http://clutch.kitajchuk.com/).
+This `clutch` SDK is currently testing against a `staging` environment at [clutch.kitajchuk.com](http://clutch.kitajchuk.com/).
 
 
 
@@ -56,10 +56,10 @@ Here are some useful links for setting up other services on AWS.
 
 
 #### Circle CI
-The Clutch scaffold is designed to provide [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) and [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) using [Circle CI](http://circleci.com). In the project settings on Circle CI add the `clutch` SSH key for your instances. You can also input all the needed environment variables in Circle CI used in the `Circlefile`. The default list included is as follows:
+The Clutch SDK is designed to provide [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) and [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) using [Circle CI](http://circleci.com) v2. In the project settings on Circle CI add the `clutch` SSH key for your instances. You can also input all the needed environment variables in Circle CI used in the `clutch.deploy|sync` files. The default list included is as follows:
 
-* AWS_USER — `ec2-user` by default
-* AWS_DEST — `/var/www/html/` by default
+* AWS_USER — `ec2-user` by default and included in `.circleci/config.yml`
+* AWS_DEST — `/var/www/html/` by default and included in `.circleci/config.yml`
 * AWS_STAGING_HOST — IP for staging instance
 * AWS_PRODUCTION_HOST — IP for production instance
 * S3_BUCKET — The name of the S3 bucket
@@ -70,7 +70,7 @@ The Clutch scaffold is designed to provide [Continuous Integration](https://en.w
 
 
 ### Headless CMS
-Clutch aims to be a simple, adapter-based scaffold for building modern wep applications. It's design uses a simple ORM adapter concept to normalize the high-level data structures. From there the system leaves the doors open for you to build, template and work with your data in its provided service format.
+Clutch aims to be a simple, adapter-based SDK for building modern wep applications. It's design uses a simple ORM adapter concept to normalize the high-level data structures. From there the system leaves the doors open for you to build, template and work with your data in its provided service format.
 
 #### Prismic.io
 Prismic does not have a CMS API so you have to manually paste the initial content-type JSON yourself in the CMS:

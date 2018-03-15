@@ -53,7 +53,7 @@ jobs:
             enabled: true
         steps:
             - attach_workspace:
-                at: /root/clutch
+                at: ~/clutch
             - run:
                 name: Production Deploy ( master branch )
                 command: npm run deploy:production

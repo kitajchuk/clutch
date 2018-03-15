@@ -52,13 +52,13 @@ workflows:
     build-deploy:
         jobs:
             - build
-            - deploy-staging
+            - deploy-staging:
                 requires:
                     - build
                 filters:
                     branches:
                         only: dev
-            - deploy-production
+            - deploy-production:
                 requires:
                     - build
                 filters:

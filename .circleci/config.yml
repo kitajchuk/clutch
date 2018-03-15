@@ -2,6 +2,9 @@ version: 2
 
 jobs:
     build:
+        environment:
+            - AWS_USER: "ec2-user"
+            - AWS_DEST: "/var/www/html/"
         machine:
             enabled: true
         node:
@@ -14,24 +17,50 @@ jobs:
                 - master
         steps:
             - checkout
-            # - run: node --version
-            # - run: npm --version
-            # - run: rm -rf node_modules
+            - run:
+                name: Node version
+                command: node --version
+            - run:
+                name: NPM version
+                command: npm --version
+            # - run:
+            #     name: Trash node_modules
+            #     command: rm -rf node_modules
             - run:
                 name: Rebuild node-sass
                 command: npm rebuild node-sass
             - run:
                 name: Clutch Bootstrap
                 command: npm run bootstrap
-            - deploy:
-                name: Staging Deploy
-                command: |
-                    if [ "${CIRCLE_BRANCH}" == "dev" ]; then
-                        npm run deploy:staging
-                    fi
-            - deploy:
-                name: Production Deploy
-                command: |
-                    if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                        npm run deploy:production
-                    fi
+    deploy-staging:
+        machine:
+            enabled: true
+        steps:
+            - run:
+                name: Staging Deploy ( dev branch )
+                command: npm run deploy:staging
+    deploy-production:
+        machine:
+            enabled: true
+        steps:
+            - run:
+                name: Production Deploy ( master branch )
+                command: npm run deploy:production
+
+workflows:
+    version: 2
+    build-deploy:
+        jobs:
+            - build
+            - deploy-staging
+                requires:
+                    - build
+                filters:
+                    branches:
+                        only: dev
+            - deploy-production
+                requires:
+                    - build
+                filters:
+                    branches:
+                        only: master

@@ -11,10 +11,10 @@ jobs:
             version: 8.10.0
         timezone:
             America/Los_Angeles
-        branches:
-            only:
-                - dev
-                - master
+        # branches:
+        #     only:
+        #         - dev
+        #         - master
         steps:
             - checkout
             - run:
@@ -51,6 +51,7 @@ workflows:
     version: 2
     build-deploy:
         jobs:
+            - build
             - deploy-staging:
                 requires:
                     - build

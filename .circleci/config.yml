@@ -2,7 +2,6 @@ version: 2
 
 jobs:
     build:
-        working_directory: ~/clutch
         environment:
             - AWS_USER: "ec2-user"
             - AWS_DEST: "/var/www/html/"
@@ -34,7 +33,7 @@ jobs:
                 name: Clutch Bootstrap
                 command: npm run bootstrap
             - persist_to_workspace:
-                root: /root/clutch
+                root: /root/project
                 paths:
                     - .
     deploy-staging:
@@ -42,7 +41,7 @@ jobs:
             enabled: true
         steps:
             - attach_workspace:
-                at: /root/clutch
+                at: /root/project
             - run:
                 name: Staging Deploy ( dev branch )
                 command: npm run deploy:staging
@@ -51,7 +50,7 @@ jobs:
             enabled: true
         steps:
             - attach_workspace:
-                at: /root/clutch
+                at: /root/project
             - run:
                 name: Production Deploy ( master branch )
                 command: npm run deploy:production

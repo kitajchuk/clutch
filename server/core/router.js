@@ -68,6 +68,14 @@ const getPreview = function ( req, res ) {
         res.redirect( url );
     });
 };
+const getSitemap = function ( req, res, next ) {
+    const sitemap = require( `../generators/${core.config.api.adapter}.sitemap` );
+
+    sitemap.generate().then(( xml ) => {
+        res.set( "Content-Type", "text/xml" ).status( 200 ).send( xml );
+    });
+
+};
 const setReq = function ( req, res, next ) {
     req.params.type = req.params.type || core.config.homepage;
 
@@ -78,6 +86,7 @@ const setReq = function ( req, res, next ) {
 
 // SYSTEM
 expressApp.get( "/preview", getPreview );
+expressApp.get( "/sitemap.xml", getSitemap );
 
 // API => JSON
 expressApp.get( "/api/:type", setReq, getApi );

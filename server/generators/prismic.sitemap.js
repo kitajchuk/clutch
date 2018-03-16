@@ -15,11 +15,8 @@
  *
  *
  */
-const fs = require( "fs" );
-const path = require( "path" );
 const prismic = require( "prismic.io" );
 const config = require( "../../clutch.config" );
-const sitemap = path.join( config.template.staticDir, "sitemap.xml" );
 const lager = require( "properjs-lager" );
 const xmlDoc = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -104,9 +101,9 @@ const createSitemap = () => {
                     );
                 });
 
-                fs.writeFileSync( sitemap, xmlDoc.replace( "@content", nodes.join( "\n" ) ) );
+                const finalXML = xmlDoc.replace( "@content", nodes.join( "\n" ) );
 
-                resolve();
+                resolve( finalXML );
             });
         });
     });

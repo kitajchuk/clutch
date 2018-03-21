@@ -41,8 +41,8 @@ Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `
 
 ```js
 "config": {
-    "aws_ec2_staging_host": "[Elastic IP]",
-    "aws_ec2_production_host": "[Elastic IP]"
+    "aws_ec2_staging_host": "put.the.host.here",
+    "aws_ec2_production_host": "put.the.host.here"
 }
 ```
 

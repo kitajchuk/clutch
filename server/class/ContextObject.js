@@ -3,6 +3,7 @@
 
 
 const config = require( "../../clutch.config" );
+const prismicDOM = require( "prismic-dom" );
 
 
 
@@ -24,7 +25,7 @@ class ContextObject {
         this.stylesheet = config.static.css;
         this.javascript = config.static.js;
         this.config = config;
-        this.dom = (config.api.adapter === "prismic" ? require( "prismic-dom" ) : null);
+        this.dom = (config.api.adapter === "prismic" ? prismicDOM : null);
     }
 
     set ( prop, value ) {
@@ -51,7 +52,7 @@ class ContextObject {
         let title = this.get( "site" ).data.title;
 
         if ( config.api.adapter === "prismic" ) {
-            title = (item ? item.data.title + ` — ${title}` : title);
+            title = (item ? prismicDOM.RichText.asText( item.data.title ) + ` — ${title}` : title);
 
         } else if ( config.api.adapter === "contentful" ) {
             title = (item ? `${item.fields.title} — ${title}` : title);

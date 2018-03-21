@@ -52,7 +52,7 @@ class ContextObject {
         let title = this.get( "site" ).data.title;
 
         if ( config.api.adapter === "prismic" ) {
-            title = (item ? prismicDOM.RichText.asText( item.data.title ) + ` — ${title}` : title);
+            title = (item ? (typeof item.data.title === "object" ? prismicDOM.RichText.asText( item.data.title ) : item.data.title) + ` — ${title}` : title);
 
         } else if ( config.api.adapter === "contentful" ) {
             title = (item ? `${item.fields.title} — ${title}` : title);

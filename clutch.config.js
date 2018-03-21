@@ -19,7 +19,7 @@ const config = {
     api: {
         // Prismic
         adapter: "prismic",
-        access: "https://clutch.cdn.prismic.io/api", // This is your API URL
+        access: "https://clutch.cdn.prismic.io/api/v2", // This is your API URL
         token: null // This is your optional API access token
 
         // Contentful

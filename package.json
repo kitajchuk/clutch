@@ -34,7 +34,7 @@
     "browser-sync": "^2.18.8",
     "browser-sync-webpack-plugin": "^1.1.4",
     "compression-webpack-plugin": "^0.4.0",
-    "contentful-management": "^3.11.0",
+    "contentful-management": "^4.2.2",
     "css-loader": "^0.26.2",
     "eslint": "^3.17.0",
     "eslint-loader": "^1.6.3",

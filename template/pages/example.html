@@ -1,7 +1,7 @@
 <div class="example -wrap -exp">
     <h1 class="h1">
         <% if ( locals.context.get( 'config' ).api.adapter === 'prismic' ) { %>
-            <%- locals.context.get( 'item' ).getText( 'page.title' ) %>
+            <%- locals.context.get( 'item' ).data.title %>
         <% } else { %>
             <%- locals.context.get( 'item' ).fields.title %>
         <% } %>
@@ -10,7 +10,7 @@
         <br />
         <br />
         <% if ( locals.context.get( 'config' ).api.adapter === 'prismic' ) { %>
-            <%- locals.context.get( 'item' ).getText( 'page.description' ) %>
+            <%- locals.context.get( 'dom' ).RichText.asText( locals.context.get( 'item' ).data.description ) %>
         <% } else { %>
             <%- locals.context.get( 'item' ).fields.description %>
         <% } %>

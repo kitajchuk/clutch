@@ -24,6 +24,7 @@ class ContextObject {
         this.stylesheet = config.static.css;
         this.javascript = config.static.js;
         this.config = config;
+        this.dom = (config.api.adapter === "prismic" ? require( "prismic-dom" ) : null);
     }
 
     set ( prop, value ) {
@@ -50,7 +51,7 @@ class ContextObject {
         let title = this.get( "site" ).data.title;
 
         if ( config.api.adapter === "prismic" ) {
-            title = (item ? item.getText( `${item.type}.title` ) + ` — ${title}` : title);
+            title = (item ? item.data.title + ` — ${title}` : title);
 
         } else if ( config.api.adapter === "contentful" ) {
             title = (item ? `${item.fields.title} — ${title}` : title);
@@ -62,16 +63,16 @@ class ContextObject {
     getPageImage () {
         const item = this.get( "item" );
         const appImage = this.get( "site" ).data.appImage;
-        let pageImage = "";
+        let pageImage = null;
 
         if ( config.api.adapter === "prismic" ) {
-            pageImage = item ? item.getImage( `${item.type}.image` ) : "";
+            pageImage = item ? item.data.image.url : null;
 
         } else if ( config.api.adapter === "contentful" ) {
-            pageImage = item ? item.fields.image.fields.file.url : "";
+            pageImage = item ? item.fields.image.fields.file.url : null;
         }
 
-        return (pageImage ? pageImage.url : appImage);
+        return (pageImage || appImage);
     }
 
     // Prismic specific... tsk tsk...?

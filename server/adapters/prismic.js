@@ -28,7 +28,7 @@
  *
  */
 const path = require( "path" );
-const prismic = require( "prismic.io" );
+const prismic = require( "prismic-javascript" );
 const cache = {
     api: null,
     site: null,
@@ -187,33 +187,43 @@ const getSite = function ( req ) {
                 };
 
                 // Normalize site context
-                for ( let i in document.fragments ) {
-                    if ( i !== "site.navi" ) {
-                        const key = i.replace( /^site\./, "" );
+                for ( let i in document.data ) {
+                    // Skip navi since we process that elsewhere...
+                    if ( i !== "navi" ) {
+                        // Handle `null` values...
+                        if ( !document.data[ i ] ) {
+                            site.data[ i ] = "";
 
-                        site.data[ key ] = document.fragments[ i ].value || document.fragments[ i ].url;
+                        // Handle `object` values...
+                        } else if ( typeof document.data[ i ] === "object" ) {
+                            site.data[ i ] = document.data[ i ].url || "";
+
+                        // Handle `string` values...
+                        } else {
+                            site.data[ i ] = document.data[ i ];
+                        }
                     }
                 }
 
                 // Normalize navi context
-                document.getSliceZone( "site.navi" ).value.forEach(( slice ) => {
+                document.data.navi.forEach(( slice ) => {
                     let id = null;
                     let uid = null;
                     let type = null;
                     let slug = null;
-                    const style = slice.value.value[ 0 ].data.style.value.toLowerCase();
-                    const title = slice.value.value[ 0 ].data.name.value;
+                    const style = slice.value[ 0 ].style.toLowerCase();
+                    const title = slice.value[ 0 ].name;
 
                     // Handle Document.link to a Page
-                    if ( slice.value.value[ 0 ].data.page ) {
-                        id = slice.value.value[ 0 ].data.page.value.document.id;
-                        uid = slice.value.value[ 0 ].data.page.value.document.uid;
-                        type = slice.value.value[ 0 ].data.page.value.document.type;
+                    if ( slice.value[ 0 ].page && slice.value[ 0 ].page.id ) {
+                        id = slice.value[ 0 ].page.id;
+                        uid = slice.value[ 0 ].page.uid;
+                        type = slice.value[ 0 ].page.type;
                         slug = uid;
 
                     // Handle `slug` manual entry
                     } else {
-                        slug = slice.value.value[ 0 ].data.slug.value.replace( /\//g, "" );
+                        slug = slice.value[ 0 ].slug.replace( /\//g, "" );
                         id = slug;
                         uid = slug;
                         type = slug;

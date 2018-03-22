@@ -31,9 +31,11 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
     * [Code setup 02](#code-setup-round-2)
     * [Circle CI setup](#circle-ci-setup)
 * [Ecosystem](#ecosystem)
-    * Environments
-    * Server
-    * Template
+    * [Environments](#environments)
+        * [API](#api)
+        * [Pub/Sub](#pubsub)
+    * [Server](#server)
+    * [Template](#template)
 * [Resources](#resources)
 
 

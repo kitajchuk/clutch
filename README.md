@@ -30,6 +30,11 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
     * [CMS setup](#headless-cms-setup-prismic)
     * [Code setup 02](#code-setup-round-2)
     * [Circle CI setup](#circle-ci-setup)
+* [Ecosystem](#ecosystem)
+    * Environments
+    * Server
+    * Template
+* [Resources](#resources)
 
 
 
@@ -123,4 +128,84 @@ From the Circle CI website you can now run your first build for your dev branch 
 
 
 ## Ecosystem
-This is coming next!
+This section breaks down aspects of the Clutch SDK ecosystem which is rooted in node.
+
+
+
+### Environments
+The Clutch SDK assumes 3 specific environments for your workflow.
+
+* sandbox ( local development )
+* staging ( aws dev instance )
+* production ( aws live prod instance )
+
+Some behaviors to note when working with Clutch and environments:
+
+* If you're using an S3 bucket it will only be utilized on `production`
+* Likewise if you're using a CDN it also will only be used on `production`
+* AppCache is enabled for `production` only by default ( I recommend leaving this as is )
+* All that in mind it should be no surprise that Webpack only gzips for `production`
+
+
+
+### Server
+The Clutch node server uses a convention over configuration approach in regards to accessible endpoints. The URI format is `:content-type/:uid`. When working with Prismic you can define Collections around documents. When you do this Clutch will first attempt to see if `:content-type` is a Collection first before resolving to the root idea of a content-type. A good example case is to have a content-type called `Casestudy`. You may not want your URLs to be `/casestudy/some-title`. Maybe you want it to be `/work/some-title`. If you create a Collection called `work` and add the Casestudy content-type as a filter you can then use the `/work/some-title` URL format.
+
+#### API
+The Clutch node server also operates as a `JSON` API for your data. The format is `/api/:content-type/:uid`. You can use the API for partial renderings if you pass `?format=html&template=name.of.template` along with your request. Partials are loaded out of the `/template/partials` directory.
+
+#### Pub/Sub
+The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to content-type requests and modify the `query` and `context` in any way you need. The `client`, `api`, and `query` objects passed to your `query` handlers will be representative of the CMS you are using. The `context` passed to your `context` handlers is the [ContextObject](https://github.com/kitajchuk/clutch/blob/master/server/class/ContextObject.js) instance.
+
+The default `server/app.js` has a couple basic examples. You have to return either the `query` or a new `Promise` for your query handlers. When returning with a Promise you must resolve with an object that as a `results` Array or reject with an error message. For your `context` handlers you have to return the `context`.
+
+
+
+### Template
+The Clutch node server uses the same convention for templates as it does for endpoints. It looks up endpoints in the `/template/pages` location. So reusing our Casestudy example from the [server](#server) docs we could make a `casestudy.html` file in the `pages` directory and that would render for Casestudy endpoints. We could also make the `work.html` file to utilize the Collection filter functionality of Prismic. The core `template` anatomy is as follows:
+
+* `template/index.html`: This is your layout
+* `template/pages`: This is where endpoints lookup templates
+* `template/partials`: This is where API partial endpoints lookup templates when using `/api/:content-type/:uid?format=html&template=name.of.template`
+* `template/site`: These are core structural elements for the document like `nav` or `header` or `footer`
+* `template/**?`: Of course you can make any folder structure you like. I often make a directory called `slices` when using [Prismic's dynamic slicezone functionality](https://prismic.io/blog/slices-builder-create-your-content-component-for-landing-pages).
+
+When working with templates you are looking at a normalized Template Context Object. You have normalized `site` and `navi` data structures created from your headless CMS `Site` content type. Depending on your content context you will either have an `item` object reference or an `items` array reference.
+
+The Template Context Object tree:
+```js
+{
+    site: {object},
+    navi: [array],
+    page: "string",
+    cache: boolean?,
+    error: "string",
+    timestamp: number,
+    item: {object},
+    items: [array],
+    stylesheet: "string",
+    javascript: "string",
+    config: {object},
+    dom: {[prismic-dom](https://github.com/prismicio/prismic-dom)}
+}
+```
+
+The Navi Context Object tree:
+```js
+{
+    id: "string",
+    uid: "string",
+    type: "string",
+    slug: "string",
+    title: "string",
+    style: "string"
+}
+```
+
+
+
+## Resources
+These are some general UI tools I find myself using on projects for various tasks.
+
+* [Icongen](http://iconogen.com)
+* [SVG Optimizer](https://petercollingridge.appspot.com/svg-editor)

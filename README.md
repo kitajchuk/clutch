@@ -9,7 +9,7 @@ clutch
 
 
 
-### Hello
+## Hello
 This README file outlines how to get up and running with a Clutch Stack. Its presented in proper order of operations. The documentation assumes some key things about you as a developer:
 
 * You know well and work with [AWS](https://aws.amazon.com)
@@ -20,7 +20,7 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
 
 
 
-### Table of Contents
+## Table of Contents
 * [Walkthrough](#walkthrough)
     * [Code setup 01](#code-setup-round-1)
     * [AWS setup](#aws-setup)
@@ -33,11 +33,11 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
 
 
 
-### Walkthrough
+## Walkthrough
 
 
 
-#### Code Setup Round 1
+### Code Setup Round 1
 This walks through creating your new Clutch project.
 
 * Install the [clutch-cli](https://github.com/kitajchuk/clutch-cli) by running `npm i -g clutch-cli`;
@@ -46,16 +46,16 @@ This walks through creating your new Clutch project.
 
 
 
-#### AWS Setup
+### AWS Setup
 Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions.
 
-##### S3 Setup
+#### S3 Setup
 This is optional, however you can create an [S3](https://aws.amazon.com/s3) bucket on AWS and add the bucket URL to the `clutch.config.js` as your `aws.cdn` value. Likewise, change the `aws.cdnOn` value to `true`. Next you'll need to create an [AWS IAM](https://aws.amazon.com/iam) user and group and save the access key and secret key so you can add them to Circle CI later.
 
-##### CloudFront Setup
+#### CloudFront Setup
 This is even more optional, but if you need a real CDN you can spin up a [CloudFront](https://aws.amazon.com/cloudfront) Distribution and attach it to your S3 bucket. If you do this you'll want to update the `aws.cdn` value in the `clutch.config.js` file with your CloudFront URL.
 
-##### Route 53 Setup
+#### Route 53 Setup
 If you plan on launching your website you'll likely need to setup the DNS in [Route 53](https://aws.amazon.com/route53). You'll add a hosted zone for your domain. Then you'll create record sets. So a full Clutch Stack for [kitajchuk.com](http://kitajchuk.com) would at least need you to create these records for the hosted zone:
 
 * An `A` Record for kitajchuk.com
@@ -64,7 +64,7 @@ If you plan on launching your website you'll likely need to setup the DNS in [Ro
 
 
 
-#### Headless CMS Setup ( Prismic )
+### Headless CMS Setup ( Prismic )
 These steps cover the basics of bootstrapping Prismic for Clutch.
 
 * Create your Prismic repository in your [dashboard](https://prismic.io/dashboard)
@@ -87,7 +87,7 @@ These steps cover the basics of bootstrapping Prismic for Clutch.
 
 
 
-#### Code Setup Round 2
+### Code Setup Round 2
 This walks through adding the final details to your Clutch project and pushing it to Github.
 
 * In the root `package.json` file enter your AWS EIPs for `config.aws_ec2_staging_host` and `config.aws_ec2_production_host`
@@ -103,7 +103,7 @@ This walks through adding the final details to your Clutch project and pushing i
 
 
 
-#### Circle CI Setup
+### Circle CI Setup
 Now that AWS and Prismic are setup and the code is on Github you can connect your project repository to Circle CI. Under the repository settings in Circle CI you'll need to add the SSH key from your `clutch.pem` file you created while setting up the AWS OpsWorks Clutch Stack under SSH Permissions. Then you'll need to add the following environment variables:
 
 * AWS_USER: `ec2-user`
@@ -122,5 +122,5 @@ From the Circle CI website you can now run your first build for your dev branch 
 
 
 
-### Ecosystem
+## Ecosystem
 This is coming next!

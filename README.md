@@ -5,216 +5,122 @@ clutch
 
 
 
-### Install
-Use the [clutch-cli](https://github.com/kitajchuk/clutch-cli) to install your copy of Clutch as this will bootstrap [ProperJS/app](https://github.com/ProperJS/app) for you as your `source` directory. With your copy of Clutch installed and bootstrapped you can run either `clutch start` or `npm run start` from your project's root directory.
-
-You can see a full list of ProperJS modules on [npm](https://www.npmjs.com/org/properjs) and [Github](https://github.com/ProperJS).
+![Clutch](https://static1.squarespace.com/static/5a20f625b7411c85e1015293/t/5ab2f92570a6ad9909ae9c7a/1521678629329/BK_Face_128x128.png)
 
 
 
-### Outline
+### Hello
+This README file outlines how to get up and running with a Clutch Stack. Its presented in proper order of operations. The documentation assumes some key things about you as a developer:
 
-* [Example](#example)
-* [Setup](#setup)
-    * [AWS](#aws)
-    * [Circle CI](#circle-ci)
-* [Headless](#headless)
-    * [Prismic](#prismicio)
-    * [Contentful](#contentful)
-* [Express](#express)
-* [Static](#static)
-* [Resources](#resources)
+* You know well and work with [AWS](https://aws.amazon.com)
+* You know well and work with [Prismic](https://prismic.io) or [Contentful](https://www.contentful.com)
+* You know well and work with [CircleCI](https://circleci.com)
+* You know well and work with [Node.js](https://nodejs.org)
+* You know well and work with one of the template languages [here](https://www.npmjs.com/package/consolidate)
 
 
 
-
-### Example
-This `clutch` SDK is currently testing against a `staging` environment at [clutch.kitajchuk.com](http://clutch.kitajchuk.com/).
-
-
-
-### Setup
-First setup the **Clutch Stack** on AWS OpsWorks as defined [here](https://github.com/kitajchuk/clutch-chef). The `clutch-chef` repository is a Chef cookbook that configures the AWS EC2 instances for you.
-
-#### AWS
-Once the **Clutch Stack** is setup in OpsWorks, you can put your `staging` and `production` information in the `package.json` file for this project under the `config` property:
-
-```js
-"config": {
-    "aws_ec2_staging_host": "put.the.host.here",
-    "aws_ec2_production_host": "put.the.host.here"
-}
-```
-
-This provides some useful `npm-run` commands for the project allowing you to connect to your instances via SSH as well as deploy directly to them if need be. Though you can deploy manually from your `sandbox`, it is recommended to utilize the Circle CI configuration for streamlined Continuous Integration and Deployment. Checkout the `npm-scripts` in the `package.json` and see the [section on Circle CI](#circle-ci) for this.
-
-Here are some useful links for setting up other services on AWS.
-* [S3 Buckets](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html)
-* [IAM Users/Groups](http://docs.aws.amazon.com/IAM/latest/UserGuide/getting-setup.html)
-* [CloudFront CDN](http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GettingStarted.html)
+### Table of Contents
+* [Walkthrough](#walkthrough)
+    * [Code setup 01](#code-setup-round-1)
+    * [AWS setup](#aws-setup)
+        * [S3 setup](#s3-setup)
+        * [CDN setup](#cloudfront-setup)
+        * [DNS setup](#route-53-setup)
+    * [CMS setup](#headless-cms-setup-prismic)
+    * [Code setup 02](#code-setup-round-2)
+    * [Circle CI setup](#circle-ci-setup)
 
 
 
-#### Circle CI
-The Clutch SDK is designed to provide [Continuous Integration](https://en.wikipedia.org/wiki/Continuous_integration) and [Continuous Deployment](https://en.wikipedia.org/wiki/Continuous_delivery#Relationship_to_continuous_deployment) using [Circle CI](http://circleci.com) v2. In the project settings on Circle CI add the `clutch` SSH key for your instances. You can also input all the needed environment variables in Circle CI used in the `clutch.deploy|sync` files. The default list included is as follows:
-
-* AWS_USER — `ec2-user` by default and included in `.circleci/config.yml`
-* AWS_DEST — `/var/www/html/` by default and included in `.circleci/config.yml`
-* AWS_STAGING_HOST — IP for staging instance
-* AWS_PRODUCTION_HOST — IP for production instance
-* S3_BUCKET — The name of the S3 bucket
-* S3_REGION — The region field for the S3 bucket
-* S3_ACCESS_KEY — The IAM role access key
-* S3_SECRET_KEY — The IAM role secret key
+### Walkthrough
 
 
 
-### Headless CMS
-Clutch aims to be a simple, adapter-based SDK for building modern wep applications. It's design uses a simple ORM adapter concept to normalize the high-level data structures. From there the system leaves the doors open for you to build, template and work with your data in its provided service format.
+#### Code Setup Round 1
+This walks through creating your new Clutch project.
 
-#### Prismic.io
-Prismic does not have a CMS API so you have to manually paste the initial content-type JSON yourself in the CMS:
-
-* Create your Prismic repository
-* Add your api url and access token info to `clutch.config.js`
-* Make sure the `adapter` property is set to `prismic`
-* In your repository create a single content type called `Site`
-* In your repository create a repeatable content type called `Page`
-* Using the `JSON` editor paste in the respective contents of the files in `models`
-* You can now create your `Site` document and apply its settings
-* You can create `Page` documents and add them to the `Site` navigation as needed
-* Now go to town and make something cool...
-
-To create your first sandbox `preview` site go to Settings -> Previews. Use `localhost` for the Site name and `http://localhost:8001/preview/` for the Preview URL.
-
-#### Contentful
-Contentful has a CMS API and does not have manual JSON entry for creating content-types.
-
-* Create your Contentful space
-* Create a new Content delivery/preview token set called `Clutch`
-* Add your space, CDN and preview token info to `clutch.config.js`
-* Create a new Content management token called `Clutch`
-* Copy your CMT token and put it in a file at `./sandbox/contentful.management.token`
-* Make sure the `adapter` property is set to `contentful`
-* Execute `npm run bootstrap:contentful` to create the initial `Site` and `Page` content-types
-* Now in Contentful you need to go into each content-type and click the Save button to activate them
-* You can now create your `Site` entry and apply its settings
-* You can create `Page` entries and add them to the `Site` navigation as needed
-* Now go to town and make something cool...
-
-To create your first sandbox `preview` site go to Settings -> Content preview. Use `localhost` for the Name and `http://localhost:8001/preview/?type=page&uid={entry_field.uid}` for the Preview URLs for your content-types, replacing `type=page` with the appropriate content-type for each checkbox.
+* Install the [clutch-cli](https://github.com/kitajchuk/clutch-cli) by running `npm i -g clutch-cli`;
+* Wherever you keep projects on your computer, make a new directory for `your.new.project`
+* Then `cd` into that directory and run `clutch init`
 
 
 
-### Express
+#### AWS Setup
+Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions.
 
-#### URL
-The Clutch node server is designed to access data in a convention over configuration approach. The format is `:type/:uid`. As long as you have posts in your CMS for the content-types and corresponding UIDs the system will successfully load your pages.
+##### S3 Setup
+This is optional, however you can create an [S3](https://aws.amazon.com/s3) bucket on AWS and add the bucket URL to the `clutch.config.js` as your `aws.cdn` value. Likewise, change the `aws.cdnOn` value to `true`. Next you'll need to create an [AWS IAM](https://aws.amazon.com/iam) user and group and save the access key and secret key so you can add them to Circle CI later.
 
-#### API
-The Clutch node server also operates as a `JSON` API for your data. The format is `api/:type/:uid`. You can use the API for partial renderings if you pass `?format=html&template=yourtemplate` along with your request. Partials are loaded out of the `template/partials` directory.
+##### CloudFront Setup
+This is even more optional, but if you need a real CDN you can spin up a [CloudFront](https://aws.amazon.com/cloudfront) Distribution and attach it to your S3 bucket. If you do this you'll want to update the `aws.cdn` value in the `clutch.config.js` file with your CloudFront URL.
 
-#### Pub/Sub
-The Clutch node server implements a pub/sub model for interacting with requests. You can subscribe to content-type requests and modify the `query` and `context` in any way you need. The `client`, `api`, and `query` objects passed to your `query` handlers will be representative of the CMS you are using. The `context` passed to your `context` handlers is the [ContextObject](https://github.com/kitajchuk/clutch/blob/master/server/class/ContextObject.js) instance.
+##### Route 53 Setup
+If you plan on launching your website you'll likely need to setup the DNS in [Route 53](https://aws.amazon.com/route53). You'll add a hosted zone for your domain. Then you'll create record sets. So a full Clutch Stack for [kitajchuk.com](http://kitajchuk.com) would at least need you to create these records for the hosted zone:
 
-The default `server/app.js` has a couple basic examples. You have to return either the `query` or a new `Promise` for your query handlers. When returning with a Promise you must resolve with an object that as a `results` Array or reject with an error message. For your `context` handlers you have to return the `context`.
-
-```js
-const config = require( "../clutch.config" );
-const router = require( "./router" );
-
-
-
-// :type, :handlers
-router.on( "example", {
-    query ( client, api, query, cache, req ) {
-        // Must return either {query} OR Promise.
-        // Promise must resolve with {results: [...]} or reject with "error"
-        // return new Promise(( resolve, reject ) => {
-        //     resolve({
-        //         results: []
-        //     });
-        // });
-        return query;
-    },
-    context ( context, cache, req ) {
-        // Must return context. You can add to the context...
-        // context.set( "foo", "bar" );
-        return context;
-    }
-});
+* An `A` Record for kitajchuk.com
+* An `A` Record for www.kitajchuk.com
+* An `A` Record for staging.kitajchuk.com
 
 
 
-router.init();
-```
+#### Headless CMS Setup ( Prismic )
+These steps cover the basics of bootstrapping Prismic for Clutch.
 
-#### Template
-The Clutch node server uses [ejs](http://ejs.co) out of the box. The system is designed using [consolidate](https://www.npmjs.com/package/consolidate) so you can swap out for any template language you want that is supported by this module. You can change the defaults in `clutch.config.js` editing the `template.module` field.
-
-The `template` anatomy:
-
-* `template/index.html` — layout
-* `template/pages` — path based templates
-* `template/partials` — api partial templates
-* `template/site` — structural layout level partials
-* `template/**?` — you can organize any way you like from here :)
-
-When working with templates you are looking at a normalized Template Context Object. You have normalized `site` and `navi` data structures created from your headless CMS `Site` content type. Depending on your content context you will either have an `item` object reference or an `items` array reference.
-
-The Template Context Object tree:
-
-```js
-{
-    site: {object},
-    navi: [array],
-    page: "string",
-    cache: boolean?,
-    error: "string",
-    timestamp: number,
-    item: {object},
-    items: [array],
-    stylesheet: "string",
-    javascript: "string",
-    config: {object}
-}
-```
-
-The Navi Context Object tree:
-
-```js
-{
-    id: "string",
-    uid: "string",
-    type: "string",
-    slug: "string",
-    title: "string",
-    style: "string"
-}
-```
+* Create your Prismic repository in your [dashboard](https://prismic.io/dashboard)
+* In your repository Settings under Previews add the following sites:
+    * Site name: sandbox, Preview URL: http://localhost:8001/preview/
+    * Site name: staging, Preview URL: `your.aws.staging.ip`
+    * Site name: production, Preview URL: `your.aws.production.ip`
+* In your repository Settings under API & Security do the following:
+    * Enable the API Endpoint CDN if it isn't already on
+    * Choose Open API for your Repository security level
+* In your repository Custom Types create a Single type called `Site`
+    * In the configuration for this type paste the contents of `models/Site.prismic.json` in the JSON editor
+* In your repository Custom Types create a Repeatable type called `Page`
+    * In the configuration for this type paste the contents of `models/Page.prismic.json` in the JSON editor
+* In your repository Content workspace create a new instance of the `Site` model
+    * Enter your details, these are high level site-wide settings that will be exposed in your templates
+* In your repository Content workspace create a new instance of the `Page` model
+    * Call it `Example` with the slug `example` and a description
+* Jump back over to your `Site` instance, click the Navigation tab and add a navigation item for the `Example` page linking it to the actual page document
 
 
 
-#### Environments
-Clutch utilizes a 3 environment system to differentiate between local and remote instances.
+#### Code Setup Round 2
+This walks through adding the final details to your Clutch project and pushing it to Github.
 
-* sandbox
-* staging
-* production
-
-
-
-### Static
-The `static` directory is the default static directory for the Express app. You can serve anything from here including `css`, `js`, `fonts`, `images` and so forth. The build pipeline distributes the `css` and `js` here by default as well. The static assets can be served by your app in one of three ways:
-
-* From static directory on your Express app server ( this is the default )
-* From an AWS S3 bucket synced with your static directory
-* From an AWS CloudFront CDN in front of an AWS S3 bucket synced with your static directory
+* In the root `package.json` file enter your AWS EIPs for `config.aws_ec2_staging_host` and `config.aws_ec2_production_host`
+* Create your new repository on Github
+* From the root of your new Clutch project source code initialize the repository `git init`
+* Add the clutch source files `git add .`
+* Make your first commit `git commit -m "clutch bootstrap"`
+* Add the remote origin `git remote add origin git@github.com:your.username/your.repository.name.git`
+* Push the source code up to Github `git push -u origin master`
+* Create the dev branch `git checkout -b dev`
+* Push the dev branch `git push origin dev`
+* On the Github website for you new repository settings click the branches tab and set dev as the new default branch
 
 
 
-### Resources
-Just some general UI tools I find myself using on new projects.
+#### Circle CI Setup
+Now that AWS and Prismic are setup and the code is on Github you can connect your project repository to Circle CI. Under the repository settings in Circle CI you'll need to add the SSH key from your `clutch.pem` file you created while setting up the AWS OpsWorks Clutch Stack under SSH Permissions. Then you'll need to add the following environment variables:
 
-* [Icongen](http://iconogen.com)
-* [SVG Optimizer](https://petercollingridge.appspot.com/svg-editor)
+* AWS_USER: `ec2-user`
+* AWS_DEST: /`var/www/html/`
+* AWS_STAGING_HOST: `your.aws.staging.ip`
+* AWS_PRODUCTION_HOST: `your.aws.production.ip`
+
+If you decided to use an S3 bucket then you'll also need add the bucket information and IAM credentials in the Circle CI environment variables:
+
+* S3_BUCKET: `aws.s3.bucket.name`
+* S3_REGION: `aws.s3.bucket.region`
+* S3_ACCESS_KEY: `aws.iam.access.key`
+* S3_SECRET_KEY: `aws.iam.secret.key`
+
+From the Circle CI website you can now run your first build for your dev branch which will deploy to your AWS staging instance.
+
+
+
+### Ecosystem
+This is coming next!

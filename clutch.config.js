@@ -1,5 +1,9 @@
+const fs = require( "fs" );
 const path = require( "path" );
 const root = path.resolve( __dirname );
+const read = ( file ) => {
+    return String( fs.readFileSync( file ) ).replace( /^\s+|\s+$/g, "" );
+};
 const config = {
     // The URL of your actual site
     url: "http://clutch.kitajchuk.com",
@@ -20,13 +24,12 @@ const config = {
         // Prismic
         adapter: "prismic",
         access: "https://clutch.cdn.prismic.io/api/v2", // This is your API URL
-        token: null // This is your optional API access token
+        token: true // ./sandbox/prismic.access.token Set to true
 
         // Contentful
         // adapter: "contentful",
         // access: "355y876evbep", // This is your space ID
-        // token: "8520d90818ee9a87c3cc1275c617ed7254d881f6d24178a4401d9b0cb39640d3", // This is your main CDN token
-        // preview: "0276a23aa96144f7fdaa7108bd7ba3fe9555107673f84d6c58dc42e0f33eda4a" // This is your main Preview token
+        // token: true // ./sandbox/contentful.access.token AND ./sandbox/contentful.preview.token
     },
     // Deployment config ( AWS )
     aws: {
@@ -87,6 +90,18 @@ const config = {
 // Serves assets from either CDN ( production ) or App Server ( sandbox + staging )...
 config.static.js = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
 config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
+
+
+
+// Configure access tokens for APIs
+if ( config.api.adapter === "prismic" ) {
+    config.api.token = read( path.join( __dirname, "./sandbox/prismic.access.token" ) );
+
+// Contentful
+} else {
+    config.api.token = read( path.join( __dirname, "./sandbox/contentful.access.token" ) );
+    config.api.preview = read( path.join( __dirname, "./sandbox/contentful.preview.token" ) );
+}
 
 
 

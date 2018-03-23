@@ -27,7 +27,8 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
         * [S3 setup](#s3-setup)
         * [CDN setup](#cloudfront-setup)
         * [DNS setup](#route-53-setup)
-    * [CMS setup](#headless-cms-setup-prismic)
+    * [Prismic setup](#headless-cms-setup-prismic)
+    * [Contentful setup](#headless-cms-setup-contentful)
     * [Code setup 02](#code-setup-round-2)
     * [Circle CI setup](#circle-ci-setup)
 * [Ecosystem](#ecosystem)
@@ -54,7 +55,7 @@ This walks through creating your new Clutch project.
 
 
 ### AWS Setup
-Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions.
+Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions. You'll also want to keep it in `sandbox` for use with deploying tokens to your instances.
 
 #### S3 Setup
 This is optional, however you can create an [S3](https://aws.amazon.com/s3) bucket on AWS and add the bucket URL to the `clutch.config.js` as your `aws.cdn` value. Likewise, change the `aws.cdnOn` value to `true`. Next you'll need to create an [AWS IAM](https://aws.amazon.com/iam) user and group and save the access key and secret key so you can add them to Circle CI later.
@@ -82,6 +83,15 @@ These steps cover the basics of bootstrapping Prismic for Clutch.
 * In your repository Settings under API & Security do the following:
     * Enable the API Endpoint CDN if it isn't already on
     * Choose Open API for your Repository security level
+    * If you need to use a Private API, choose that
+        * Under the Generate an Access Token section enter a name and click Add this application
+        * This makes an app config with oAuth and token access
+        * Under the application settings you just made copy the Permanent access tokens - Access to master
+        * Create a file at `sandbox/prismic.access.token` and paste the token in that file
+        * Next in `clutch.config.js` change `api.token` to `true`
+        * Run the sandbox deploy scripts so your instances have access to these tokens
+            * `npm run deploy:sandbox:staging`
+            * `npm run deploy:sandbox:production`
 * In your repository Custom Types create a Single type called `Site`
     * In the configuration for this type paste the contents of `models/Site.prismic.json` in the JSON editor
 * In your repository Custom Types create a Repeatable type called `Page`
@@ -91,6 +101,11 @@ These steps cover the basics of bootstrapping Prismic for Clutch.
 * In your repository Content workspace create a new instance of the `Page` model
     * Call it `Example` with the slug `example` and a description
 * Jump back over to your `Site` instance, click the Navigation tab and add a navigation item for the `Example` page linking it to the actual page document
+
+
+
+### Headless CMS Setup ( Contentful )
+Coming soon...
 
 
 
@@ -107,6 +122,7 @@ This walks through adding the final details to your Clutch project and pushing i
 * Create the dev branch `git checkout -b dev`
 * Push the dev branch `git push origin dev`
 * On the Github website for you new repository settings click the branches tab and set dev as the new default branch
+*
 
 
 

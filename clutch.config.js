@@ -94,11 +94,11 @@ config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.
 
 
 // Configure access tokens for APIs
-if ( config.api.adapter === "prismic" ) {
+if ( config.api.adapter === "prismic" && config.api.token !== false ) {
     config.api.token = read( path.join( __dirname, "./sandbox/prismic.access.token" ) );
 
 // Contentful
-} else {
+} else if ( config.api.adapter === "contentful" && config.api.token !== false ) {
     config.api.token = read( path.join( __dirname, "./sandbox/contentful.access.token" ) );
     config.api.preview = read( path.join( __dirname, "./sandbox/contentful.preview.token" ) );
 }

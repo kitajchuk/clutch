@@ -99,8 +99,9 @@ These steps cover the basics of bootstrapping Prismic for Clutch.
 * In your repository Content workspace create a new instance of the `Site` model
     * Enter your details, these are high level site-wide settings that will be exposed in your templates
 * In your repository Content workspace create a new instance of the `Page` model
-    * Call it `Example` with the slug `example` and a description
-* Jump back over to your `Site` instance, click the Navigation tab and add a navigation item for the `Example` page linking it to the actual page document
+    * Call it `Home` with the slug `home` and a description
+* Jump back over to your `Site` instance, click the Navigation tab and add a navigation item for the `Home` page linking it to the actual page document
+* You can follow the steps for making the `Home` page and create the `Example` page
 
 
 

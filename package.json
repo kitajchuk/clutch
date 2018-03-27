@@ -11,7 +11,6 @@
   },
   "scripts": {
     "bootstrap": "node clutch.install.js",
-    "postbootstrap": "node properjs.install.js",
     "bootstrap:contentful": "node ./server/adapters/contentful.bootstrap.js",
     "generate:robots": "node ./server/core/robots.js",
     "generate:appcache": "node ./server/generators/appcache.js",

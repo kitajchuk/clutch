@@ -208,35 +208,22 @@ const getSite = function ( req ) {
 
                 // Normalize navi context
                 document.data.navi.forEach(( slice ) => {
-                    let id = null;
-                    let uid = null;
-                    let type = null;
-                    let slug = null;
-                    const style = slice.value[ 0 ].style.toLowerCase();
-                    const title = slice.value[ 0 ].name;
+                    let slug = slice.primary.page.slug || slice.primary.slug;
 
-                    // Handle Document.link to a Page
-                    if ( slice.value[ 0 ].page && slice.value[ 0 ].page.id ) {
-                        id = slice.value[ 0 ].page.id;
-                        uid = slice.value[ 0 ].page.uid;
-                        type = slice.value[ 0 ].page.type;
-                        slug = uid;
+                    if ( slug === core.config.homepage ) {
+                        slug = "/";
 
-                    // Handle `slug` manual entry
                     } else {
-                        slug = slice.value[ 0 ].slug.replace( /\//g, "" );
-                        id = slug;
-                        uid = slug;
-                        type = slug;
+                        slug = `/${slug}/`;
                     }
 
                     navi.items.push({
-                        id: id,
-                        uid: (slug === core.config.homepage ? slug : uid),
-                        type: type,
-                        slug: (slug === core.config.homepage ? "/" : `/${slug}/`),
-                        title: title,
-                        style: style
+                        id: slice.primary.page.id || "",
+                        uid: slice.primary.page.uid || slice.primary.slug,
+                        type: slice.primary.page.type || slice.primary.slug,
+                        slug,
+                        title: slice.primary.name,
+                        label: slice.primary.label
                     });
                 });
 

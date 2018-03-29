@@ -35,23 +35,11 @@
             }
         },
         "location":{
-            "type":"GeoPoint",
+            "type":"StructuredText",
             "config":{
-                "label":"Location"
-            }
-        },
-        "instagram":{
-            "type":"Link",
-            "config":{
-                "allowTargetBlank":true,
-                "label":"Instagram"
-            }
-        },
-        "linkedin":{
-            "type":"Link",
-            "config":{
-                "allowTargetBlank":true,
-                "label":"Linkedin"
+                "multi":"paragraph",
+                "label":"Location",
+                "placeholder":"Location"
             }
         }
     },
@@ -240,9 +228,6 @@
                         "icon":"open_in_new",
                         "display":"list",
                         "non-repeat":{
-
-                        },
-                        "repeat":{
                             "label":{
                                 "type":"Text",
                                 "config":{
@@ -275,6 +260,9 @@
                                     "placeholder":"Link to page document"
                                 }
                             }
+                        },
+                        "repeat":{
+
                         }
                     }
                 }

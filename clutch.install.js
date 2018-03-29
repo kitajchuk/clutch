@@ -24,7 +24,16 @@ const config = require( "./clutch.config" );
 
 
 
-// 1.0 Create sandbox
+// 1.0: Fresh `node_modules`
+console.log( "Installing node_modules..." );
+
+// child_process.execSync( `rm -rf ${rootPackageLock}` );
+// child_process.execSync( `rm -rf ${rootNodeModules}` );
+child_process.execSync( "npm i" );
+
+
+
+// 2.0 Create sandbox
 console.log( "Creating sandbox..." );
 
 if ( !fs.existsSync( rootSandbox ) ) {
@@ -32,7 +41,7 @@ if ( !fs.existsSync( rootSandbox ) ) {
 }
 
 
-// 2.0 Create template partials
+// 3.0 Create template partials
 console.log( "Creating template partials..." );
 
 if ( !fs.existsSync( rootTemplatePartials ) ) {
@@ -40,7 +49,7 @@ if ( !fs.existsSync( rootTemplatePartials ) ) {
 }
 
 
-// 3.0 Create notes
+// 4.0 Create notes
 console.log( "Creating notes..." );
 
 if ( !fs.existsSync( rootNotes ) ) {
@@ -48,20 +57,12 @@ if ( !fs.existsSync( rootNotes ) ) {
 }
 
 
-// 4.0 Create source
+// 5.0 Create source
 console.log( "Creating source...?" );
 
 if ( !fs.existsSync( rootSource ) ) {
     child_process.execSync( `./node_modules/.bin/clutch source` );
 }
-
-
-// 5.0: Fresh `node_modules`
-console.log( "Installing node_modules..." );
-
-child_process.execSync( `rm -rf ${rootPackageLock}` );
-// child_process.execSync( `rm -rf ${rootNodeModules}` );
-child_process.execSync( "npm install" );
 
 
 // 6.0 Hobo.js build
@@ -73,14 +74,14 @@ child_process.execSync( `cd ${rootHobo} && npm install && npm run build -- '${co
 // 7.0 server install
 console.log( "Installing server node_modules..." );
 
-child_process.execSync( `cd ${rootServer} && npm install` );
+child_process.execSync( `cd ${rootServer} && npm i` );
 
 
 // 8.0 tasks install
 console.log( "Installing tasks node_modules..." );
 
 if ( fs.existsSync( rootTasks ) ) {
-    child_process.execSync( `cd ${rootTasks} && npm install` );
+    child_process.execSync( `cd ${rootTasks} && npm i` );
 }
 
 // 9.0 done

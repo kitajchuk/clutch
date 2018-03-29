@@ -31,9 +31,9 @@ const webpackConfig = {
             host: "localhost",
             port: config.browser.port,
             proxy: `http://localhost:${config.express.port}`,
-            files: [
-                "template/**/*.html"
-            ]
+            // files: [
+            //     "template/**/*.html"
+            // ]
         })
     ],
 

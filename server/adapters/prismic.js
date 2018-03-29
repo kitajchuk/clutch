@@ -195,10 +195,6 @@ const getSite = function ( req ) {
                         if ( !document.data[ i ] ) {
                             site.data[ i ] = "";
 
-                        // Handle `object` values...
-                        } else if ( typeof document.data[ i ] === "object" ) {
-                            site.data[ i ] = document.data[ i ].url || "";
-
                         // Handle `string` values...
                         } else {
                             site.data[ i ] = document.data[ i ];

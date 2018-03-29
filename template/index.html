@@ -6,26 +6,26 @@
         <meta name="description" content="<%= locals.context.get( 'site' ).data.description %>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="google-site-verification" content="<%= locals.context.get( 'site' ).data.googleVerify %>" />
-        <link rel="shortcut icon" href="<%= locals.context.get( 'site' ).data.appFavicon %>" type="image/x-icon" />
-        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= locals.context.get( 'site' ).data.appIOSIcon57x57 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= locals.context.get( 'site' ).data.appIOSIcon60x60 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= locals.context.get( 'site' ).data.appIOSIcon72x72 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<%= locals.context.get( 'site' ).data.appIOSIcon76x76 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= locals.context.get( 'site' ).data.appIOSIcon114x114 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<%= locals.context.get( 'site' ).data.appIOSIcon120x120 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= locals.context.get( 'site' ).data.appIOSIcon144x144 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= locals.context.get( 'site' ).data.appIOSIcon152x152 %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<%= locals.context.get( 'site' ).data.appIOSIcon180x180 %>" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon16x16 %>" sizes="16x16" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon32x32 %>" sizes="32x32" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon96x96 %>" sizes="96x96" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon192x192 %>" sizes="192x192" />
+        <link rel="shortcut icon" href="<%= locals.context.get( 'site' ).data.appFavicon.url %>" type="image/x-icon" />
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= locals.context.get( 'site' ).data.appIOSIcon57x57.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= locals.context.get( 'site' ).data.appIOSIcon60x60.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= locals.context.get( 'site' ).data.appIOSIcon72x72.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<%= locals.context.get( 'site' ).data.appIOSIcon76x76.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= locals.context.get( 'site' ).data.appIOSIcon114x114.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<%= locals.context.get( 'site' ).data.appIOSIcon120x120.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= locals.context.get( 'site' ).data.appIOSIcon144x144.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= locals.context.get( 'site' ).data.appIOSIcon152x152.url %>" />
+        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<%= locals.context.get( 'site' ).data.appIOSIcon180x180.url %>" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon16x16.url %>" sizes="16x16" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon32x32.url %>" sizes="32x32" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon96x96.url %>" sizes="96x96" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon192x192.url %>" sizes="192x192" />
         <meta name="application-name" content="<%= locals.context.get( 'site' ).data.appName %>" />
         <meta name="msapplication-TileColor" content="<%= locals.context.get( 'site' ).data.appMSTileColor %>">
-        <meta name="msapplication-square70x70logo" content="<%= locals.context.get( 'site' ).data.appMSIcon70x70 %>" />
-        <meta name="msapplication-square150x150logo" content="<%= locals.context.get( 'site' ).data.appMSIcon150x150 %>" />
-        <meta name="msapplication-wide310x150logo" content="<%= locals.context.get( 'site' ).data.appMSIcon310x150 %>" />
-        <meta name="msapplication-square310x310logo" content="<%= locals.context.get( 'site' ).data.appMSIcon310x310 %>" />
+        <meta name="msapplication-square70x70logo" content="<%= locals.context.get( 'site' ).data.appMSIcon70x70.url %>" />
+        <meta name="msapplication-square150x150logo" content="<%= locals.context.get( 'site' ).data.appMSIcon150x150.url %>" />
+        <meta name="msapplication-wide310x150logo" content="<%= locals.context.get( 'site' ).data.appMSIcon310x150.url %>" />
+        <meta name="msapplication-square310x310logo" content="<%= locals.context.get( 'site' ).data.appMSIcon310x310.url %>" />
         <meta property="og:site_name" content="<%= locals.context.get( 'site' ).data.title %>" />
         <meta property="og:title" content="<%= locals.context.get( 'site' ).data.title %>" />
         <meta property="og:url" content="<%= locals.context.get( 'site' ).data.url %>" />
@@ -39,10 +39,10 @@
         <meta itemprop="image" content="<%= locals.context.getPageImage() %>" />
         <link href="<%= locals.context.get( 'stylesheet' ) + '?v=' + locals.context.get( 'timestamp' ) %>" rel="stylesheet" />
     </head>
-    <body>
+    <body class="-fzero">
         <%- include( 'site/header.html' ) %>
         <%- include( 'site/navi.html' ) %>
-        <main class="main js-main -fzero" data-title="<%= locals.context.getPageTitle() %>">
+        <main class="main js-main" data-title="<%= locals.context.getPageTitle() %>">
             <%- include( locals.context.getTemplate() ) %>
         </main>
         <%- include( 'site/footer.html' ) %>

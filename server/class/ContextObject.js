@@ -63,11 +63,12 @@ class ContextObject {
 
     getPageImage () {
         const item = this.get( "item" );
-        const appImage = this.get( "site" ).data.appImage;
+        let appImage = this.get( "site" ).data.appImage;
         let pageImage = null;
 
         if ( config.api.adapter === "prismic" ) {
             pageImage = item ? item.data.image.url : null;
+            appImage = appImage.url;
 
         } else if ( config.api.adapter === "contentful" ) {
             pageImage = item ? item.fields.image.fields.file.url : null;

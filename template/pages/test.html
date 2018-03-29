@@ -1,0 +1,20 @@
+<div class="example -pad">
+    <div class="-wrap -exp">
+        <p class="p -wrap-copy anim anim--tr js-lazy-anim">
+            <% if ( locals.context.get( 'config' ).api.adapter === 'prismic' ) { %>
+                <%- locals.context.get( 'dom' ).RichText.asText( locals.context.get( 'item' ).data.description ) %>
+            <% } else { %>
+                <%- locals.context.get( 'item' ).fields.description %>
+            <% } %>
+        </p>
+    </div>
+    <div class="-wrap -exp">
+        <h3 class="h3 anim anim--tr js-lazy-anim">Clutch h3</h3>
+    </div>
+    <div class="-wrap -exp">
+        <h2 class="h2 anim anim--tr js-lazy-anim">Clutch h2</h2>
+    </div>
+    <div class="-wrap -exp">
+        <h1 class="h1 anim anim--tr js-lazy-anim">Clutch h1</h1>
+    </div>
+</div>

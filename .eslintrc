@@ -8,9 +8,9 @@
         "es6": true,
         "browser": true
     },
-    "ecmaFeatures": {
-        "modules": true
-    },
+    // "ecmaFeatures": {
+    //     "modules": true
+    // },
     "parserOptions": {
         "sourceType": "module"
     },
@@ -98,6 +98,7 @@
         "no-unused-expressions": 2,
         "no-useless-call": 2,
         "no-useless-concat": 2,
+        "no-useless-escape": 1,
         "no-void": 2,
         "no-warning-comments": [
             1

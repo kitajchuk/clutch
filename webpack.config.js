@@ -14,6 +14,9 @@ const sassFontPath = config.aws.cdnOn ? `${config.aws.cdn}/fonts/` : "/fonts/";
 
 
 const webpackConfig = {
+    mode: "none",
+
+
     devtool: "source-map",
 
 
@@ -57,10 +60,43 @@ const webpackConfig = {
 
     module: {
         rules: [
-            { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: ["eslint-loader"], enforce: "pre" },
-            { test: /source\/js\/.*\.js$/, exclude: /node_modules/, use: [{ loader: "babel-loader", options: { presets: ["es2015"] } }] },
-            { test: /(hobo|hobo.build)\.js$/, use: ["expose-loader?hobo"] },
-            { test: /\.(sass|scss)$/, exclude: /node_modules/, use: ["file-loader?name=../css/[name].css", "postcss-loader", {loader: "sass-loader", options: { outputStyle: "compressed", data: '$font-path: "' + sassFontPath + '";' }}] }
+            {
+                test: /source\/js\/.*\.js$/,
+                exclude: /node_modules/,
+                use: ["eslint-loader"],
+                enforce: "pre"
+            },
+            {
+                test: /source\/js\/.*\.js$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            presets: ["env"]
+                        }
+                    }
+                ]
+            },
+            {
+                test: /(hobo|hobo.build)\.js$/,
+                use: ["expose-loader?hobo"]
+            },
+            {
+                test: /\.(sass|scss)$/,
+                exclude: /node_modules/,
+                use: [
+                    "file-loader?name=../css/[name].css",
+                    "postcss-loader",
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            outputStyle: "compressed",
+                            data: '$font-path: "' + sassFontPath + '";'
+                        }
+                    }
+                ]
+            }
         ]
     }
 };

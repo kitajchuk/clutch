@@ -9,7 +9,6 @@ const cookieParser = require( "cookie-parser" );
 const lager = require( "properjs-lager" );
 const listeners = {};
 const core = {
-    watch: require( "./watch" ),
     query: require( "./query" ),
     config: require( "../../clutch.config" ),
     content: require( "./content" ),
@@ -129,11 +128,7 @@ module.exports = {
      *
      */
     init () {
-        core.watch.getPages().then(() => {
-            if ( core.config.env.sandbox ) {
-                core.watch.startWatch();
-            }
-
+        core.template.getPages().then(() => {
             expressApp.listen( core.config.express.port );
 
             lager.server( `Clutch Express server started` );

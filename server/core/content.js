@@ -5,7 +5,6 @@
 const path = require( "path" );
 const lager = require( "properjs-lager" );
 const core = {
-    watch: require( "./watch" ),
     query: require( "./query" ),
     config: require( "../../clutch.config" ),
     template: require( "./template" )
@@ -27,7 +26,7 @@ const getPage = function ( req, res, listener ) {
             // 0.0 => Missing template file
             // 0.1 => Single ContentItem
             // 0.2 => Multiple ContentItems(s)
-            if ( core.watch.cache.pages.indexOf( `${page}.html` ) === -1 ) {
+            if ( core.template.cache.pages.indexOf( `${page}.html` ) === -1 ) {
                 const file = path.join( core.config.template.pagesDir, `${page}.html` );
 
                 fail( `The template file for this path is missing at "${file}".` );

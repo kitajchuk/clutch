@@ -3,6 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <title><%= locals.context.getPageTitle() %></title>
+        <meta http-equiv="x-dns-prefetch-control" content="on" />
+        <link rel="dns-prefetch" href="//clutch.cdn.prismic.io" /><!-- Change this to your repo -->
+        <link rel="dns-prefetch" href="//prismic-io.s3.amazonaws.com" />
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <meta name="description" content="<%= locals.context.get( 'site' ).data.description %>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="google-site-verification" content="<%= locals.context.get( 'site' ).data.googleVerify %>" />

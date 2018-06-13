@@ -40,7 +40,6 @@ const core = {
     template: require( "../core/template" )
 };
 const ContextObject = require( "../class/ContextObject" );
-const apiOptions = (core.config.api.token ? { accessToken: core.config.api.token } : null);
 
 
 
@@ -109,10 +108,12 @@ const getPreview = function ( req, res ) {
     return new Promise(( resolve, reject ) => {
         const previewToken = req.query.token;
         const linkResolver = function ( doc ) {
-            return `/${doc.type}/${doc.uid}/`;
+            const type = (core.config.generate.mappings[ doc.type ] || doc.type);
+
+            return (type === "page") ? `/${doc.uid}/` : `/${type}/${doc.uid}/`;
         };
 
-        prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
+        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
             api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
                 res.cookie( prismic.previewCookie, previewToken, {
                     maxAge: 60 * 30 * 1000,
@@ -178,7 +179,7 @@ const getPartial = function ( req, data, listener ) {
  */
 const getSite = function ( req ) {
     return new Promise(( resolve, reject ) => {
-        prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
+        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
             api.getSingle( "site" ).then(( document ) => {
                 const navi = {
                     items: []
@@ -262,7 +263,7 @@ const getNavi = function ( type ) {
 const getDataForApi = function ( req, listener ) {
     return new Promise(( resolve, reject ) => {
         const doQuery = function ( type ) {
-            prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
+            prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
                 const done = function ( json ) {
                     resolve( json.results );
                 };
@@ -280,7 +281,7 @@ const getDataForApi = function ( req, listener ) {
                     query.push( prismic.Predicates.at( "document.type", type ) );
                 }
 
-                // query: pubsub?
+                // @hook: query
                 if ( listener && listener.handlers.query ) {
                     query = listener.handlers.query( prismic, api, query, cache, req );
                 }
@@ -295,9 +296,14 @@ const getDataForApi = function ( req, listener ) {
                         form.query( query );
                     }
 
-                    // ordering: pubsub?
+                    // @hook: orderings
                     if ( listener && listener.handlers.orderings ) {
                         listener.handlers.orderings( prismic, cache.api, form, cache, req );
+                    }
+
+                    // @hook: fetchLinks
+                    if ( listener && listener.handlers.fetchLinks ) {
+                        listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
                     }
 
                     // submit
@@ -368,7 +374,7 @@ const getDataForPage = function ( req, listener ) {
                 query.push( prismic.Predicates.at( "document.type", type ) );
             }
 
-            // query: pubsub?
+            // @hook: query
             if ( listener && listener.handlers.query ) {
                 query = listener.handlers.query( prismic, cache.api, query, cache, req );
             }
@@ -383,9 +389,14 @@ const getDataForPage = function ( req, listener ) {
                     form.query( query );
                 }
 
-                // ordering: pubsub?
+                // @hook: orderings
                 if ( listener && listener.handlers.orderings ) {
                     listener.handlers.orderings( prismic, cache.api, form, cache, req );
+                }
+
+                // @hook: fetchLinks
+                if ( listener && listener.handlers.fetchLinks ) {
+                    listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
                 }
 
                 // submit

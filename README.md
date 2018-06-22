@@ -27,8 +27,8 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
         * [S3 setup](#s3-setup)
         * [CDN setup](#cloudfront-setup)
         * [DNS setup](#route-53-setup)
-    * [Prismic setup](#headless-cms-setup-prismic)
-    * [Contentful setup](#headless-cms-setup-contentful)
+    * [Prismic setup](##headless-cms-setup--prismic-)
+    * [Contentful setup](#headless-cms-setup--contentful-)
     * [Code setup 02](#code-setup-round-2)
     * [Circle CI setup](#circle-ci-setup)
 * [Ecosystem](#ecosystem)
@@ -92,6 +92,12 @@ These steps cover the basics of bootstrapping Prismic for Clutch.
         * Run the sandbox deploy scripts so your instances have access to these tokens
             * `npm run deploy:sandbox:staging`
             * `npm run deploy:sandbox:production`
+* In your repository Settings under Webhooks:
+    * Enter the URL for your site: `http://your.site.com/webhook/`
+    * Enter a Secret, I use [randomkeygen](https://randomkeygen.com/)
+    * Create the file `sandbox/prismic.webhook.secret` and put the key in this file
+    * Click "Add this webhook"
+    * Clutch will now listen for webhooks, see `server/core/router.js`
 * In your repository Custom Types create a Single type called `Site`
     * In the configuration for this type paste the contents of `models/Site.prismic.json` in the JSON editor
 * In your repository Custom Types create a Repeatable type called `Page`

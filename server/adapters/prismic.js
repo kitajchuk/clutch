@@ -403,17 +403,12 @@ const getDataForPage = function ( req, listener ) {
             }
         };
 
-        getSite( req ).then(() => {
-            const type = req.params.type;
-            const uid = req.params.uid;
+        if ( !req.params.type ) {
+            resolve( data );
 
-            if ( !type ) {
-                resolve( data );
-
-            } else {
-                doQuery( type, uid );
-            }
-        });
+        } else {
+            doQuery( req.params.type, req.params.uid );
+        }
     });
 };
 
@@ -465,6 +460,7 @@ const getForm = function ( req, api, collection ) {
 module.exports = {
     cache,
     getApi,
+    getSite,
     getPage,
     getPreview
 };

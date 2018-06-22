@@ -6,6 +6,7 @@ const express = require( "express" );
 const expressApp = express();
 const compression = require( "compression" );
 const cookieParser = require( "cookie-parser" );
+const bodyParser = require( "body-parser" );
 const lager = require( "properjs-lager" );
 const listeners = {};
 const core = {
@@ -14,6 +15,7 @@ const core = {
     content: require( "./content" ),
     template: require( "./template" )
 };
+let isSiteUpdate = false;
 
 
 
@@ -23,6 +25,10 @@ const core = {
  *
  */
 expressApp.use( cookieParser() );
+expressApp.use( bodyParser.json() );
+expressApp.use( bodyParser.urlencoded({
+    extended: true
+}));
 expressApp.use( compression( core.config.compression ) );
 expressApp.use( express.static( core.config.template.staticDir, {
     maxAge: core.config.static.maxAge
@@ -67,6 +73,20 @@ const getPreview = function ( req, res ) {
         res.redirect( url );
     });
 };
+const getWebhook = function ( req, res ) {
+    // Skip if update is in progress, Skip if invalid secret was sent
+    if ( !isSiteUpdate && req.body.secret === core.config.api.secret ) {
+        isSiteUpdate = true;
+
+        // Re-Fetch Site JSON
+        core.query.getSite().then(() => {
+            isSiteUpdate = false;
+        });
+    }
+
+    // Always resolve with a 200 and some text
+    res.status( 200 ).send( core.config.api.secret );
+};
 const getSitemap = function ( req, res, next ) {
     const sitemap = require( `../generators/${core.config.api.adapter}.sitemap` );
 
@@ -85,6 +105,7 @@ const setReq = function ( req, res, next ) {
 
 // SYSTEM
 expressApp.get( "/preview", getPreview );
+expressApp.post( "/webhook", getWebhook );
 expressApp.get( "/sitemap.xml", getSitemap );
 
 // API => JSON
@@ -128,11 +149,15 @@ module.exports = {
      *
      */
     init () {
+        // Fetch ./template/pages listing
         core.template.getPages().then(() => {
-            expressApp.listen( core.config.express.port );
+            // Fetch Site JSON
+            core.query.getSite().then(() => {
+                expressApp.listen( core.config.express.port );
 
-            lager.server( `Clutch Express server started` );
-            lager.server( `Clutch access URL — http://localhost:${core.config.browser.port}` );
+                lager.server( `Clutch Express server started` );
+                lager.server( `Clutch access URL — http://localhost:${core.config.browser.port}` );
+            });
         });
     }
 };

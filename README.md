@@ -27,7 +27,7 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
         * [S3 setup](#s3-setup)
         * [CDN setup](#cloudfront-setup)
         * [DNS setup](#route-53-setup)
-    * [Prismic setup](##headless-cms-setup--prismic-)
+    * [Prismic setup](#headless-cms-setup--prismic-)
     * [Contentful setup](#headless-cms-setup--contentful-)
     * [Code setup 02](#code-setup-round-2)
     * [Circle CI setup](#circle-ci-setup)

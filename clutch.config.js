@@ -85,6 +85,13 @@ const config = {
             // e.g. casestudy: "work"
             // Ensures you get /work/:uid rather than /casestudy/:uid
         }
+    },
+    // Third-party app Oauth authorizations
+    authorizations: {
+        token: null,
+        apps: [
+            "vimeo"
+        ]
     }
 };
 
@@ -100,6 +107,14 @@ const prismicTokenPath = path.join( __dirname, "./sandbox/prismic.access.token" 
 const prismicSecretPath = path.join( __dirname, "./sandbox/prismic.webhook.secret" );
 const contentfulTokenPath = path.join( __dirname, "./sandbox/contentful.access.token" );
 const contentfulPreviewPath = path.join( __dirname, "./sandbox/contentful.preview.token" );
+const clutchAuthorizationsTokenPath = path.join( __dirname, "./sandbox/clutch.authorizations.token" );
+
+
+
+// Configure access token for authorizations
+if ( fs.existsSync( clutchAuthorizationsTokenPath ) ) {
+    config.authorizations.token = read( clutchAuthorizationsTokenPath );
+}
 
 
 

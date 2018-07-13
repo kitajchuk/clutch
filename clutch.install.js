@@ -38,6 +38,7 @@ console.log( "Creating sandbox..." );
 
 if ( !fs.existsSync( rootSandbox ) ) {
     child_process.execSync( `mkdir ${rootSandbox}` );
+    child_process.execSync( `mkdir ${path.join( rootSandbox, "authorizations" )}` );
 }
 
 

@@ -15,6 +15,7 @@ const core = {
     content: require( "./content" ),
     template: require( "./template" )
 };
+const ContextObject = require( "../class/ContextObject" );
 let isSiteUpdate = false;
 
 
@@ -41,6 +42,11 @@ expressApp.use( express.static( core.config.template.staticDir, {
  * Configure Express Routes.
  *
  */
+const setReq = function ( req, res, next ) {
+    req.params.type = req.params.type || core.config.homepage;
+
+    next();
+};
 const getKey = function ( type ) {
     const key = type;
 
@@ -87,7 +93,7 @@ const getWebhook = function ( req, res ) {
     // Always resolve with a 200 and some text
     res.status( 200 ).send( core.config.api.secret );
 };
-const getSitemap = function ( req, res, next ) {
+const getSitemap = function ( req, res ) {
     const sitemap = require( `../generators/${core.config.api.adapter}.sitemap` );
 
     sitemap.generate().then(( xml ) => {
@@ -95,10 +101,29 @@ const getSitemap = function ( req, res, next ) {
     });
 
 };
-const setReq = function ( req, res, next ) {
-    req.params.type = req.params.type || core.config.homepage;
+const checkAuthToken = function ( req, res, next ) {
+    if ( req.query.token === core.config.authorizations.token ) {
+        next();
 
-    next();
+    } else {
+        res.redirect( "/" );
+    }
+}
+const getAuthorizations = function ( req, res ) {
+    req.params.type = "authorizations";
+    core.content.getPage( req, res, listeners.authorizations ).then(( callback ) => {
+        // Handshake callback :-P
+        callback(( status, html ) => {
+            res.status( status ).send( html );
+        });
+    });
+};
+const getAuthorizationForApp = function ( req, res ) {
+    const app = core.config.authorizations.apps.find(( app ) => {
+        return (app === req.params.app);
+    });
+
+    require( `../auth/${app}` ).auth( req, res );
 };
 
 
@@ -107,6 +132,8 @@ const setReq = function ( req, res, next ) {
 expressApp.get( "/preview", getPreview );
 expressApp.post( "/webhook", getWebhook );
 expressApp.get( "/sitemap.xml", getSitemap );
+expressApp.get( "/authorizations", checkAuthToken, getAuthorizations );
+expressApp.get( "/authorizations/:app", checkAuthToken, getAuthorizationForApp );
 
 // API => JSON
 expressApp.get( "/api/:type", setReq, getApi );
@@ -149,6 +176,11 @@ module.exports = {
      *
      */
     init () {
+        // Init authorizations
+        core.config.authorizations.apps.forEach(( app ) => {
+            require( `../auth/${app}` ).init( expressApp );
+        });
+
         // Fetch ./template/pages listing
         core.template.getPages().then(() => {
             // Fetch Site JSON

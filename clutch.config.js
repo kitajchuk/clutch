@@ -11,6 +11,8 @@ const config = {
     homepage: "home",
     // Page Not Found UID — 404
     notfound: "404",
+    // Page Server Error UID - 500
+    notright: "500",
     // Timestamp ( Stamp of instantiation )
     timestamp: Date.now(),
     // Environments

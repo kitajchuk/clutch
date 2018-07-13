@@ -75,7 +75,17 @@ const getPage = function ( req, res, listener ) {
                 callback( (context.page === core.config.notfound ? 404 : 200), html );
 
             }).catch(( error ) => {
-                lager.error( error );
+                renderError( callback, error );
+            });
+        };
+        const renderError = function ( callback, error ) {
+            context.set({
+                page: core.config.notright,
+                error: error
+            });
+
+            core.template.render( core.config.template.layout, { context: context } ).then(( html ) => {
+                callback( 500, html );
             });
         };
 

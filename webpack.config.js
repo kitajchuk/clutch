@@ -101,8 +101,8 @@ const webpackConfig = {
 
 
 module.exports = ( env ) => {
-    // You can enable gzip compression here...
-    if ( env.production ) {
+    // You can enable gzip compression here for S3...
+    if ( env.production && config.aws.cdnOn ) {
         webpackConfig.plugins.push(new CompressionPlugin({
             asset: "[path]",
             algorithm: "gzip",

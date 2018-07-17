@@ -62,6 +62,7 @@ if ( !fs.existsSync( rootNotes ) ) {
 console.log( "Creating source...?" );
 
 if ( !fs.existsSync( rootSource ) ) {
+    child_process.execSync( `npm install clutch-cli` );
     child_process.execSync( `./node_modules/.bin/clutch source` );
 }
 

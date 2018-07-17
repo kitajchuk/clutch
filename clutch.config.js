@@ -56,14 +56,14 @@ const config = {
     browser: {
         port: 8001,
         hobo: "is eq not attr filter detach remove append",
-        appcache: (process.env.NODE_ENV === "production")
+        appcache: false
     },
     // Static assets config
     static: {
         // One day
         maxAge: 86400000,
-        endJS: "/js/app.js",
-        endCSS: "/css/screen.css"
+        endJS: `/js/app.${process.env.NODE_ENV}.js`,
+        endCSS: `/css/screen.${process.env.NODE_ENV}.css`
     },
     // Compression js config
     compression: {

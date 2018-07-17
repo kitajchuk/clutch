@@ -15,7 +15,7 @@
     "generate:robots": "node ./server/core/robots.js",
     "generate:appcache": "node ./server/generators/appcache.js",
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
-    "watch": "./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
+    "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/nodemon -i ./static -i ./template -i ./source server/app.js",
     "build": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
     "build:staging": "export NODE_ENV=staging ; ./node_modules/.bin/webpack --env.staging --progress --profile --display-modules --colors -p",

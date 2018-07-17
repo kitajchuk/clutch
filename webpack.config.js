@@ -51,7 +51,7 @@ const webpackConfig = {
 
     output: {
         path: path.resolve( __dirname, "static/js" ),
-        filename: "app.js"
+        filename: `app.${process.env.NODE_ENV}.js`
     },
 
 
@@ -83,7 +83,7 @@ const webpackConfig = {
                 test: /\.(sass|scss)$/,
                 exclude: /node_modules/,
                 use: [
-                    "file-loader?name=../css/[name].css",
+                    `file-loader?name=../css/[name].${process.env.NODE_ENV}.css`,
                     "postcss-loader",
                     {
                         loader: "sass-loader",

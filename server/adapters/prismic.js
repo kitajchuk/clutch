@@ -39,6 +39,7 @@ const core = {
     template: require( "../core/template" )
 };
 const ContextObject = require( "../class/ContextObject" );
+const apiOptions = (core.config.api.token ? { accessToken: core.config.api.token } : null);
 
 
 
@@ -116,7 +117,7 @@ const getPreview = function ( req, res ) {
             return resolvedUrl;
         };
 
-        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
+        prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
             api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
                 res.cookie( prismic.previewCookie, previewToken, {
                     maxAge: 60 * 30 * 1000,
@@ -182,7 +183,7 @@ const getPartial = function ( req, data, listener ) {
  */
 const getSite = function ( req ) {
     return new Promise(( resolve, reject ) => {
-        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
+        prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
             api.getSingle( "site" ).then(( document ) => {
                 const navi = {
                     items: []
@@ -266,7 +267,7 @@ const getNavi = function ( type ) {
 const getDataForApi = function ( req, listener ) {
     return new Promise(( resolve, reject ) => {
         const doQuery = function ( type ) {
-            prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
+            prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
                 const done = function ( json ) {
                     resolve( json.results );
                 };

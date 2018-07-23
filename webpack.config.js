@@ -40,7 +40,7 @@ const webpackConfig = {
 
     resolve: {
         modules: [root, source, nodeModules],
-        mainFields: ["webpack", "browserify", "web", "hobo", "main"]
+        mainFields: ["webpack", "browserify", "web", "clutch", "hobo", "main"]
     },
 
 

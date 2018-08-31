@@ -55,7 +55,7 @@ This walks through creating your new Clutch project.
 
 
 ### AWS Setup
-Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions. You'll also want to keep it in `sandbox` for use with deploying tokens to your instances.
+Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions. You'll also want to keep it in `.clutch` for use with deploying tokens to your instances.
 
 #### S3 Setup
 This is optional, however you can create an [S3](https://aws.amazon.com/s3) bucket on AWS and add the bucket URL to the `clutch.config.js` as your `aws.cdn` value. Likewise, change the `aws.cdnOn` value to `true`. Next you'll need to create an [AWS IAM](https://aws.amazon.com/iam) user and group and save the access key and secret key so you can add them to Circle CI later.
@@ -87,15 +87,15 @@ These steps cover the basics of bootstrapping Prismic for Clutch.
         * Under the Generate an Access Token section enter a name and click Add this application
         * This makes an app config with oAuth and token access
         * Under the application settings you just made copy the Permanent access tokens - Access to master
-        * Create a file at `sandbox/prismic.access.token` and paste the token in that file
+        * Create a file at `.clutch/prismic.access.token` and paste the token in that file
         * Next in `clutch.config.js` change `api.token` to `true`
-        * Run the sandbox deploy scripts so your instances have access to these tokens
-            * `npm run deploy:sandbox:staging`
-            * `npm run deploy:sandbox:production`
+        * Run the .clutch deploy scripts so your instances have access to these tokens
+            * `npm run deploy:clutch:staging`
+            * `npm run deploy:clutch:production`
 * In your repository Settings under Webhooks:
     * Enter the URL for your site: `http://your.site.com/webhook/`
     * Enter a Secret, I use [randomkeygen](https://randomkeygen.com/)
-    * Create the file `sandbox/prismic.webhook.secret` and put the key in this file
+    * Create the file `.clutch/prismic.webhook.secret` and put the key in this file
     * Click "Add this webhook"
     * Clutch will now listen for webhooks, see `server/core/router.js`
 * In your repository Custom Types create a Single type called `Site`

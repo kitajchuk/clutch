@@ -53,7 +53,6 @@ const setRoutes = () => {
     expressApp.get( "/sitemap.xml", getSitemap );
     expressApp.get( "/authorizations", checkAuthToken, getAuthorizations );
     expressApp.get( "/authorizations/:app", checkAuthToken, getAuthorizationForApp );
-    expressApp.get( "/taxonomy", checkCSRF, setReq, getTaxonomyPage );
 
     // AUTHORIZATIONS
     core.config.authorizations.apps.forEach(( app ) => {
@@ -212,23 +211,6 @@ const getAuthorizationForApp = ( req, res ) => {
     });
 
     require( `../auth/${app}` ).auth( req, res );
-};
-
-
-
-/**
- *
- * :GET Taxonomies
- *
- */
-const getTaxonomyPage = ( req, res ) => {
-    req.params.type = "taxonomy";
-    core.content.getPage( req, res, listeners.taxonomy ).then(( callback ) => {
-        // Handshake callback :-P
-        callback(( status, html ) => {
-            res.status( status ).send( html );
-        });
-    });
 };
 
 

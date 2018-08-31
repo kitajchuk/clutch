@@ -6,8 +6,8 @@ const core = {
     config: require( "../../clutch.config" )
 };
 const authorization = {
-    config: require( "../../sandbox/authorizations/vimeo.config" ),
-    store: path.join( __dirname, "../../sandbox/authorizations/vimeo.auth.json" ),
+    config: require( "../../.clutch/authorizations/vimeo.config" ),
+    store: path.join( __dirname, "../../.clutch/authorizations/vimeo.auth.json" ),
     cache: path.join( __dirname, "../../static/vimeo/" )
 };
 

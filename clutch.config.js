@@ -55,7 +55,7 @@ const config = {
     // Browser-sync config
     browser: {
         port: 8001,
-        hobo: "is eq not attr filter detach remove append",
+        hobo: "is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass",
         appcache: false
     },
     // Static assets config
@@ -103,11 +103,11 @@ config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.
 
 
 
-const prismicTokenPath = path.join( __dirname, "./sandbox/prismic.access.token" );
-const prismicSecretPath = path.join( __dirname, "./sandbox/prismic.webhook.secret" );
-const contentfulTokenPath = path.join( __dirname, "./sandbox/contentful.access.token" );
-const contentfulPreviewPath = path.join( __dirname, "./sandbox/contentful.preview.token" );
-const clutchAuthorizationsTokenPath = path.join( __dirname, "./sandbox/clutch.authorizations.token" );
+const prismicTokenPath = path.join( __dirname, "./.clutch/prismic.access.token" );
+const prismicSecretPath = path.join( __dirname, "./.clutch/prismic.webhook.secret" );
+const contentfulTokenPath = path.join( __dirname, "./.clutch/contentful.access.token" );
+const contentfulPreviewPath = path.join( __dirname, "./.clutch/contentful.preview.token" );
+const clutchAuthorizationsTokenPath = path.join( __dirname, "./.clutch/clutch.authorizations.token" );
 
 
 

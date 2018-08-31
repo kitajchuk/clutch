@@ -7,7 +7,7 @@ const path = require( "path" );
 const root = __dirname;
 const rootNodeModules = path.join( root, "node_modules" );
 const rootPackageLock = path.join( root, "package-lock.json" );
-const rootSandbox = path.join( root, "sandbox" );
+const rootClutch = path.join( root, ".clutch" );
 const rootTemplatePartials = path.join( root, "template", "partials" );
 const rootNotes = path.join( root, ".notes" );
 const rootServer = path.join( root, "server" );
@@ -34,11 +34,11 @@ child_process.execSync( "npm i" );
 
 
 // 2.0 Create sandbox
-console.log( "Creating sandbox..." );
+console.log( "Creating .clutch..." );
 
-if ( !fs.existsSync( rootSandbox ) ) {
-    child_process.execSync( `mkdir ${rootSandbox}` );
-    child_process.execSync( `mkdir ${path.join( rootSandbox, "authorizations" )}` );
+if ( !fs.existsSync( rootClutch ) ) {
+    child_process.execSync( `mkdir ${rootClutch}` );
+    child_process.execSync( `mkdir ${path.join( rootClutch, "authorizations" )}` );
 }
 
 

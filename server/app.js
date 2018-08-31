@@ -13,7 +13,7 @@ router.on( "authorizations", {
         return new Promise(( resolve, reject ) => {
             resolve({
                 results: config.authorizations.apps.map(( app ) => {
-                    const authFile = path.join( __dirname, `../sandbox/authorizations/${app}.auth.json` );
+                    const authFile = path.join( __dirname, `../.clutch/authorizations/${app}.auth.json` );
 
                     return {
                         authorized: fs.existsSync( authFile ),

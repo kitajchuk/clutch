@@ -62,6 +62,17 @@ const getApi = function ( req, res, listener ) {
                 data.documents = json;
             }
 
+            // Pagination information
+            data.pagination = {
+                page: json.page,
+                results_per_page: json.results_per_page,
+                results_size: json.results_size,
+                total_results_size: json.total_results_size,
+                total_pages: json.total_pages,
+                next_page: json.next_page,
+                prev_page: json.prev_page
+            }
+
             // Render partial for ?format=html&template=foo
             if ( req.query.format === "html" ) {
                 getPartial( req, data, listener ).then(( html ) => {
@@ -310,6 +321,11 @@ const getDataForApi = function ( req, listener ) {
                         listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
                     }
 
+                    // @hook: pagination
+                    if ( listener && listener.handlers.pagination ) {
+                        listener.handlers.pagination( prismic, cache.api, form, cache, req );
+                    }
+
                     // submit
                     form.submit().then( done ).catch( fail );
                 }
@@ -337,6 +353,7 @@ const getDataForPage = function ( req, listener ) {
             let query = [];
             const navi = getNavi( type );
             const form = getForm( req, cache.api, type );
+            const isHeadlessHome = (type === core.config.homepage);
             const isNaviNoForm = (navi && !cache.api.data.forms[ type ]);
             const done = function ( json ) {
                 if ( !json.results.length ) {
@@ -353,8 +370,8 @@ const getDataForPage = function ( req, listener ) {
                     data.items = json.results;
 
                     // uid
-                    if ( uid || isNaviNoForm ) {
-                        data.item = getDoc( (isNaviNoForm ? navi.uid : uid), json.results );
+                    if ( uid || isNaviNoForm || isHeadlessHome ) {
+                        data.item = getDoc( (isHeadlessHome ? core.config.homepage : (isNaviNoForm ? navi.uid : uid)), json.results );
 
                         if ( !data.item ) {
                             reject( `The document with UID "${isNaviNoForm ? navi.uid : uid}" could not be found by Prismic.` );
@@ -369,7 +386,11 @@ const getDataForPage = function ( req, listener ) {
             };
 
             // query: type?
-            if ( isNaviNoForm ) {
+            if ( isHeadlessHome ) {
+                query.push( prismic.Predicates.at( "document.type", "page" ) );
+                query.push( prismic.Predicates.at( "my.page.uid", core.config.homepage ) );
+
+            } else if ( isNaviNoForm ) {
                 query.push( prismic.Predicates.at( "document.type", navi.type ) );
                 query.push( prismic.Predicates.at( "document.id", navi.id ) );
 
@@ -401,6 +422,11 @@ const getDataForPage = function ( req, listener ) {
                 // @hook: fetchLinks
                 if ( listener && listener.handlers.fetchLinks ) {
                     listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
+                }
+
+                // @hook: pagination
+                if ( listener && listener.handlers.pagination ) {
+                    listener.handlers.pagination( prismic, cache.api, form, cache, req );
                 }
 
                 // submit

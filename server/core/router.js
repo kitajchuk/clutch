@@ -8,6 +8,7 @@ const compression = require( "compression" );
 const cookieParser = require( "cookie-parser" );
 const bodyParser = require( "body-parser" );
 const lager = require( "properjs-lager" );
+const csurf = require( "csurf" );
 const listeners = {};
 const core = {
     query: require( "./query" ),
@@ -16,6 +17,9 @@ const core = {
     template: require( "./template" )
 };
 const ContextObject = require( "../class/ContextObject" );
+const checkCSRF = csurf({
+    cookie: true
+});
 let isSiteUpdate = false;
 
 
@@ -42,17 +46,57 @@ expressApp.use( express.static( core.config.template.staticDir, {
  * Configure Express Routes.
  *
  */
-const setReq = function ( req, res, next ) {
+const setRoutes = () => {
+    // SYSTEM
+    expressApp.get( "/preview", getPreview );
+    expressApp.post( "/webhook", postWebhook );
+    expressApp.get( "/sitemap.xml", getSitemap );
+    expressApp.get( "/authorizations", checkAuthToken, getAuthorizations );
+    expressApp.get( "/authorizations/:app", checkAuthToken, getAuthorizationForApp );
+    expressApp.get( "/taxonomy", checkCSRF, setReq, getTaxonomyPage );
+
+    // AUTHORIZATIONS
+    core.config.authorizations.apps.forEach(( app ) => {
+        require( `../auth/${app}` ).init( expressApp, checkCSRF );
+    });
+
+    // API => JSON
+    expressApp.get( "/api/:type", setReq, getApi );
+    expressApp.get( "/api/:type/:uid", setReq, getApi );
+
+    // URI => HTML
+    expressApp.get( "/", checkCSRF, setReq, getPage );
+    expressApp.get( "/:type", checkCSRF, setReq, getPage );
+    expressApp.get( "/:type/:uid", checkCSRF, setReq, getPage );
+};
+
+
+
+
+/**
+ *
+ * Request handling.
+ *
+ */
+const setReq = ( req, res, next ) => {
     req.params.type = req.params.type || core.config.homepage;
 
     next();
 };
-const getKey = function ( type ) {
+const getKey = ( type ) => {
     const key = type;
 
     return key || core.config.homepage;
-}
-const getApi = function ( req, res ) {
+};
+
+
+
+/**
+ *
+ * :GET API
+ *
+ */
+const getApi = ( req, res ) => {
     const key = getKey( req.params.type );
 
     core.query.getApi( req, res, listeners[ key ] ).then(( result ) => {
@@ -64,7 +108,15 @@ const getApi = function ( req, res ) {
         }
     });
 };
-const getPage = function ( req, res ) {
+
+
+
+/**
+ *
+ * :GET Pages
+ *
+ */
+const getPage = ( req, res ) => {
     const key = getKey( req.params.type );
 
     core.content.getPage( req, res, listeners[ key ] ).then(( callback ) => {
@@ -74,12 +126,21 @@ const getPage = function ( req, res ) {
         });
     });
 };
-const getPreview = function ( req, res ) {
+
+
+
+/**
+ *
+ * :GET  Prismic stuff
+ * :POST Prismic stuff
+ *
+ */
+const getPreview = ( req, res ) => {
     core.query.getPreview( req, res ).then(( url ) => {
         res.redirect( url );
     });
 };
-const getWebhook = function ( req, res ) {
+const postWebhook = ( req, res ) => {
     // Skip if update is in progress, Skip if invalid secret was sent
     if ( !isSiteUpdate && req.body.secret === core.config.api.secret ) {
         isSiteUpdate = true;
@@ -91,9 +152,9 @@ const getWebhook = function ( req, res ) {
     }
 
     // Always resolve with a 200 and some text
-    res.status( 200 ).send( core.config.api.secret );
+    res.status( 200 ).send( "success" );
 };
-const getSitemap = function ( req, res ) {
+const getSitemap = ( req, res ) => {
     const sitemap = require( `../generators/${core.config.api.adapter}.sitemap` );
 
     sitemap.generate().then(( xml ) => {
@@ -101,15 +162,42 @@ const getSitemap = function ( req, res ) {
     });
 
 };
-const checkAuthToken = function ( req, res, next ) {
+
+
+
+/**
+ *
+ * Middleware checks
+ *
+ */
+const checkOrigin = ( req, res, next ) => {
+    // No origin means not CORS :-)
+    if ( !req.headers.origin ) {
+        next();
+
+    } else {
+        res.status( 200 ).json({
+            error: "Invalid origin for request"
+        });
+    }
+};
+const checkAuthToken = ( req, res, next ) => {
     if ( req.query.token === core.config.authorizations.token ) {
         next();
 
     } else {
         res.redirect( "/" );
     }
-}
-const getAuthorizations = function ( req, res ) {
+};
+
+
+
+/**
+ *
+ * :GET Authorizations
+ *
+ */
+const getAuthorizations = ( req, res ) => {
     req.params.type = "authorizations";
     core.content.getPage( req, res, listeners.authorizations ).then(( callback ) => {
         // Handshake callback :-P
@@ -118,7 +206,7 @@ const getAuthorizations = function ( req, res ) {
         });
     });
 };
-const getAuthorizationForApp = function ( req, res ) {
+const getAuthorizationForApp = ( req, res ) => {
     const app = core.config.authorizations.apps.find(( app ) => {
         return (app === req.params.app);
     });
@@ -128,21 +216,20 @@ const getAuthorizationForApp = function ( req, res ) {
 
 
 
-// SYSTEM
-expressApp.get( "/preview", getPreview );
-expressApp.post( "/webhook", getWebhook );
-expressApp.get( "/sitemap.xml", getSitemap );
-expressApp.get( "/authorizations", checkAuthToken, getAuthorizations );
-expressApp.get( "/authorizations/:app", checkAuthToken, getAuthorizationForApp );
-
-// API => JSON
-expressApp.get( "/api/:type", setReq, getApi );
-expressApp.get( "/api/:type/:uid", setReq, getApi );
-
-// URI => HTML
-expressApp.get( "/", setReq, getPage );
-expressApp.get( "/:type", setReq, getPage );
-expressApp.get( "/:type/:uid", setReq, getPage );
+/**
+ *
+ * :GET Taxonomies
+ *
+ */
+const getTaxonomyPage = ( req, res ) => {
+    req.params.type = "taxonomy";
+    core.content.getPage( req, res, listeners.taxonomy ).then(( callback ) => {
+        // Handshake callback :-P
+        callback(( status, html ) => {
+            res.status( status ).send( html );
+        });
+    });
+};
 
 
 
@@ -176,10 +263,8 @@ module.exports = {
      *
      */
     init () {
-        // Init authorizations
-        core.config.authorizations.apps.forEach(( app ) => {
-            require( `../auth/${app}` ).init( expressApp );
-        });
+        // Init routes
+        setRoutes();
 
         // Fetch ./template/pages listing
         core.template.getPages().then(() => {

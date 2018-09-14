@@ -26,7 +26,10 @@ const getPage = function ( req, res, listener ) {
             // 0.0 => Missing template file
             // 0.1 => Single ContentItem
             // 0.2 => Multiple ContentItems(s)
-            if ( core.template.cache.pages.indexOf( `${page}.html` ) === -1 ) {
+            const isNoNamePage = (core.template.cache.pages.indexOf( `${page}.html` ) === -1);
+            const isNoTypePage = data.item ? (core.template.cache.pages.indexOf( `${data.item.type}.html` ) === -1) : true;
+
+            if ( isNoNamePage && isNoTypePage ) {
                 const file = path.join( core.config.template.pagesDir, `${page}.html` );
 
                 fail( `The template file for this path is missing at "${file}".` );
@@ -71,6 +74,12 @@ const getPage = function ( req, res, listener ) {
             const localObject = {
                 context: context
             };
+            const item = localObject.context.get( "item" );
+            const isNoNamePage = (core.template.cache.pages.indexOf( `${page}.html` ) === -1);
+
+            if ( isNoNamePage && item ) {
+                localObject.context.set( "page", item.type );
+            }
 
             core.template.render( core.config.template.layout, localObject ).then(( html ) => {
                 callback( (context.page === core.config.notfound ? 404 : 200), html );

@@ -6,11 +6,12 @@
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start:staging": "export NODE_ENV=staging ; ./node_modules/.bin/forever -a -l forever.log -o out.log -e err.log start app.js",
-    "start:production": "export NODE_ENV=production ; ./node_modules/.bin/forever -a -l forever.log -o out.log -e err.log start app.js",
+    "start:sandbox": "export NODE_ENV=sandbox ; ./node_modules/.bin/pm2 --no-daemon --watch --ignore-watch '*.log' -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
+    "start:staging": "export NODE_ENV=staging ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
+    "start:production": "export NODE_ENV=production ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
     "install:staging": "export NODE_ENV=staging ; node app.install.js",
     "install:production": "export NODE_ENV=production ; node app.install.js",
-    "stop": "./node_modules/.bin/forever stopall"
+    "stop": "./node_modules/.bin/pm2 stop 'all'"
   },
   "contributors": [
     {
@@ -29,7 +30,7 @@
     "csurf": "^1.9.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "forever": "^0.15.3",
+    "pm2": "^3.1.2",
     "prismic-dom": "^2.0.6",
     "prismic-javascript": "^1.5.0-beta.2",
     "properjs-lager": "^0.1.0",

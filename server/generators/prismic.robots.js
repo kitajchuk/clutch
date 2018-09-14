@@ -15,10 +15,8 @@
  *
  *
  */
-const fs = require( "fs" );
 const path = require( "path" );
 const config = require( "../../clutch.config" );
-const robots = path.join( config.template.staticDir, "robots.txt" );
 const lager = require( "properjs-lager" );
 const botsText = `
 # Clutch Robots Txt
@@ -42,9 +40,9 @@ const createRobots = () => {
             }
         }
 
-        fs.writeFileSync( robots, botsText.replace( "@content", rules.join( "\n" ) ) );
+        const finalTXT = botsText.replace( "@content", rules.join( "\n" ) );
 
-        resolve();
+        resolve( finalTXT );
     });
 };
 

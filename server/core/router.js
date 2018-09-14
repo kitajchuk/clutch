@@ -50,6 +50,7 @@ const setRoutes = () => {
     // SYSTEM
     expressApp.get( "/preview", getPreview );
     expressApp.post( "/webhook", postWebhook );
+    expressApp.get( "/robots.txt", getRobots );
     expressApp.get( "/sitemap.xml", getSitemap );
     expressApp.get( "/authorizations", checkAuthToken, getAuthorizations );
     expressApp.get( "/authorizations/:app", checkAuthToken, getAuthorizationForApp );
@@ -158,6 +159,14 @@ const getSitemap = ( req, res ) => {
 
     sitemap.generate().then(( xml ) => {
         res.set( "Content-Type", "text/xml" ).status( 200 ).send( xml );
+    });
+
+};
+const getRobots = ( req, res ) => {
+    const robots = require( `../generators/${core.config.api.adapter}.robots` );
+
+    robots.generate().then(( txt ) => {
+        res.set( "Content-Type", "text/plain" ).status( 200 ).send( txt );
     });
 
 };

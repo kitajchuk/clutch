@@ -15,9 +15,10 @@
  *
  *
  */
-const prismic = require( "prismic.io" );
+const prismic = require( "prismic-javascript" );
 const config = require( "../../clutch.config" );
 const lager = require( "properjs-lager" );
+const apiOptions = (config.api.token ? { accessToken: config.api.token } : null);
 const xmlDoc = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     @content
@@ -55,7 +56,7 @@ const getDocuments = ( api ) => {
                 .then(( json ) => {
                     json.results.forEach(( doc ) => {
                         // Explicit `false` to exclude content-type
-                        if ( config.generate.sitemap[ doc.type ] !== false ) {
+                        if ( !(config.generate.sitemap[ doc.type ] === false) ) {
                             docs.push( doc );
                         }
                     });
@@ -77,7 +78,7 @@ const getDocuments = ( api ) => {
 };
 const createSitemap = () => {
     return new Promise(( resolve, reject ) => {
-        prismic.api( config.api.access, (config.api.token || null) ).then(( api ) => {
+        prismic.api( config.api.access, apiOptions ).then(( api ) => {
             getDocuments( api ).then(( docs ) => {
                 const nodes = [];
 
@@ -95,9 +96,9 @@ const createSitemap = () => {
                     nodes.push(
                         xmlNode
                             .replace( "@loc", loc )
-                            .replace( "@changefreq", "monthly" )
+                            .replace( "@changefreq", "yearly" )
                             .replace( "@priority", "0.5" )
-                            .replace( "@lastmod", getLastmod( doc.lastPublicationDate ) )
+                            .replace( "@lastmod", getLastmod( doc.last_publication_date ) )
                     );
                 });
 

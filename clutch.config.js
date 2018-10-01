@@ -28,11 +28,6 @@ const config = {
         access: "https://clutch.cdn.prismic.io/api/v2", // This is your API URL
         token: true, // ./sandbox/prismic.access.token Set to true
         secret: "" // ./sandbox/prismic.webhook.secret
-
-        // Contentful
-        // adapter: "contentful",
-        // access: "355y876evbep", // This is your space ID
-        // token: true // ./sandbox/contentful.access.token AND ./sandbox/contentful.preview.token
     },
     // Deployment config ( AWS )
     aws: {
@@ -105,8 +100,6 @@ config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.
 
 const prismicTokenPath = path.join( __dirname, "./.clutch/prismic.access.token" );
 const prismicSecretPath = path.join( __dirname, "./.clutch/prismic.webhook.secret" );
-const contentfulTokenPath = path.join( __dirname, "./.clutch/contentful.access.token" );
-const contentfulPreviewPath = path.join( __dirname, "./.clutch/contentful.preview.token" );
 const clutchAuthorizationsTokenPath = path.join( __dirname, "./.clutch/clutch.authorizations.token" );
 
 
@@ -119,17 +112,12 @@ if ( fs.existsSync( clutchAuthorizationsTokenPath ) ) {
 
 
 // Configure access tokens for APIs
-if ( config.api.adapter === "prismic" && config.api.token !== false && fs.existsSync( prismicTokenPath ) ) {
+if ( config.api.token !== false && fs.existsSync( prismicTokenPath ) ) {
     config.api.token = read( prismicTokenPath );
 
     if ( fs.existsSync( prismicSecretPath ) ) {
         config.api.secret = read( prismicSecretPath );
     }
-
-// Contentful
-} else if ( config.api.adapter === "contentful" && config.api.token !== false && fs.existsSync( contentfulTokenPath ) ) {
-    config.api.token = read( contentfulTokenPath );
-    config.api.preview = read( contentfulPreviewPath );
 }
 
 

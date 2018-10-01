@@ -221,7 +221,7 @@ const getSite = function ( req ) {
 
                 // Normalize navi context
                 document.data.navi.forEach(( slice ) => {
-                    let slug = slice.primary.page.slug || slice.primary.slug;
+                    let slug = slice.primary.page.uid;
 
                     if ( slug === core.config.homepage ) {
                         slug = "/";

@@ -49,42 +49,8 @@ class ContextObject {
     }
 
     getPageTitle () {
-        const page = this.get( "page" );;
-        const site = this.get( "site" );
-        const navi = this.get( "navi" );
-        const items = this.get( "items" );
-        let item = this.get( "item" );
-        let title = site.data.title;
-        let navItem = null;
-
-        if ( config.api.adapter === "prismic" ) {
-            if ( typeof title === "object" ) {
-                title = prismicDOM.RichText.asText( title );
-            }
-
-            // Supports collection mapping to content-type
-            if ( items ) {
-                item = navi.items.find(( nav ) => {
-                    return (nav.uid === page);
-                });
-
-                if ( item ) {
-                    item.data = {
-                        title: item.title
-                    };
-                }
-
-            } else if ( item && (typeof item.data.title === "object") ) {
-                item.data.title = prismicDOM.RichText.asText( item.data.title );
-            }
-
-            title = (item ? `${item.data.title} — ${title}` : title);
-
-        } else if ( config.api.adapter === "contentful" ) {
-            title = (item ? `${item.fields.title} — ${title}` : title);
-        }
-
-        return title;
+        pageImage = item ? item.data.image.url : null;
+        appImage = appImage.url;
     }
 
     getPageImage () {

@@ -12,7 +12,6 @@
   "scripts": {
     "bootstrap": "node clutch.install.js",
     "bootstrap:hobo": "cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass'",
-    "bootstrap:contentful": "node ./server/adapters/contentful.bootstrap.js",
     "generate:robots": "node ./server/core/robots.js",
     "generate:appcache": "node ./server/generators/appcache.js",
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
@@ -37,7 +36,6 @@
     "browser-sync": "^2.24.4",
     "browser-sync-webpack-plugin": "^2.2.2",
     "compression-webpack-plugin": "^0.4.0",
-    "contentful-management": "^4.2.2",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",

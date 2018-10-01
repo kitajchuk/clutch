@@ -1,7 +1,7 @@
 clutch
 ======
 
-> A modern headless CMS SDK for Prismic and Contentful.
+> A modern headless CMS SDK for Prismic.io.
 
 
 
@@ -13,7 +13,7 @@ clutch
 This README file outlines how to get up and running with a Clutch Stack. Its presented in proper order of operations. The documentation assumes some key things about you as a developer:
 
 * You know well and work with [AWS](https://aws.amazon.com)
-* You know well and work with [Prismic](https://prismic.io) or [Contentful](https://www.contentful.com)
+* You know well and work with [Prismic](https://prismic.io)
 * You know well and work with [CircleCI](https://circleci.com)
 * You know well and work with [Node.js](https://nodejs.org)
 * You know well and work with one of the template languages [here](https://www.npmjs.com/package/consolidate)
@@ -28,7 +28,6 @@ This README file outlines how to get up and running with a Clutch Stack. Its pre
         * [CDN setup](#cloudfront-setup)
         * [DNS setup](#route-53-setup)
     * [Prismic setup](#headless-cms-setup--prismic-)
-    * [Contentful setup](#headless-cms-setup--contentful-)
     * [Code setup 02](#code-setup-round-2)
     * [Circle CI setup](#circle-ci-setup)
 * [Ecosystem](#ecosystem)
@@ -108,11 +107,6 @@ These steps cover the basics of bootstrapping Prismic for Clutch.
     * Call it `Home` with the slug `home` and a description
 * Jump back over to your `Site` instance, click the Navigation tab and add a navigation item for the `Home` page linking it to the actual page document
 * You can follow the steps for making the `Home` page and create the `Example` page
-
-
-
-### Headless CMS Setup ( Contentful )
-Coming soon...
 
 
 

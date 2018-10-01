@@ -1,11 +1,7 @@
 <div class="example -pad">
     <div class="-wrap -exp">
         <p class="p -wrap-copy anim anim--tr js-lazy-anim">
-            <% if ( locals.context.get( 'config' ).api.adapter === 'prismic' ) { %>
-                <%- locals.context.get( 'dom' ).RichText.asText( locals.context.get( 'item' ).data.description ) %>
-            <% } else { %>
-                <%- locals.context.get( 'item' ).fields.description %>
-            <% } %>
+            <%- locals.context.get( 'dom' ).RichText.asText( locals.context.get( 'item' ).data.description ) %>
         </p>
     </div>
     <div class="-wrap -exp">

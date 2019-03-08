@@ -13,7 +13,6 @@
     "bootstrap": "node clutch.install.js",
     "bootstrap:hobo": "cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass'",
     "generate:robots": "node ./server/core/robots.js",
-    "generate:appcache": "node ./server/generators/appcache.js",
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; cd ./server && npm run start:sandbox",
@@ -23,12 +22,11 @@
     "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host -i ./.clutch/clutch.pem",
     "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host -i ./.clutch/clutch.pem",
     "deploy:staging": "npm run build:staging ; npm run generate:robots ; export NODE_ENV=staging ; export AWS_HOST=${AWS_STAGING_HOST} ; ./clutch.deploy",
-    "deploy:production": "npm run build:production ; npm run generate:robots ; npm run generate:appcache ; export NODE_ENV=production ; export AWS_HOST=${AWS_PRODUCTION_HOST} ; ./clutch.sync ; ./clutch.deploy",
+    "deploy:production": "npm run build:production ; npm run generate:robots ; export NODE_ENV=production ; export AWS_HOST=${AWS_PRODUCTION_HOST} ; ./clutch.sync ; ./clutch.deploy",
     "deploy:clutch:staging": "rsync -av -e 'ssh -i ./.clutch/clutch.pem' --rsync-path 'sudo rsync' --exclude 'clutch.pem' .clutch ec2-user@34.209.179.25:/var/www/html/",
     "deploy:clutch:production": "mirror deploy:clutch:staging with production EIP here"
   },
   "devDependencies": {
-    "appcache-manifest": "^2.1.0",
     "autoprefixer": "^8.6.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",

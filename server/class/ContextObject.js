@@ -49,19 +49,33 @@ class ContextObject {
     }
 
     getPageTitle () {
-        pageImage = item ? item.data.image.url : null;
-        appImage = appImage.url;
+        const site = this.get( "site" );
+        const item = this.get( "item" );
+        let title = null;
+        let isRich = null;
+
+        if ( item ) {
+            isRich = !(typeof item.data.title === "string");
+            title = `${isRich ? prismicDOM.RichText.asText( item.data.title ) : item.data.title} — ${site.data.title}`;
+
+        } else {
+            title = site.data.title;
+        }
+
+        return title;
     }
 
-    getPageImage () {
+    getPageDescription () {
+        const site = this.get( "site" );
         const item = this.get( "item" );
-        let appImage = this.get( "site" ).data.appImage;
-        let pageImage = null;
+        let desc = null;
 
-        pageImage = item ? item.data.image.url : null;
-        appImage = appImage.url;
+        // Homepage
+        if ( item && (item.uid === "home") || !item ) {
+            desc = site.data.description;
+        }
 
-        return (pageImage || appImage);
+        return desc;
     }
 
     getUrl ( doc ) {

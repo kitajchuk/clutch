@@ -1,46 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" class="" <% if ( locals.context.get( 'config' ).browser.appcache ) { %>manifest="/cache.manifest"<% } %>>
+<html lang="en" class="">
     <head>
         <meta charset="utf-8" />
         <title><%= locals.context.getPageTitle() %></title>
         <meta http-equiv="x-dns-prefetch-control" content="on" />
-        <link rel="dns-prefetch" href="//clutch.cdn.prismic.io" /><!-- Change this to your repo -->
+        <link rel="dns-prefetch" href="//clutch.cdn.prismic.io" />
         <link rel="dns-prefetch" href="//prismic-io.s3.amazonaws.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        <meta name="description" content="<%= locals.context.get( 'site' ).data.description %>" />
+        <meta name="description" content="<%= locals.context.getPageDescription() %>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="google-site-verification" content="<%= locals.context.get( 'site' ).data.googleVerify %>" />
-        <link rel="shortcut icon" href="<%= locals.context.get( 'site' ).data.appFavicon.url %>" type="image/x-icon" />
-        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= locals.context.get( 'site' ).data.appIOSIcon57x57.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= locals.context.get( 'site' ).data.appIOSIcon60x60.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= locals.context.get( 'site' ).data.appIOSIcon72x72.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<%= locals.context.get( 'site' ).data.appIOSIcon76x76.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= locals.context.get( 'site' ).data.appIOSIcon114x114.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<%= locals.context.get( 'site' ).data.appIOSIcon120x120.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= locals.context.get( 'site' ).data.appIOSIcon144x144.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= locals.context.get( 'site' ).data.appIOSIcon152x152.url %>" />
-        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<%= locals.context.get( 'site' ).data.appIOSIcon180x180.url %>" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon16x16.url %>" sizes="16x16" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon32x32.url %>" sizes="32x32" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon96x96.url %>" sizes="96x96" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'site' ).data.appIcon192x192.url %>" sizes="192x192" />
-        <meta name="application-name" content="<%= locals.context.get( 'site' ).data.appName %>" />
-        <meta name="msapplication-TileColor" content="<%= locals.context.get( 'site' ).data.appMSTileColor %>">
-        <meta name="msapplication-square70x70logo" content="<%= locals.context.get( 'site' ).data.appMSIcon70x70.url %>" />
-        <meta name="msapplication-square150x150logo" content="<%= locals.context.get( 'site' ).data.appMSIcon150x150.url %>" />
-        <meta name="msapplication-wide310x150logo" content="<%= locals.context.get( 'site' ).data.appMSIcon310x150.url %>" />
-        <meta name="msapplication-square310x310logo" content="<%= locals.context.get( 'site' ).data.appMSIcon310x310.url %>" />
+        <link rel="shortcut icon" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-60x60.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-152x152.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-180x180.png" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/android-chrome-192x192.png" sizes="192x192" />
+        <meta name="application-name" content="kitajchuk" />
+        <meta name="msapplication-TileColor" content="#000000">
+        <meta name="msapplication-square70x70logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/smalltile.png" />
+        <meta name="msapplication-square150x150logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/mediumtile.png" />
+        <meta name="msapplication-wide310x150logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/widetile.png" />
+        <meta name="msapplication-square310x310logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/largetile.png" />
         <meta property="og:site_name" content="<%= locals.context.get( 'site' ).data.title %>" />
         <meta property="og:title" content="<%= locals.context.get( 'site' ).data.title %>" />
         <meta property="og:url" content="<%= locals.context.get( 'site' ).data.url %>" />
         <meta property="og:type" content="website" />
-        <meta property="og:description" content="<%= locals.context.get( 'site' ).data.description %>" />
-        <meta property="og:image" content="<%= locals.context.getPageImage() %>" />
+        <meta property="og:description" content="<%= locals.context.getPageDescription() %>" />
+        <meta property="og:image" content="<%= locals.context.get( 'config' ).url %>/img/share/Kitajchuk_Share_Graphic.jpg" />
         <meta itemprop="name" content="<%= locals.context.get( 'site' ).data.title %>" />
-        <meta itemprop="description" content="<%= locals.context.get( 'site' ).data.description %>" />
+        <meta itemprop="description" content="<%= locals.context.getPageDescription() %>" />
         <meta itemprop="url" content="<%= locals.context.get( 'site' ).data.url %>" />
-        <meta itemprop="thumbnailUrl" content="<%= locals.context.getPageImage() %>" />
-        <meta itemprop="image" content="<%= locals.context.getPageImage() %>" />
+        <meta itemprop="thumbnailUrl" content="/img/share/Kitajchuk_Share_Graphic.jpg" />
+        <meta itemprop="image" content="<%= locals.context.get( 'config' ).url %>/img/share/Kitajchuk_Share_Graphic.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@kitajchuk" />
+        <meta name="twitter:creator" content="@kitajchuk" />
+        <meta name="twitter:title" content="<%= locals.context.get( 'site' ).data.title %>" />
+        <meta name="twitter:description" content="<%= locals.context.getPageDescription() %>" />
+        <meta name="twitter:image" content="<%= locals.context.get( 'config' ).url %>/img/share/Kitajchuk_Share_Graphic.jpg" />
         <link href="<%= locals.context.get( 'stylesheet' ) + '?v=' + locals.context.get( 'timestamp' ) %>" rel="stylesheet" />
     </head>
     <body class="-fzero" data-csrf="<%= locals.context.get( 'csrf' ) %>">

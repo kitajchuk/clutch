@@ -6,7 +6,7 @@
   "version": "1.0.4",
   "config": {
     "aws_ec2_dest": "/var/www/html/",
-    "aws_ec2_staging_host": "34.209.179.25",
+    "aws_ec2_staging_host": "put.the.host.here",
     "aws_ec2_production_host": "put.the.host.here"
   },
   "scripts": {
@@ -19,11 +19,11 @@
     "build": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
     "build:staging": "export NODE_ENV=staging ; ./node_modules/.bin/webpack --env.staging --progress --profile --display-modules --colors -p",
     "build:production": "export NODE_ENV=production ; ./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
-    "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host -i ./.clutch/clutch.pem",
-    "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host -i ./.clutch/clutch.pem",
+    "connect:staging": "ssh ec2-user@$npm_package_config_aws_ec2_staging_host",
+    "connect:production": "ssh ec2-user@$npm_package_config_aws_ec2_production_host",
     "deploy:staging": "npm run build:staging ; npm run generate:robots ; export NODE_ENV=staging ; export AWS_HOST=${AWS_STAGING_HOST} ; ./clutch.deploy",
     "deploy:production": "npm run build:production ; npm run generate:robots ; export NODE_ENV=production ; export AWS_HOST=${AWS_PRODUCTION_HOST} ; ./clutch.sync ; ./clutch.deploy",
-    "deploy:clutch:staging": "rsync -av -e 'ssh -i ./.clutch/clutch.pem' --rsync-path 'sudo rsync' --exclude 'clutch.pem' .clutch ec2-user@34.209.179.25:/var/www/html/",
+    "deploy:clutch:staging": "rsync -av -e 'ssh --rsync-path 'sudo rsync' --exclude 'clutch.pem' .clutch ec2-user@34.209.179.25:/var/www/html/",
     "deploy:clutch:production": "mirror deploy:clutch:staging with production EIP here"
   },
   "devDependencies": {

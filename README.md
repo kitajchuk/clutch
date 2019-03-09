@@ -54,7 +54,17 @@ This walks through creating your new Clutch project.
 
 
 ### AWS Setup
-Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions. You'll also want to keep it in `.clutch` for use with deploying tokens to your instances.
+Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions. You can keep it in `.clutch` for `ssh` access to your instance. The preferred option is to store your public key on each instance in the `/home/ec2-user/.ssh/authorized_keys` file.
+
+#### Letsencrypt Setup
+Assuming you can now `ssh` cleanly into your instances, here's how you can setup letsencrypt for `https`! Run these commands:
+* `sudo -s`
+* `git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt`
+* `touch /var/www/html/.well-known`
+* `/opt/letsencrypt/letsencrypt-auto --debug`
+    * Prompt answers in order: 2 ( for nginx ), your email ( eg foo@bar.com ), A, N, your domains ( eg. foo.com www.foo.com ), 2 ( redirect https )
+* Screenshot the "IMPORTANT NOTES" for safe keeping
+* `rm -rf /var/www/html/.well-known`
 
 #### S3 Setup
 This is optional, however you can create an [S3](https://aws.amazon.com/s3) bucket on AWS and add the bucket URL to the `clutch.config.js` as your `aws.cdn` value. Likewise, change the `aws.cdnOn` value to `true`. Next you'll need to create an [AWS IAM](https://aws.amazon.com/iam) user and group and save the access key and secret key so you can add them to Circle CI later.

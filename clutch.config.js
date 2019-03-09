@@ -6,7 +6,7 @@ const read = ( file ) => {
 };
 const config = {
     // The URL of your actual site
-    url: "http://clutch.kitajchuk.com",
+    url: "",
     // Homepage UID
     homepage: "home",
     // Page Not Found UID — 404
@@ -45,7 +45,8 @@ const config = {
     },
     // Express.js config
     express: {
-        port: 8000
+        port: 8000,
+        portHttps: 8443
     },
     // Browser-sync config
     browser: {
@@ -86,7 +87,15 @@ const config = {
         apps: [
             "vimeo"
         ]
-    }
+    },
+    // letsencrypt
+    letsencrypt: {
+        privkey: "",
+        cert: "",
+        chain: ""
+    },
+    // https
+    https: true
 };
 
 
@@ -100,6 +109,7 @@ config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.
 const prismicTokenPath = path.join( __dirname, "./.clutch/prismic.access.token" );
 const prismicSecretPath = path.join( __dirname, "./.clutch/prismic.webhook.secret" );
 const clutchAuthorizationsTokenPath = path.join( __dirname, "./.clutch/clutch.authorizations.token" );
+let letsencryptRootPath = path.join( __dirname, `./.clutch/letsencrypt.${process.env.NODE_ENV}.path` );
 
 
 
@@ -117,6 +127,30 @@ if ( config.api.token !== false && fs.existsSync( prismicTokenPath ) ) {
     if ( fs.existsSync( prismicSecretPath ) ) {
         config.api.secret = read( prismicSecretPath );
     }
+}
+
+
+
+// Configure URLs
+if ( config.env.sandbox ) {
+    config.url = `http://localhost:${config.browser.port}`;
+    config.https = false;
+
+} else if ( config.env.staging && config.https ) {
+    letsencryptRootPath = read( letsencryptRootPath );
+
+    config.url = `https://clutch.kitajchuk.com`;
+    config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
+    config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
+    config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
+
+} else if ( config.env.production && config.https ) {
+    letsencryptRootPath = read( letsencryptRootPath );
+
+    config.url = `https://clutch.kitajchuk.com`;
+    config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
+    config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
+    config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
 }
 
 

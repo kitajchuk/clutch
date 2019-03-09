@@ -31,13 +31,7 @@ if ( fs.existsSync( pidLogFile ) ) {
 }
 
 
-// 3.0 Make sure ports are forwarded for node
-console.log( `Forwarding port 80 to port 8000...` );
-
-child_process.execSync( "iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000" );
-
-
-// 4.0 Start `environment` server
+// 3.0 Start `environment` server
 console.log( `Starting ${process.env.NODE_ENV} server...` );
 
 child_process.execSync( `npm run start:${process.env.NODE_ENV}` );

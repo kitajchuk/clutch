@@ -20,6 +20,11 @@ const ContextObject = require( "../class/ContextObject" );
 const checkCSRF = csurf({
     cookie: true
 });
+const http = require( "http" );
+const https = require( "https" );
+const fs = require( "fs" );
+let httpServer = null;
+let httpsServer = null;
 let isSiteUpdate = false;
 
 
@@ -261,7 +266,18 @@ module.exports = {
         core.template.getPages().then(() => {
             // Fetch Site JSON
             core.query.getSite().then(() => {
-                expressApp.listen( core.config.express.port );
+                httpServer = http.createServer( expressApp );
+                httpServer.listen( core.config.express.port );
+
+                if ( core.config.https ) {
+                    httpsServer = https.createServer({
+                            key: fs.readFileSync( core.config.letsencrypt.privkey, "utf8" ),
+                            cert: fs.readFileSync( core.config.letsencrypt.cert, "utf8" ),
+                            ca: fs.readFileSync( core.config.letsencrypt.chain, "utf8" )
+
+                        }, expressApp );
+                    httpsServer.listen( core.config.express.portHttps );
+                }
 
                 lager.server( `Clutch Express server started` );
                 lager.server( `Clutch access URL — http://localhost:${core.config.browser.port}` );

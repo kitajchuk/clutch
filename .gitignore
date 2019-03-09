@@ -30,8 +30,6 @@ static/cache.manifest
 # Dev - you can opt in to any of these you want
 static/json
 static/svg
-static/touch
-static/img
 
 
 # Node / NPM

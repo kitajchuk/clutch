@@ -57,7 +57,7 @@ This walks through creating your new Clutch project.
 Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks) using the [clutch-chef recipe documentation](https://github.com/kitajchuk/clutch-chef). Make sure you hold onto that `clutch.pem` file you get from setting up a Key Pair as you'll use it later to store the Fingerprint in Circle CI for SSH Permissions. You can keep it in `.clutch` for `ssh` access to your instance. The preferred option is to store your public key on each instance in the `/home/ec2-user/.ssh/authorized_keys` file.
 
 #### Letsencrypt Setup
-Assuming you can now `ssh` cleanly into your instances, here's how you can setup letsencrypt for `https`! Run these commands:
+Assuming you can now `ssh` cleanly into your instances, here's how you can setup letsencrypt for `https`! Stop your servers and remove any port forwarding for Node specifically. You'll set this up again once you have installed letsencrypt. Run these commands:
 * `sudo -s`
 * `git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt`
 * `touch /var/www/html/.well-known`

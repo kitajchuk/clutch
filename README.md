@@ -68,6 +68,7 @@ Assuming you can now `ssh` cleanly into your instances, here's how you can setup
 * `rm -rf /var/www/html/.well-known`
 * `iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
 * `iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443`
+* Deploy any necessary contents of `.clutch` to your instance using `npm run deploy:clutch:{env}`
 
 #### S3 Setup
 This is optional, however you can create an [S3](https://aws.amazon.com/s3) bucket on AWS and add the bucket URL to the `clutch.config.js` as your `aws.cdn` value. Likewise, change the `aws.cdnOn` value to `true`. Next you'll need to create an [AWS IAM](https://aws.amazon.com/iam) user and group and save the access key and secret key so you can add them to Circle CI later.

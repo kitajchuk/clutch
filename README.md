@@ -5,7 +5,7 @@ clutch
 
 
 
-![Clutch](https://static1.squarespace.com/static/5a20f625b7411c85e1015293/t/5ab2f92570a6ad9909ae9c7a/1521678629329/BK_Face_128x128.png)
+<img style="width:100%;" src="https://static1.squarespace.com/static/5925b6cb03596e075b56bfe2/5d059cfabc404e0001103362/5d059ef873542100013b0b53/1562516926893/Kitajchuk_ProperJS_Coverimage.jpg?format=2500w" />
 
 
 

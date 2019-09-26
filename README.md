@@ -60,6 +60,7 @@ Create the `Clutch Stack` within [AWS OpsWorks](https://aws.amazon.com/opsworks)
 Assuming you can now `ssh` cleanly into your instances, here's how you can setup letsencrypt for `https`! SSH into your instance and stop the node servers. Then remove any iptable forwarding for node. Then run these commands:
 * `sudo -s`
 * `iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
+* `iptables -t nat -D PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443`
 * `git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt`
 * `touch /var/www/html/.well-known`
 * `/opt/letsencrypt/letsencrypt-auto --debug`
@@ -69,6 +70,17 @@ Assuming you can now `ssh` cleanly into your instances, here's how you can setup
 * `iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
 * `iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443`
 * Deploy any necessary contents of `.clutch` to your instance using `npm run deploy:clutch:{env}`
+
+If you just need to add a domain (Expand):
+* `sudo -s`
+* `iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
+* `iptables -t nat -D PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443`
+* `touch /var/www/html/.well-known`
+* `/opt/letsencrypt/letsencrypt-auto -d --nginx domain1,domain2,domain3`
+* `rm -rf /var/www/html/.well-known`
+* `iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
+* `iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443`
+
 
 #### S3 Setup
 This is optional, however you can create an [S3](https://aws.amazon.com/s3) bucket on AWS and add the bucket URL to the `clutch.config.js` as your `aws.cdn` value. Likewise, change the `aws.cdnOn` value to `true`. Next you'll need to create an [AWS IAM](https://aws.amazon.com/iam) user and group and save the access key and secret key so you can add them to Circle CI later.

@@ -76,7 +76,7 @@ If you just need to add a domain (Expand):
 * `iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
 * `iptables -t nat -D PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443`
 * `touch /var/www/html/.well-known`
-* `/opt/letsencrypt/letsencrypt-auto -d --nginx domain1,domain2,domain3`
+* `/opt/letsencrypt/letsencrypt-auto --nginx -d domain1,domain2,domain3`
 * `rm -rf /var/www/html/.well-known`
 * `iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
 * `iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443`

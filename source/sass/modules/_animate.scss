@@ -1,0 +1,26 @@
+/******************************************************************************
+ * Animations
+*******************************************************************************/
+.anim {
+    transition-delay: $base-duration / 2;
+    transition-duration: $base-duration;
+    transition-timing-function: $ease;
+}
+.anim--op {
+    opacity: 0;
+    transition-property: opacity;
+
+    &.is-animated {
+        opacity: 1;
+        }
+}
+.anim--tr {
+    opacity: 0;
+    transform: translate3d( 0, $p-bump * 2, 0 );
+    transition-property: transform opacity;
+
+    &.is-animated {
+        opacity: 1;
+        transform: translate3d( 0, 0, 0 );
+        }
+}

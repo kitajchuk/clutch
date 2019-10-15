@@ -1,0 +1,15 @@
+.navi {
+    &.is-active {
+        pointer-events: none;
+
+        .navi__ul {
+            pointer-events: auto;
+            }
+    }
+}
+.navi__li + .navi__li {
+    margin-top: $p-bump * 2;
+    }
+.navi__a {
+    color: $spot;
+    }

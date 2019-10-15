@@ -6,7 +6,7 @@ const read = ( file ) => {
 };
 const config = {
     // The URL of your actual site
-    url: "",
+    url: "PRODUCTION_URL",
     // Homepage UID
     homepage: "home",
     // Page Not Found UID — 404
@@ -25,7 +25,7 @@ const config = {
     api: {
         // Prismic
         adapter: "prismic",
-        access: "https://clutch.cdn.prismic.io/api/v2", // This is your API URL
+        access: "PRISMIC_API_URL", // This is your API URL
         token: true, // ./sandbox/prismic.access.token Set to true
         secret: "" // ./sandbox/prismic.webhook.secret
     },
@@ -92,7 +92,11 @@ const config = {
     letsencrypt: {
         privkey: "",
         cert: "",
-        chain: ""
+        chain: "",
+        domains: {
+            staging: ["STAGING_DOMAIN"],
+            production: ["PRODUCTION_DOMAIN", "PRODUCTION_DOMAIN_WWW"]
+        }
     },
     // https
     https: true
@@ -139,7 +143,7 @@ if ( config.env.sandbox ) {
 } else if ( config.env.staging && config.https ) {
     letsencryptRootPath = read( letsencryptRootPath );
 
-    config.url = `https://clutch.kitajchuk.com`;
+    config.url = `PRODUCTION_URL`;
     config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
     config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
     config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
@@ -147,7 +151,7 @@ if ( config.env.sandbox ) {
 } else if ( config.env.production && config.https ) {
     letsencryptRootPath = read( letsencryptRootPath );
 
-    config.url = `https://clutch.kitajchuk.com`;
+    config.url = `PRODUCTION_URL`;
     config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
     config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
     config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;

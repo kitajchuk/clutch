@@ -7,17 +7,17 @@
   "main": "app.js",
   "scripts": {
     "start:sandbox": "export NODE_ENV=sandbox ; ./node_modules/.bin/pm2 --no-daemon --watch --ignore-watch '*.log' -a -l pm2.log -o out.log -e err.log start app.js",
-    "start:staging": "export NODE_ENV=staging ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
+    "start:development": "export NODE_ENV=development ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
     "start:production": "export NODE_ENV=production ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
-    "install:staging": "export NODE_ENV=staging ; node app.install.js",
+    "install:development": "export NODE_ENV=development ; node app.install.js",
     "install:production": "export NODE_ENV=production ; node app.install.js",
     "stop": "./node_modules/.bin/pm2 stop 'all'"
   },
   "contributors": [
     {
-      "name": "Brandon Kitajchuk",
-      "email": "kitajchuk@gmail.com",
-      "url": "http://kitajchuk.com"
+        "name": "Brandon Lee Kitajchuk",
+        "email": "bk@kitajchuk.com",
+        "url": "https://kitajchuk.com"
     }
   ],
   "license": "MIT",

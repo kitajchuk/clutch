@@ -6,7 +6,7 @@
 #
 # AWS_USER — `ec2-user` by default
 # AWS_DEST — `/var/www/html/` by default
-# AWS_STAGING_HOST — Elastic IP for staging instance
+# AWS_DEVELOPMENT_HOST — Elastic IP for dev instance
 # AWS_PRODUCTION_HOST — Elastic IP for production instance
 # S3_BUCKET — The name of the S3 bucket
 # S3_REGION — The region field for the S3 bucket

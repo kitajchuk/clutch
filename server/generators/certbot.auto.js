@@ -12,10 +12,19 @@
  */
 const config = require( "../../clutch.config" );
 const child_process = require( "child_process" );
+const fs = require( "fs" );
+const path = require( "path" );
+const optDir = path.join( process.cwd(), "../../../../../opt/letsencrypt/" );
 const report = [];
 
+// Install letsencrypt
+if ( !fs.existsSync( optDir ) ) {
+    child_process.execSync( `git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt` );
+        report.push( "Installed letsencrypt" );
+}
+
 // Stop Clutch server
-child_process.execSync( `git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt` );
+child_process.execSync( `cd /var/www/html/server && npm run stop` );
     report.push( "Stopped Clutch server" );
 
 // Revert IP tables for cert authentication

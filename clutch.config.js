@@ -18,7 +18,7 @@ const config = {
     // Environments
     env: {
         sandbox: (process.env.NODE_ENV === "sandbox"),
-        staging: (process.env.NODE_ENV === "staging"),
+        development: (process.env.NODE_ENV === "development"),
         production: (process.env.NODE_ENV === "production")
     },
     // API CMS config ( Prismic, Contentful )
@@ -94,7 +94,7 @@ const config = {
         cert: "",
         chain: "",
         domains: {
-            staging: ["STAGING_DOMAIN"],
+            development: ["DEVELOPMENT_DOMAIN"],
             production: ["PRODUCTION_DOMAIN", "PRODUCTION_DOMAIN_WWW"]
         }
     },
@@ -104,7 +104,7 @@ const config = {
 
 
 
-// Serves assets from either CDN ( production ) or App Server ( sandbox + staging )...
+// Serves assets from either CDN ( production ) or App Server ( sandbox + development )...
 config.static.js = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
 config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
 
@@ -140,10 +140,10 @@ if ( config.env.sandbox ) {
     config.url = `http://localhost:${config.browser.port}`;
     config.https = false;
 
-} else if ( config.env.staging && config.https ) {
+} else if ( config.env.development && config.https ) {
     letsencryptRootPath = read( letsencryptRootPath );
 
-    config.url = `PRODUCTION_URL`;
+    config.url = `DEVELOPMENT_URL`;
     config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
     config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
     config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;

@@ -16,17 +16,17 @@ const env = {
      * @member ENV
      * @memberof core.env
      * @description The applied environment ref.
-     *              Looks at IP, localhost and staging for DEV, otherwise PROD
+     *              Looks at domain to determine ENV as `DEV` or `PROD`
      *
      */
-    ENV: (/^localhost|^[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}/g.test( document.domain ) ? DEV : PROD),
+    ENV: (/^localhost|^dev|^[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}/g.test( document.domain ) ? DEV : PROD),
 
 
     /**
      *
      * @method get
      * @memberof core.isDev
-     * @description Returns true for dev / staging.
+     * @description Returns true for sandbox and development environments
      * @returns {boolean}
      *
      */

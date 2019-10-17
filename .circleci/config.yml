@@ -37,7 +37,7 @@ jobs:
                 root: ~/clutch
                 paths:
                     - .
-    deploy-staging:
+    deploy-development:
         working_directory: ~/clutch
         machine:
             enabled: true
@@ -45,8 +45,8 @@ jobs:
             - attach_workspace:
                 at: ~/clutch
             - run:
-                name: Staging Deploy ( dev branch )
-                command: npm run deploy:staging
+                name: Development Deploy ( dev branch )
+                command: npm run deploy:development
     deploy-production:
         working_directory: ~/clutch
         machine:
@@ -63,7 +63,7 @@ workflows:
     build-deploy:
         jobs:
             - build
-            - deploy-staging:
+            - deploy-development:
                 requires:
                     - build
                 filters:

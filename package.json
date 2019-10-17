@@ -1,9 +1,9 @@
 {
   "title": "Clutch",
   "name": "clutch",
-  "description": "A modern headless CMS SDK for Prismic and Contentful.",
+  "description": "An Open-ended Developer SDK for Prismic.io.",
   "private": true,
-  "version": "1.0.4",
+  "version": "2.0.0",
   "config": {},
   "scripts": {
     "bootstrap": "node clutch.install.js",
@@ -11,17 +11,17 @@
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; cd ./server && npm run start:sandbox",
-    "certbot:staging": "export NODE_ENV=staging ; node ./server/generators/certbot.auto.js",
+    "certbot:development": "export NODE_ENV=development ; node ./server/generators/certbot.auto.js",
     "certbot:production": "export NODE_ENV=production ; node ./server/generators/certbot.auto.js",
     "build": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
-    "build:staging": "export NODE_ENV=staging ; ./node_modules/.bin/webpack --env.staging --progress --profile --display-modules --colors -p",
+    "build:development": "export NODE_ENV=development ; ./node_modules/.bin/webpack --env.development --progress --profile --display-modules --colors -p",
     "build:production": "export NODE_ENV=production ; ./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
-    "connect:staging": "ssh ec2-user@STAGING_IP",
+    "connect:development": "ssh ec2-user@DEVELOPMENT_IP",
     "connect:production": "ssh ec2-user@PRODUCTION_IP",
-    "deploy:staging": "npm run build:staging; export NODE_ENV=staging ; export AWS_HOST=${AWS_STAGING_HOST} ; ./clutch.deploy",
+    "deploy:development": "npm run build:development; export NODE_ENV=development ; export AWS_HOST=${AWS_DEVELOPMENT_HOST} ; ./clutch.deploy",
     "deploy:production": "npm run build:production ; export NODE_ENV=production ; export AWS_HOST=${AWS_PRODUCTION_HOST} ; ./clutch.sync ; ./clutch.deploy",
-    "deploy:clutch:staging": "rsync -av -e 'ssh' --rsync-path 'sudo rsync' --exclude 'clutch.pem' .clutch ec2-user@STAGING_IP:/var/www/html/",
-    "deploy:clutch:production": "rsync -av -e 'ssh' --rsync-path 'sudo rsync' --exclude 'clutch.pem' .clutch ec2-user@PRODUCTION_IP:/var/www/html/"
+    "deploy:clutch:development": "rsync -av -e 'ssh' --rsync-path 'sudo rsync' .clutch ec2-user@DEVELOPMENT_IP:/var/www/html/",
+    "deploy:clutch:production": "rsync -av -e 'ssh' --rsync-path 'sudo rsync' .clutch ec2-user@PRODUCTION_IP:/var/www/html/"
   },
   "devDependencies": {
     "autoprefixer": "^8.6.2",
@@ -84,7 +84,7 @@
     {
       "name": "Brandon Lee Kitajchuk",
       "email": "bk@kitajchuk.com",
-      "url": "http://kitajchuk.com"
+      "url": "https://kitajchuk.com"
     }
   ],
   "readmeFilename": "README.md"

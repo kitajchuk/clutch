@@ -2,7 +2,7 @@ const fs = require( "fs" );
 const path = require( "path" );
 const files = require( "./server/core/files" );
 const root = path.resolve( __dirname );
-const rootConfig = files.read( path.join( root, ".clutch", "config.json" ) );
+const rootConfig = files.read( path.join( root, ".clutch", "config.json" ), true );
 const config = {
     // The URL of your actual site
     url: "PRODUCTION_URL",
@@ -26,7 +26,7 @@ const config = {
         adapter: "prismic",
         access: rootConfig.prismic.apiAccess, // This is your API URL from Prismic's settings panel
         token: true,
-        secret: ootConfig.prismic.accessToken
+        secret: rootConfig.prismic.accessToken
     },
     // Deployment config ( AWS )
     aws: {

@@ -1,7 +1,7 @@
 clutch
 ======
 
-> A modern headless CMS SDK for Prismic.io.
+> A Node.js Developer SDK for Prismic.io.
 
 
 

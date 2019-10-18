@@ -141,20 +141,24 @@ if ( config.env.sandbox ) {
     config.https = false;
 
 } else if ( config.env.development && config.https ) {
-    letsencryptRootPath = read( letsencryptRootPath );
-
     config.url = `DEVELOPMENT_URL`;
-    config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
-    config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
-    config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
+
+    if ( fs.existsSync( letsencryptRootPath ) ) {
+        letsencryptRootPath = read( letsencryptRootPath );
+        config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
+        config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
+        config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
+    }
 
 } else if ( config.env.production && config.https ) {
-    letsencryptRootPath = read( letsencryptRootPath );
-
     config.url = `PRODUCTION_URL`;
-    config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
-    config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
-    config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
+
+    if ( fs.existsSync( letsencryptRootPath ) ) {
+        letsencryptRootPath = read( letsencryptRootPath );
+        config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
+        config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
+        config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
+    }
 }
 
 

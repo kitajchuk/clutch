@@ -15,7 +15,29 @@ const rootTasks = path.join( root, "tasks" );
 const rootSource = path.join( root, "source" );
 const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 const child_process = require( "child_process" );
-const config = require( "./clutch.config" );
+const files = require( "./server/core/files" );
+const rootConfig = {
+    prismic: {
+        apiAccess: "",
+        accessToken: "",
+        webhookSecret: ""
+    },
+    letsencrypt: {
+        developmentPath: "",
+        productionPath: "",
+        privkey: "",
+        cert: "",
+        chain: "",
+        domains: {
+            development: ["DEVELOPMENT_DOMAIN"],
+            production: ["PRODUCTION_DOMAIN", "PRODUCTION_DOMAIN_WWW"]
+        }
+    },
+    clutch: {
+        hobo: "is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass",
+        authorizationsToken: ""
+    }
+};
 
 
 
@@ -39,6 +61,10 @@ console.log( "Creating .clutch..." );
 if ( !fs.existsSync( rootClutch ) ) {
     child_process.execSync( `mkdir ${rootClutch}` );
     child_process.execSync( `mkdir ${path.join( rootClutch, "authorizations" )}` );
+    child_process.execSync( `touch ${path.join( rootClutch, "config.json" )}` );
+
+    // Leave this alone! You put your values in .clutch/config.json
+    files.write( path.join( rootClutch, "config.json" ), rootConfig, true );
 }
 
 
@@ -70,7 +96,7 @@ if ( !fs.existsSync( rootSource ) ) {
 // 6.0 Hobo.js build
 console.log( "Building properjs-hobo..." );
 
-child_process.execSync( `cd ${rootHobo} && npm install && npm run build -- '${config.browser.hobo}'` );
+child_process.execSync( `cd ${rootHobo} && npm install && npm run build -- '${rootConfig.clutch.hobo}'` );
 
 
 // 7.0 server install

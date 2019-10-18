@@ -1,9 +1,8 @@
 const fs = require( "fs" );
 const path = require( "path" );
+const files = require( "./server/core/files" );
 const root = path.resolve( __dirname );
-const read = ( file ) => {
-    return String( fs.readFileSync( file ) ).replace( /^\s+|\s+$/g, "" );
-};
+const rootConfig = files.read( path.join( root, ".clutch", "config.json" ) );
 const config = {
     // The URL of your actual site
     url: "PRODUCTION_URL",
@@ -25,9 +24,9 @@ const config = {
     api: {
         // Prismic
         adapter: "prismic",
-        access: "PRISMIC_API_URL", // This is your API URL
-        token: true, // ./sandbox/prismic.access.token Set to true
-        secret: "" // ./sandbox/prismic.webhook.secret
+        access: rootConfig.prismic.apiAccess, // This is your API URL from Prismic's settings panel
+        token: true,
+        secret: ootConfig.prismic.accessToken
     },
     // Deployment config ( AWS )
     aws: {
@@ -50,8 +49,7 @@ const config = {
     },
     // Browser-sync config
     browser: {
-        port: 8001,
-        hobo: "is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass"
+        port: 8001
     },
     // Static assets config
     static: {
@@ -83,21 +81,13 @@ const config = {
     },
     // Third-party app Oauth authorizations
     authorizations: {
-        token: null,
+        token: rootConfig.clutch.authorizationsToken,
         apps: [
             "vimeo"
         ]
     },
     // letsencrypt
-    letsencrypt: {
-        privkey: "",
-        cert: "",
-        chain: "",
-        domains: {
-            development: ["DEVELOPMENT_DOMAIN"],
-            production: ["PRODUCTION_DOMAIN", "PRODUCTION_DOMAIN_WWW"]
-        }
-    },
+    letsencrypt: rootConfig.letsencrypt,
     // https
     https: true
 };
@@ -110,32 +100,7 @@ config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.
 
 
 
-const prismicTokenPath = path.join( __dirname, "./.clutch/prismic.access.token" );
-const prismicSecretPath = path.join( __dirname, "./.clutch/prismic.webhook.secret" );
-const clutchAuthorizationsTokenPath = path.join( __dirname, "./.clutch/clutch.authorizations.token" );
-let letsencryptRootPath = path.join( __dirname, `./.clutch/letsencrypt.${process.env.NODE_ENV}.path` );
-
-
-
-// Configure access token for authorizations
-if ( fs.existsSync( clutchAuthorizationsTokenPath ) ) {
-    config.authorizations.token = read( clutchAuthorizationsTokenPath );
-}
-
-
-
-// Configure access tokens for APIs
-if ( config.api.token !== false && fs.existsSync( prismicTokenPath ) ) {
-    config.api.token = read( prismicTokenPath );
-
-    if ( fs.existsSync( prismicSecretPath ) ) {
-        config.api.secret = read( prismicSecretPath );
-    }
-}
-
-
-
-// Configure URLs
+// Configure URLs & HTTPS
 if ( config.env.sandbox ) {
     config.url = `http://localhost:${config.browser.port}`;
     config.https = false;
@@ -143,21 +108,19 @@ if ( config.env.sandbox ) {
 } else if ( config.env.development && config.https ) {
     config.url = `DEVELOPMENT_URL`;
 
-    if ( fs.existsSync( letsencryptRootPath ) ) {
-        letsencryptRootPath = read( letsencryptRootPath );
-        config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
-        config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
-        config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
+    if ( rootConfig.letsencrypt.developmentPath ) {
+        config.letsencrypt.privkey = `${rootConfig.letsencrypt.developmentPath}privkey.pem`;
+        config.letsencrypt.cert = `${rootConfig.letsencrypt.developmentPath}cert.pem`;
+        config.letsencrypt.chain = `${rootConfig.letsencrypt.developmentPath}chain.pem`;
     }
 
 } else if ( config.env.production && config.https ) {
     config.url = `PRODUCTION_URL`;
 
-    if ( fs.existsSync( letsencryptRootPath ) ) {
-        letsencryptRootPath = read( letsencryptRootPath );
-        config.letsencrypt.privkey = `${letsencryptRootPath}privkey.pem`;
-        config.letsencrypt.cert = `${letsencryptRootPath}cert.pem`;
-        config.letsencrypt.chain = `${letsencryptRootPath}chain.pem`;
+    if ( rootConfig.letsencrypt.productionPath ) {
+        config.letsencrypt.privkey = `${rootConfig.letsencrypt.productionPath}privkey.pem`;
+        config.letsencrypt.cert = `${rootConfig.letsencrypt.productionPath}cert.pem`;
+        config.letsencrypt.chain = `${rootConfig.letsencrypt.productionPath}chain.pem`;
     }
 }
 

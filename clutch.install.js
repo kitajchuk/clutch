@@ -95,7 +95,7 @@ if ( !fs.existsSync( rootSource ) ) {
 // 6.0 Hobo.js build
 console.log( "Building properjs-hobo..." );
 
-child_process.execSync( `npm run boostrap:hobo` );
+child_process.execSync( `npm run bootstrap:hobo` );
 
 
 // 7.0 server install

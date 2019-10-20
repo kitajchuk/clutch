@@ -11,8 +11,6 @@
     "start": "echo 'Clutch is starting...' && (npm run server & npm run watch)",
     "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; cd ./server && npm run start:sandbox",
-    "certbot:development": "export NODE_ENV=development ; node ./server/generators/certbot.auto.js",
-    "certbot:production": "export NODE_ENV=production ; node ./server/generators/certbot.auto.js",
     "build": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --progress --profile --display-modules --colors",
     "build:development": "export NODE_ENV=development ; ./node_modules/.bin/webpack --env.development --progress --profile --display-modules --colors -p",
     "build:production": "export NODE_ENV=production ; ./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",

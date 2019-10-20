@@ -13,7 +13,7 @@ Clutch
 Install the `clutch` command line interface:
 
 ```shell
-npm i boxen-cli -g
+npm i clutch-cli -g
 ```
 
 You can initialize clutch in your current working directory, or pass a folder name you would like clutch to create and initialize within:

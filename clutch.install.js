@@ -34,7 +34,6 @@ const rootConfig = {
         }
     },
     clutch: {
-        hobo: "is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass",
         authorizationsToken: ""
     }
 };
@@ -96,7 +95,7 @@ if ( !fs.existsSync( rootSource ) ) {
 // 6.0 Hobo.js build
 console.log( "Building properjs-hobo..." );
 
-child_process.execSync( `cd ${rootHobo} && npm install && npm run build -- '${rootConfig.clutch.hobo}'` );
+child_process.execSync( `npm run boostrap:hobo'` );
 
 
 // 7.0 server install

@@ -6,6 +6,7 @@
   "private": true,
   "main": "app.js",
   "scripts": {
+    "devstart": "export NODE_ENV=development ; ./node_modules/.bin/pm2 --no-daemon -a -l pm2.log -o out.log -e err.log start app.js",
     "start:sandbox": "export NODE_ENV=sandbox ; ./node_modules/.bin/pm2 --no-daemon --watch --ignore-watch '*.log' -a -l pm2.log -o out.log -e err.log start app.js",
     "start:development": "export NODE_ENV=development ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
     "start:production": "export NODE_ENV=production ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",

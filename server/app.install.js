@@ -4,7 +4,6 @@ const root = __dirname;
 const rootNodeModules = path.join( root, "node_modules" );
 const rootPackageLock = path.join( root, "package-lock.json" );
 const child_process = require( "child_process" );
-const pidLogFile = path.join( root, "pid.log" );
 const config = require( "../clutch.config" );
 
 
@@ -17,17 +16,17 @@ console.log( "Installing node_modules..." );
 
 child_process.execSync( `rm -rf ${rootPackageLock}` );
 // child_process.execSync( `rm -rf ${rootNodeModules}` );
-child_process.execSync( "npm install" );
+child_process.execSync( "npm i" );
 
 
 // 2.0 Stop `environment` server
-if ( fs.existsSync( pidLogFile ) ) {
-    console.log( `Stopping ${process.env.NODE_ENV} server...` );
+try {
+    console.log( `Try stopping ${process.env.NODE_ENV} server...` );
 
     child_process.execSync( "npm run stop" );
 
-} else {
-    console.log( `No PID file, skipping stop command...` );
+} catch ( error ) {
+    console.log( `Stopping server failed: ${error}` );
 }
 
 

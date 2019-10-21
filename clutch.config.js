@@ -25,8 +25,8 @@ const config = {
         // Prismic
         adapter: "prismic",
         access: rootConfig.prismic.apiAccess, // This is your API URL from Prismic's settings panel
-        token: true,
-        secret: rootConfig.prismic.accessToken
+        token: rootConfig.prismic.accessToken,
+        secret: rootConfig.prismic.webhookSecret
     },
     // Deployment config ( AWS )
     aws: {
@@ -82,9 +82,7 @@ const config = {
     // Third-party app Oauth authorizations
     authorizations: {
         token: rootConfig.clutch.authorizationsToken,
-        apps: [
-            "vimeo"
-        ]
+        apps: []
     },
     // letsencrypt
     letsencrypt: rootConfig.letsencrypt,

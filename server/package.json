@@ -12,8 +12,10 @@
     "start:production": "export NODE_ENV=production ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
     "install:development": "export NODE_ENV=development ; node app.install.js",
     "install:production": "export NODE_ENV=production ; node app.install.js",
-    "certbot:development": "export NODE_ENV=development ; node ./generators/certbot.auto.js",
-    "certbot:production": "export NODE_ENV=production ; node ./generators/certbot.auto.js",
+    "certbot:development:init": "export NODE_ENV=development ; node ./generators/certbot.init.js",
+    "certbot:production:init": "export NODE_ENV=production ; node ./generators/certbot.init.js",
+    "certbot:development:auto": "export NODE_ENV=development ; node ./generators/certbot.auto.js",
+    "certbot:production:auto": "export NODE_ENV=production ; node ./generators/certbot.auto.js",
     "stop": "./node_modules/.bin/pm2 stop 'all'"
   },
   "contributors": [

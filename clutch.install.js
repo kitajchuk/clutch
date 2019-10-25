@@ -25,6 +25,7 @@ const rootConfig = {
     letsencrypt: {
         developmentPath: "",
         productionPath: "",
+        email: "",
         privkey: "",
         cert: "",
         chain: "",

@@ -5,7 +5,7 @@ const root = path.resolve( __dirname );
 const rootConfig = files.read( path.join( root, ".clutch", "config.json" ), true );
 const config = {
     // The URL of your actual site
-    url: "PRODUCTION_URL",
+    url: rootConfig.clutch.urls.production,
     // Homepage UID
     homepage: "home",
     // Page Not Found UID — 404
@@ -30,8 +30,7 @@ const config = {
     },
     // Deployment config ( AWS )
     aws: {
-        cdn: "",
-        cdnOn: false // Turn on to use CDN ( You can just use S3 or add CloudFront if you want )
+        cdn: "" // Turn on to use CDN ( You can just use S3 or add CloudFront if you want )
     },
     // Templating config
     template: {
@@ -97,8 +96,8 @@ const config = {
 
 
 // Serves assets from either CDN or App Server/Static site
-config.static.js = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
-config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
+config.static.js = (config.aws.cdn && config.env.production) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
+config.static.css = (config.aws.cdn && config.env.production) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
 
 
 
@@ -108,7 +107,7 @@ if ( config.env.sandbox ) {
     config.https = false;
 
 } else if ( config.env.development && config.https ) {
-    config.url = `DEVELOPMENT_URL`;
+    config.url = rootConfig.clutch.urls.development;
 
     if ( rootConfig.letsencrypt.developmentPath ) {
         config.letsencrypt.privkey = `${rootConfig.letsencrypt.developmentPath}privkey.pem`;
@@ -117,7 +116,7 @@ if ( config.env.sandbox ) {
     }
 
 } else if ( config.env.production && config.https ) {
-    config.url = `PRODUCTION_URL`;
+    config.url = rootConfig.clutch.urls.production;
 
     if ( rootConfig.letsencrypt.productionPath ) {
         config.letsencrypt.privkey = `${rootConfig.letsencrypt.productionPath}privkey.pem`;

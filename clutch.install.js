@@ -12,28 +12,7 @@ const child_process = require( "child_process" );
 const files = require( "./server/core/files" );
 const lager = require( "properjs-lager" );
 // Leave this alone! You put your values in .clutch/config.json
-const rootConfig = {
-    prismic: {
-        apiAccess: "",
-        accessToken: "",
-        webhookSecret: ""
-    },
-    letsencrypt: {
-        developmentPath: "",
-        productionPath: "",
-        email: "",
-        privkey: "",
-        cert: "",
-        chain: "",
-        domains: {
-            development: ["DEVELOPMENT_DOMAIN"],
-            production: ["PRODUCTION_DOMAIN", "PRODUCTION_DOMAIN_WWW"]
-        }
-    },
-    clutch: {
-        authorizationsToken: ""
-    }
-};
+const rootConfig = require( "./clutch.root" );
 
 
 

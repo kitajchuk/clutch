@@ -45,13 +45,13 @@ const webpackConfig = {
 
 
     entry: {
-        "app": path.resolve( __dirname, "source/js/app.js" )
+        "clutch": path.resolve( __dirname, "source/js/properjs/clutch.js" )
     },
 
 
     output: {
         path: path.resolve( __dirname, "static/js" ),
-        filename: `app.${process.env.NODE_ENV}.js`
+        filename: `clutch.${process.env.NODE_ENV}.js`
     },
 
 
@@ -59,13 +59,13 @@ const webpackConfig = {
         rules: [
             {
                 test: /source\/js\/.*\.js$/,
-                exclude: /node_modules/,
+                exclude: /node_modules|vendor/,
                 use: ["eslint-loader"],
                 enforce: "pre"
             },
             {
                 test: /source\/js\/.*\.js$/,
-                exclude: /node_modules/,
+                exclude: /node_modules|vendor/,
                 use: [
                     {
                         loader: "babel-loader",
@@ -81,7 +81,7 @@ const webpackConfig = {
             },
             {
                 test: /\.(sass|scss)$/,
-                exclude: /node_modules/,
+                exclude: /node_modules|vendor/,
                 use: [
                     `file-loader?name=../css/[name].${process.env.NODE_ENV}.css`,
                     "postcss-loader",

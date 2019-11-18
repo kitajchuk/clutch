@@ -1,5 +1,9 @@
-import log from "../../core/log";
-import emitter from "../../core/emitter";
+import * as core from "../core";
+
+
+
+// Singleton
+let _instance = null;
 
 
 /**
@@ -13,9 +17,21 @@ import emitter from "../../core/emitter";
  */
 class Analytics {
     constructor () {
-        emitter.on( "app--analytics-pageview", this.track.bind( this ) );
+        if ( !_instance ) {
+            core.emitter.on( "app--tracker", this.track.bind( this ) );
 
-        log( "[Analytics initialized]" );
+            core.log( "Analytics::Initialized" );
+
+            this.doc = {
+                data: {
+                    title: null
+                }
+            };
+
+            _instance = this;
+        }
+
+        return _instance;
     }
 
 
@@ -29,26 +45,30 @@ class Analytics {
      *
      */
     track ( doc ) {
-        log( "Analytics pageview", window.location.href );
-
         // Google Analytics
-        window.ga( "send", "pageview", window.location.href );
+        if ( !this.doc.data.title ) {
+            this.doc.data.title = document.title;
+        }
 
-        // Document title
-        this.setDocumentTitle( doc.data.title );
+        if ( window.ga && doc.data.title !== this.doc.data.title ) {
+            this.doc = doc;
+            this.setTitle( doc.data.title );
+            core.log( "Analytics::Track", doc.data.title );
+            window.ga( "send", "pageview", window.location.href );
+        }
     }
 
 
     /**
      *
      * @public
-     * @method setDocumentTitle
+     * @method setTitle
      * @param {string} title The new title for the document
      * @memberof class.Analytics
      * @description Update the documents title.
      *
      */
-    setDocumentTitle ( title ) {
+    setTitle ( title ) {
         document.title = title;
     }
 }

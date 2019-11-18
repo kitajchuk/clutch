@@ -25,6 +25,7 @@ const log = function ( ...args ) {
     }
 
     let method = "log";
+    const values = ["[Clutch]"];
 
     // First arg can be another `console` method to call ?
     if ( typeof console[ args[ 0 ] ] === "function" ) {
@@ -32,7 +33,7 @@ const log = function ( ...args ) {
         args = args.slice( 1, args.length );
     }
 
-    window.console[ method ]( args );
+    window.console[ method ]( values.concat( args ) );
 };
 
 

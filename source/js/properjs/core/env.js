@@ -13,20 +13,39 @@ const PROD = "production";
 const env = {
     /**
      *
+     * @member DEV
+     * @memberof core.env
+     * @description The development environment CONST.
+     *
+     */
+    DEV: DEV,
+
+
+    /**
+     *
+     * @member PROD
+     * @memberof core.env
+     * @description The production environment CONST.
+     *
+     */
+    PROD: PROD,
+
+
+    /**
+     *
      * @member ENV
      * @memberof core.env
      * @description The applied environment ref.
-     *              Looks at domain to determine ENV as `DEV` or `PROD`
      *
      */
-    ENV: (/^localhost|^dev|^[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}/g.test( document.domain ) ? DEV : PROD),
+    ENV: (/^dev|localhost|^[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}/g.test( document.domain ) ? DEV : PROD),
 
 
     /**
      *
      * @method get
      * @memberof core.isDev
-     * @description Returns true for sandbox and development environments
+     * @description Returns the dev mode status.
      * @returns {boolean}
      *
      */
@@ -39,7 +58,7 @@ const env = {
      *
      * @method get
      * @memberof core.isProd
-     * @description Returns true for production.
+     * @description Returns the dev mode status.
      * @returns {boolean}
      *
      */

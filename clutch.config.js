@@ -54,7 +54,7 @@ const config = {
     static: {
         // One day
         maxAge: 86400000,
-        endJS: `/js/app.${process.env.NODE_ENV}.js`,
+        endJS: `/js/clutch.${process.env.NODE_ENV}.js`,
         endCSS: `/css/screen.${process.env.NODE_ENV}.css`,
         // Enable static site server+generator+deploy+websub
         site: true

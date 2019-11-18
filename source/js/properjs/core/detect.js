@@ -1,4 +1,5 @@
 import dom from "./dom";
+import log from "./log";
 
 
 const vendors = [
@@ -38,6 +39,8 @@ const detect = {
         } else {
             dom.html.addClass( "is-hoverable" );
         }
+
+        log( "Detect::Initialized", this );
     },
 
 
@@ -124,6 +127,13 @@ const detect = {
         return (this._isTouch && this._isMobile);
     }
 };
+
+
+
+/******************************************************************************
+ * Auto-Initialize
+*******************************************************************************/
+detect.init();
 
 
 

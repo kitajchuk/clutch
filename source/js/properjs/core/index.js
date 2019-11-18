@@ -11,7 +11,7 @@ import * as util from "./util";
 import config from "./config";
 import env from "./env";
 import log from "./log";
-import cache from "./cache";
+// import cache from "./cache";
 import emitter from "./emitter";
 //import mediabox from "./mediabox";
 
@@ -23,7 +23,7 @@ export {
     config,
     env,
     log,
-    cache,
+    // cache,
     emitter,
     //mediabox
 };

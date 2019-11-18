@@ -59,8 +59,10 @@ context.pageTemplate = context.getTemplate();
     </head>
     <body class="-fzero">
         <%- include( 'site/header.html' ) %>
-        <main class="main js-main" data-csrf="<%= context.csrf %>" data-title="<%= context.pageTitle %>">
-            <%- include( context.pageTemplate ) %>
+        <main class="main js-main js-smooth" data-csrf="<%= context.csrf %>" data-title="<%= context.pageTitle %>">
+            <div class="main__content js-smooth-section">
+                <%- include( context.pageTemplate ) %>
+            </div>
         </main>
         <%- include( 'site/footer.html' ) %>
         <%- include( 'site/intro.html' ) %>

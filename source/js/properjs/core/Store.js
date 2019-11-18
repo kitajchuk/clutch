@@ -7,7 +7,7 @@ let _initialized = false;
 
 // Session Storage
 let _cache = {};
-const _access = "app-cache";
+const _access = "clutch-cache";
 const _session = window.sessionStorage;
 
 
@@ -50,7 +50,7 @@ class Store {
 
         this.flush();
 
-        log( "[Cache Store initialized]", this );
+        log( "Store::Initialized" );
     }
 
 
@@ -83,7 +83,7 @@ class Store {
      */
     save () {
         if ( !this._opts.enableStorage || !Store.isStorageSupported ) {
-            log( "[Cache Store::Not using SessionStorage]" );
+            log( "Store::Disabled" );
             return;
         }
 
@@ -103,7 +103,7 @@ class Store {
      *
      */
     slug ( uri ) {
-        uri = uri.replace( /^\/|\/$/g, "" ).replace( /\/|\?|\&|=|\s/g, "-" ).toLowerCase();
+        uri = uri.replace( /^\/|\/$/g, "" ).replace( /\/|\?|&|=|\s/g, "-" ).toLowerCase();
 
         return uri;
     }
@@ -195,8 +195,8 @@ Store.isStorageSupported = (function () {
     let ret = true;
 
     try {
-        _session.setItem( "app-test", 1 );
-        _session.removeItem( "app-test" );
+        _session.setItem( "clutch-test", 1 );
+        _session.removeItem( "clutch-test" );
 
     } catch ( err ) {
         ret = false;

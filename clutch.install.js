@@ -57,16 +57,10 @@ lager.info( "[Clutch] Building properjs-hobo..." );
 child_process.execSync( `npm run bootstrap:hobo` );
 
 
-// 6.0 JScroll devDependencies
-lager.info( "[Clutch] Building JScroll..." );
-
-child_process.execSync( `npm run bootstrap:jscroll` );
-
-
-// 7.0 server install
+// 6.0 server install
 lager.info( "[Clutch] Installing server node_modules..." );
 
 child_process.execSync( `cd ${rootServer} && npm i` );
 
-// 8.0 done
+// 7.0 done
 lager.cache( "[Clutch] Install complete!" );

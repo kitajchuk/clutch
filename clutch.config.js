@@ -20,7 +20,7 @@ const config = {
         development: (process.env.NODE_ENV === "development"),
         production: (process.env.NODE_ENV === "production")
     },
-    // API CMS config ( Prismic, Contentful )
+    // API CMS config ( Prismic )
     api: {
         // Prismic
         adapter: "prismic",
@@ -56,7 +56,9 @@ const config = {
         // One day
         maxAge: 86400000,
         endJS: `/js/app.${process.env.NODE_ENV}.js`,
-        endCSS: `/css/screen.${process.env.NODE_ENV}.css`
+        endCSS: `/css/screen.${process.env.NODE_ENV}.css`,
+        // Enable static site server+generator+deploy+websub
+        site: true
     },
     // Compression js config
     compression: {
@@ -77,6 +79,8 @@ const config = {
             // contentType => collectionId
             // e.g. casestudy: "work"
             // Ensures you get /work/:uid rather than /casestudy/:uid
+            // Slash "/" treats associative :uid as homepage
+            home: "/"
         }
     },
     // Third-party app Oauth authorizations
@@ -92,7 +96,7 @@ const config = {
 
 
 
-// Serves assets from either CDN ( production ) or App Server ( sandbox + development )...
+// Serves assets from either CDN or App Server/Static site
 config.static.js = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
 config.static.css = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
 

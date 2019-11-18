@@ -27,6 +27,8 @@ static/css
 static/robots.txt
 static/sitemap.xml
 static/cache.manifest
+static/*.html
+static/**/*.html
 
 # Dev - you can opt in to any of these you want
 static/json

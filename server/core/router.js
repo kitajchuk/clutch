@@ -23,6 +23,7 @@ const checkCSRF = csurf({
 const http = require( "http" );
 const https = require( "https" );
 const fs = require( "fs" );
+const stasis = require( `../generators/${core.config.api.adapter}.static` );
 let httpServer = null;
 let httpsServer = null;
 let isSiteUpdate = false;
@@ -259,28 +260,31 @@ module.exports = {
      *
      */
     init () {
-        // Init routes
-        setRoutes();
+        return new Promise(( resolve, reject ) => {
+            // Init routes
+            setRoutes();
 
-        // Fetch ./template/pages listing
-        core.template.getPages().then(() => {
-            // Fetch Site JSON
-            core.query.getSite().then(() => {
-                httpServer = http.createServer( expressApp );
-                httpServer.listen( core.config.express.port );
+            // Fetch ./template/pages listing
+            core.template.getPages().then(() => {
+                // Fetch Site JSON
+                core.query.getSite().then(() => {
+                    httpServer = http.createServer( expressApp );
+                    httpServer.listen( core.config.express.port );
 
-                if ( core.config.https ) {
-                    httpsServer = https.createServer({
-                            key: fs.readFileSync( core.config.letsencrypt.privkey, "utf8" ),
-                            cert: fs.readFileSync( core.config.letsencrypt.cert, "utf8" ),
-                            ca: fs.readFileSync( core.config.letsencrypt.chain, "utf8" )
+                    if ( core.config.https ) {
+                        httpsServer = https.createServer({
+                                key: fs.readFileSync( core.config.letsencrypt.privkey, "utf8" ),
+                                cert: fs.readFileSync( core.config.letsencrypt.cert, "utf8" ),
+                                ca: fs.readFileSync( core.config.letsencrypt.chain, "utf8" )
 
-                        }, expressApp );
-                    httpsServer.listen( core.config.express.portHttps );
-                }
+                            }, expressApp );
+                        httpsServer.listen( core.config.express.portHttps );
+                    }
 
-                lager.server( `Clutch Express server started` );
-                lager.server( `Clutch access URL — http://localhost:${core.config.browser.port}` );
+                    stasis.clean( core.config ).then( resolve );
+
+                    lager.cache( `[Clutch] Server Initialized` );
+                });
             });
         });
     }

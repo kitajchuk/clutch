@@ -1,63 +1,77 @@
+<%
+const context = locals.context;
+const sourceJS = `${context.javascript}?v=${context.timestamp}`;
+const sourceCSS = `${context.stylesheet}?v=${context.timestamp}`;
+
+context.pageTitle = context.getPageTitle();
+context.pageDescription = context.getPageDescription();
+context.pageTemplate = context.getTemplate();
+%>
 <!DOCTYPE html>
 <html lang="en" class="">
     <head>
         <meta charset="utf-8" />
-        <title><%= locals.context.getPageTitle() %></title>
+        <title><%= context.pageTitle %></title>
         <meta http-equiv="x-dns-prefetch-control" content="on" />
-        <link rel="dns-prefetch" href="//clutch.cdn.prismic.io" />
+        <link rel="dns-prefetch" href="//seraphicgroup.cdn.prismic.io" />
         <link rel="dns-prefetch" href="//prismic-io.s3.amazonaws.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        <meta name="description" content="<%= locals.context.getPageDescription() %>" />
+        <meta name="description" content="<%= context.pageDescription %>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="google-site-verification" content="<%= locals.context.get( 'site' ).data.googleVerify %>" />
-        <link rel="shortcut icon" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon.ico" type="image/x-icon" />
-        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-57x57.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-60x60.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-72x72.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-76x76.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-114x114.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-120x120.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-144x144.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-152x152.png" />
-        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="<%= locals.context.get( 'config' ).url %>/img/meta/apple-touch-icon-180x180.png" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon-16x16.png" sizes="16x16" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon-32x32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/favicon-96x96.png" sizes="96x96" />
-        <link rel="icon" type="image/png" href="<%= locals.context.get( 'config' ).url %>/img/meta/android-chrome-192x192.png" sizes="192x192" />
-        <meta name="application-name" content="kitajchuk" />
-        <meta name="msapplication-TileColor" content="#000000">
-        <meta name="msapplication-square70x70logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/smalltile.png" />
-        <meta name="msapplication-square150x150logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/mediumtile.png" />
-        <meta name="msapplication-wide310x150logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/widetile.png" />
-        <meta name="msapplication-square310x310logo" content="<%= locals.context.get( 'config' ).url %>/img/meta/largetile.png" />
-        <meta property="og:site_name" content="<%= locals.context.get( 'site' ).data.title %>" />
-        <meta property="og:title" content="<%= locals.context.get( 'site' ).data.title %>" />
-        <meta property="og:url" content="<%= locals.context.get( 'site' ).data.url %>" />
+        <meta name="google-site-verification" content="<%= context.site.data.googleVerify %>" />
+        <link rel="apple-touch-icon" sizes="57x57" href="<%= context.config.url %>/img/icon/apple-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="<%= context.config.url %>/img/icon/apple-icon-60x60.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="<%= context.config.url %>/img/icon/apple-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="<%= context.config.url %>/img/icon/apple-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="<%= context.config.url %>/img/icon/apple-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="<%= context.config.url %>/img/icon/apple-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="<%= context.config.url %>/img/icon/apple-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="<%= context.config.url %>/img/icon/apple-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="<%= context.config.url %>/img/icon/apple-icon-180x180.png" />
+        <link rel="icon" type="image/png" sizes="192x192"  href="<%= context.config.url %>/img/icon/android-icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="<%= context.config.url %>/img/icon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="<%= context.config.url %>/img/icon/favicon-96x96.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="<%= context.config.url %>/img/icon/favicon-16x16.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="<%= context.config.url %>/img/icon/favicon.ico" />
+        <link rel="manifest" href="<%= context.config.url %>/img/icon/manifest.json" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="msapplication-TileImage" content="<%= context.config.url %>/img/icon/ms-icon-144x144.png" />
+        <meta name="theme-color" content="#000000" />
+        <meta property="og:site_name" content="<%= context.site.data.title %>" />
+        <meta property="og:title" content="<%= context.site.data.title %>" />
+        <meta property="og:url" content="<%= context.config.url %>" />
         <meta property="og:type" content="website" />
-        <meta property="og:description" content="<%= locals.context.getPageDescription() %>" />
-        <meta property="og:image" content="<%= locals.context.get( 'config' ).url %>/img/share/Kitajchuk_Share_Graphic.jpg" />
-        <meta itemprop="name" content="<%= locals.context.get( 'site' ).data.title %>" />
-        <meta itemprop="description" content="<%= locals.context.getPageDescription() %>" />
-        <meta itemprop="url" content="<%= locals.context.get( 'site' ).data.url %>" />
-        <meta itemprop="thumbnailUrl" content="/img/share/Kitajchuk_Share_Graphic.jpg" />
-        <meta itemprop="image" content="<%= locals.context.get( 'config' ).url %>/img/share/Kitajchuk_Share_Graphic.jpg" />
+        <meta property="og:description" content="<%= context.pageDescription %>" />
+        <meta property="og:image" content="<%= context.config.url %>/img/share/Share_Graphic.jpeg" />
+        <meta itemprop="name" content="<%= context.site.data.title %>" />
+        <meta itemprop="description" content="<%= context.pageDescription %>" />
+        <meta itemprop="url" content="<%= context.config.url %>" />
+        <meta itemprop="thumbnailUrl" content="<%= context.config.url %>/img/share/Share_Graphic.jpeg" />
+        <meta itemprop="image" content="<%= context.config.url %>/img/share/Share_Graphic.jpeg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@kitajchuk" />
         <meta name="twitter:creator" content="@kitajchuk" />
-        <meta name="twitter:title" content="<%= locals.context.get( 'site' ).data.title %>" />
-        <meta name="twitter:description" content="<%= locals.context.getPageDescription() %>" />
-        <meta name="twitter:image" content="<%= locals.context.get( 'config' ).url %>/img/share/Kitajchuk_Share_Graphic.jpg" />
-        <link href="<%= locals.context.get( 'stylesheet' ) + '?v=' + locals.context.get( 'timestamp' ) %>" rel="stylesheet" />
+        <meta name="twitter:title" content="<%= context.site.data.title %>" />
+        <meta name="twitter:description" content="<%= context.pageDescription %>" />
+        <meta name="twitter:image" content="<%= context.config.url %>/img/share/Share_Graphic.jpeg" />
+        <link href="<%= sourceCSS %>" rel="stylesheet" />
+        <script type="application/google-analytics"></script>
     </head>
-    <body class="-fzero" data-csrf="<%= locals.context.get( 'csrf' ) %>">
+    <body class="-fzero">
         <%- include( 'site/header.html' ) %>
-        <%- include( 'site/navi.html' ) %>
-        <main class="main js-main" data-title="<%= locals.context.getPageTitle() %>">
-            <%- include( locals.context.getTemplate() ) %>
+        <main class="main js-main" data-csrf="<%= context.csrf %>" data-title="<%= context.pageTitle %>">
+            <%- include( context.pageTemplate ) %>
         </main>
         <%- include( 'site/footer.html' ) %>
         <%- include( 'site/intro.html' ) %>
-        <script src="<%= locals.context.get( 'javascript' ) + '?v=' + locals.context.get( 'timestamp' ) %>"></script>
-        <%- include( 'site/ga.html' ) %>
+        <script src="<%= sourceJS %>"></script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', '<%= context.site.data.googleUA %>', 'auto');
+            ga('send', 'pageview');
+        </script>
     </body>
 </html>

@@ -9,7 +9,7 @@ const autoprefixer = require( "autoprefixer" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
 const OnBuildWebpackPlugin = require( "on-build-webpack" );
-const sassFontPath = (config.aws.cdnOn && config.env.production) ? `${config.aws.cdn}/fonts/` : "/fonts/";
+const sassFontPath = (config.aws.cdn && config.env.production) ? `${config.aws.cdn}/fonts/` : "/fonts/";
 
 
 
@@ -93,6 +93,13 @@ const webpackConfig = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.svg$/,
+                exclude: /node_modules/,
+                use: [
+                    "svg-inline-loader"
+                ]
             }
         ]
     }
@@ -102,7 +109,7 @@ const webpackConfig = {
 
 module.exports = ( env ) => {
     // You can enable gzip compression here for S3...
-    if ( env.production && config.aws.cdnOn ) {
+    if ( env.production && config.aws.cdn ) {
         webpackConfig.plugins.push(new CompressionPlugin({
             asset: "[path]",
             algorithm: "gzip",

@@ -28,4 +28,4 @@ clutch init my-project
 
 
 ### Documentation
-That's it! Checkout the [clutch docs](https://kitajchuk.com/clutch/readme) for complete info on developing with the SDK.
+That's it! Checkout the [clutch docs](https://kitajchuk.com/clutch/readme) for complete info on developing with the SDK. Try the NEW hotness and go serverless with [Clutch static](https://kitajchuk.com/clutch/level-99)!

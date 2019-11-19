@@ -1,7 +1,7 @@
 import * as core from "./core";
 import ImageController from "./controllers/ImageController";
 import BaseController from "./controllers/BaseController";
-import View from "./components/View";
+// import View from "./components/View";
 
 
 
@@ -28,7 +28,7 @@ class Controllers {
         this.controllers = [];
 
         // Push components here...
-        this.push( "view", this.element.find( ".js-view" ), BaseController, View );
+        // this.push( "view", this.element.find( ".js-view" ), BaseController, View );
         // this.push( "form", () => {
         //     return this.element.find( ".js-form" );
         //

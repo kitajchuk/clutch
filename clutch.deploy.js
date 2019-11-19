@@ -30,14 +30,14 @@ if ( config.static.site ) {
     config.https = false;
     router.init().then(() => {
         stasis.generate( config ).then(() => {
-            s3.sync(
-                process.env.S3_ACCESS_KEY,
-                process.env.S3_SECRET_KEY,
-                process.env.S3_REGION,
-                process.env.S3_BUCKET,
-                "",
-                "static"
-            ).then(() => {
+            s3.sync({
+                key: process.env.S3_ACCESS_KEY,
+                secret: process.env.S3_SECRET_KEY,
+                region: process.env.S3_REGION,
+                bucket: process.env.S3_BUCKET,
+                directory: "static"
+
+            }).then(() => {
                 stasis.clean( config ).then(() => {
                     process.exit( 0 );
                 });

@@ -18,8 +18,8 @@
     "build:production": "export NODE_ENV=production ; ./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
     "connect:development": "ssh ec2-user@DEVELOPMENT_IP",
     "connect:production": "ssh ec2-user@PRODUCTION_IP",
-    "deploy:development": "npm run build:development; export NODE_ENV=development ; export AWS_HOST=${AWS_DEVELOPMENT_HOST} ; node ./clutch.deploy.js",
-    "deploy:production": "npm run build:production ; export NODE_ENV=production ; export AWS_HOST=${AWS_PRODUCTION_HOST} ; node ./clutch.deploy.js",
+    "deploy:development": "export NODE_ENV=development ; export AWS_HOST=${AWS_DEVELOPMENT_HOST} ; npm run build:development ; node ./clutch.deploy.js",
+    "deploy:production": "export NODE_ENV=production ; export AWS_HOST=${AWS_PRODUCTION_HOST} ; npm run build:production ; node ./clutch.deploy.js",
     "deploy:clutch:development": "rsync -av -e 'ssh' --rsync-path 'sudo rsync' .clutch ec2-user@DEVELOPMENT_IP:/var/www/html/",
     "deploy:clutch:production": "rsync -av -e 'ssh' --rsync-path 'sudo rsync' .clutch ec2-user@PRODUCTION_IP:/var/www/html/"
   },

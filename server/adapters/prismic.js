@@ -333,7 +333,12 @@ const getDataForApi = function ( req, listener ) {
             });
         };
 
-        doQuery( req.params.type );
+        if ( core.config.onepager ) {
+            doQuery( core.config.homepage, null );
+
+        } else {
+            doQuery( req.params.type, null );
+        }
     });
 };
 
@@ -435,7 +440,10 @@ const getDataForPage = function ( req, listener ) {
             }
         };
 
-        if ( !req.params.type ) {
+        if ( core.config.onepager ) {
+            doQuery( core.config.homepage, null );
+
+        } else if ( !req.params.type ) {
             resolve( data );
 
         } else {

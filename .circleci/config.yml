@@ -8,10 +8,10 @@ jobs:
             - AWS_DEST: "/var/www/html/"
         machine:
             enabled: true
-        node:
-            version: 8.10.0
-        timezone:
-            America/Los_Angeles
+        # node:
+        #     version: 8.10.0
+        # timezone:
+        #     America/Los_Angeles
         # branches:
         #     only:
         #         - dev

@@ -54,7 +54,10 @@ class ContextObject {
         let title = null;
         let isRich = null;
 
-        if ( item ) {
+        if ( config.onepager ) {
+            title = site.data.title;
+
+        } else if ( item ) {
             isRich = !(typeof item.data.title === "string");
             title = `${isRich ? prismicDOM.RichText.asText( item.data.title ) : item.data.title} — ${site.data.title}`;
 
@@ -71,7 +74,7 @@ class ContextObject {
         let desc = null;
 
         // Homepage
-        if ( item && (item.uid === "home") || !item ) {
+        if ( item && (item.uid === config.homepage) || !item ) {
             desc = site.data.description;
         }
 

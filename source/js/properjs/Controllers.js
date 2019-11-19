@@ -1,6 +1,6 @@
 import * as core from "./core";
 import ImageController from "./controllers/ImageController";
-import BaseController from "./controllers/BaseController";
+// import BaseController from "./controllers/BaseController";
 // import View from "./components/View";
 
 

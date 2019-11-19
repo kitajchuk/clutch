@@ -78,8 +78,6 @@ const config = {
             // contentType => collectionId
             // e.g. casestudy: "work"
             // Ensures you get /work/:uid rather than /casestudy/:uid
-            // Slash "/" treats associative :uid as homepage
-            home: "/"
         }
     },
     // Third-party app Oauth authorizations

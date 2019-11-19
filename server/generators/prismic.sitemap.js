@@ -91,7 +91,9 @@ const createSitemap = () => {
                         loc = `${loc}/${config.generate.mappings[ doc.type ] ? config.generate.mappings[ doc.type ] : doc.type}`;
                     }
 
-                    loc = `${loc}/${doc.uid}/`;
+                    if ( doc.uid !== config.homepage ) {
+                        loc = `${loc}/${doc.uid}/`;
+                    }
 
                     nodes.push(
                         xmlNode

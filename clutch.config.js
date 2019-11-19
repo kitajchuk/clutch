@@ -9,9 +9,9 @@ const envRegex = /^DEVELOPMENT_URL|^PRODUCTION_URL/g;
 const envVars = {
     devUrl: rootConfig.clutch.urls.development.replace( envRegex, "" ) || process.env.DEVELOPMENT_URL,
     prodUrl: rootConfig.clutch.urls.production.replace( envRegex, "" ) || process.env.PRODUCTION_URL,
-    access: rootConfig.prismic.apiAccess || process.env.PRISMIC_API_ACCESS,
-    token: rootConfig.prismic.accessToken || process.env.PRISMIC_API_TOKEN,
-    secret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET
+    apiAccess: rootConfig.prismic.apiAccess || process.env.PRISMIC_API_ACCESS,
+    accessToken: rootConfig.prismic.accessToken || process.env.PRISMIC_API_TOKEN,
+    webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET
 };
 const config = {
     // The URL of your actual site

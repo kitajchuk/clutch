@@ -60,8 +60,14 @@ const webpackConfig = {
             {
                 test: /source\/js\/.*\.js$/,
                 exclude: /node_modules|vendor/,
-                use: ["eslint-loader"],
-                enforce: "pre"
+                loader: "eslint-loader",
+                enforce: "pre",
+                options: {
+                    emitError: true,
+                    emitWarning: false,
+                    failOnError: true,
+                    quiet: true
+                }
             },
             {
                 test: /source\/js\/.*\.js$/,

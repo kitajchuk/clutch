@@ -35,7 +35,7 @@ if ( config.static.site ) {
                 process.env.S3_SECRET_KEY,
                 process.env.S3_REGION,
                 process.env.S3_BUCKET,
-                null,
+                "",
                 "static"
             ).then(() => {
                 stasis.clean( config ).then(() => {

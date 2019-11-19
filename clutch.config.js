@@ -111,6 +111,10 @@ const config = {
 if ( config.aws.cdn && config.env.production ) {
     config.static.js = `${config.aws.cdn}${config.static.endJS}`;
     config.static.css = `${config.aws.cdn}${config.static.endCSS}`;
+
+} else {
+    config.static.js = config.static.endJS;
+    config.static.css = config.static.endCSS;
 }
 
 

@@ -5,7 +5,7 @@ const root = path.resolve( __dirname );
 const rootConfig = files.read( path.join( root, ".clutch", "config.json" ), true );
 const config = {
     // The URL of your actual site
-    url: rootConfig.clutch.urls.production,
+    url: rootConfig.clutch.urls.production || process.env.PRODUCTION_URL,
     // Homepage UID
     homepage: "home",
     // Page Not Found UID — 404
@@ -24,9 +24,10 @@ const config = {
     api: {
         // Prismic
         adapter: "prismic",
-        access: rootConfig.prismic.apiAccess, // This is your API URL from Prismic's settings panel
-        token: rootConfig.prismic.accessToken,
-        secret: rootConfig.prismic.webhookSecret
+        // This is your API URL from Prismic's settings panel
+        access: rootConfig.prismic.apiAccess || process.env.PRISMIC_API_ACCESS,
+        token: rootConfig.prismic.accessToken || process.env.PRISMIC_API_TOKEN,
+        secret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET
     },
     // Deployment config ( AWS )
     aws: {
@@ -105,7 +106,7 @@ if ( config.env.sandbox ) {
     config.https = false;
 
 } else if ( config.env.development && config.https ) {
-    config.url = rootConfig.clutch.urls.development;
+    config.url = rootConfig.clutch.urls.development || process.env.DEVELOPMENT_URL;
 
     if ( rootConfig.letsencrypt.developmentPath ) {
         config.letsencrypt.privkey = `${rootConfig.letsencrypt.developmentPath}privkey.pem`;
@@ -114,7 +115,7 @@ if ( config.env.sandbox ) {
     }
 
 } else if ( config.env.production && config.https ) {
-    config.url = rootConfig.clutch.urls.production;
+    config.url = rootConfig.clutch.urls.production || process.env.PRODUCTION_URL;
 
     if ( rootConfig.letsencrypt.productionPath ) {
         config.letsencrypt.privkey = `${rootConfig.letsencrypt.productionPath}privkey.pem`;

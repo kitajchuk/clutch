@@ -24,9 +24,12 @@ jobs:
             - run:
                 name: NPM version
                 command: npm --version
-            - run:
-                name: Trash node_modules
-                command: rm -rf node_modules
+            # - run:
+            #     name: Trash node_modules
+            #     command: rm -rf node_modules
+            # - run:
+            #     name: Install node_modules
+            #     command: npm i
             - run:
                 name: Rebuild node-sass
                 command: npm rebuild node-sass

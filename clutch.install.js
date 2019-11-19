@@ -10,21 +10,20 @@ const rootServer = path.join( root, "server" );
 const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 const child_process = require( "child_process" );
 const files = require( "./server/core/files" );
-const lager = require( "properjs-lager" );
 // Leave this alone! You put your values in .clutch/config.json
 const rootConfig = require( "./clutch.root" );
 
 
 
 // 1.0: Fresh `node_modules`
-lager.info( "[Clutch] Installing node_modules..." );
+console.log( "[Clutch] Installing node_modules..." );
 
 child_process.execSync( "npm i" );
 
 
 
 // 2.0 Create sandbox
-lager.info( "[Clutch] Creating .clutch directory..." );
+console.log( "[Clutch] Creating .clutch directory..." );
 
 if ( !fs.existsSync( rootClutch ) ) {
     child_process.execSync( `mkdir ${rootClutch}` );
@@ -36,7 +35,7 @@ if ( !fs.existsSync( rootClutch ) ) {
 
 
 // 3.0 Create template partials
-lager.info( "[Clutch] Creating template partials..." );
+console.log( "[Clutch] Creating template partials..." );
 
 if ( !fs.existsSync( rootTemplatePartials ) ) {
     child_process.execSync( `mkdir ${rootTemplatePartials}` );
@@ -44,7 +43,7 @@ if ( !fs.existsSync( rootTemplatePartials ) ) {
 
 
 // 4.0 Create notes
-lager.info( "[Clutch] Creating .notes file for dev..." );
+console.log( "[Clutch] Creating .notes file for dev..." );
 
 if ( !fs.existsSync( rootNotes ) ) {
     child_process.execSync( `touch ${rootNotes}` );
@@ -52,15 +51,15 @@ if ( !fs.existsSync( rootNotes ) ) {
 
 
 // 5.0 Hobo.js build
-lager.info( "[Clutch] Building properjs-hobo..." );
+console.log( "[Clutch] Building properjs-hobo..." );
 
 child_process.execSync( `npm run bootstrap:hobo` );
 
 
 // 6.0 server install
-lager.info( "[Clutch] Installing server node_modules..." );
+console.log( "[Clutch] Installing server node_modules..." );
 
 child_process.execSync( `cd ${rootServer} && npm i` );
 
 // 7.0 done
-lager.cache( "[Clutch] Install complete!" );
+console.log( "[Clutch] Install complete!" );

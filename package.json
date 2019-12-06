@@ -10,7 +10,7 @@
     "bootstrap:hobo": "cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass'",
     "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; cd ./server && npm run start",
-    "build": "npm run build:netlify ; npm run static:build",
+    "build": "npm rebuild node-sass ; npm run bootstrap ; npm run build:netlify ; npm run static:build",
     "build:netlify": "export NODE_ENV=netlify ; ./node_modules/.bin/webpack --env.netlify --progress --profile --display-modules --colors -p",
     "static:build": "export NODE_ENV=sandbox ; export CLUTCH_CLEAN=0 ; node clutch.static.js",
     "static:clean": "export NODE_ENV=sandbox ; export CLUTCH_CLEAN=1 ; node clutch.static.js"

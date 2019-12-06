@@ -8,8 +8,6 @@ const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
-const OnBuildWebpackPlugin = require( "on-build-webpack" );
-const sassFontPath = (config.aws.cdn && config.env.production) ? `${config.aws.cdn}/fonts/` : "/fonts/";
 
 
 
@@ -25,9 +23,6 @@ const webpackConfig = {
             options: {
                 postcss: [autoprefixer( { browsers: ["last 2 versions"] } )]
             }
-        }),
-        new OnBuildWebpackPlugin(() => {
-            lager.cache( "Webpack build complete" );
         }),
         new BrowserSyncPlugin({
             open: true,
@@ -51,7 +46,7 @@ const webpackConfig = {
 
     output: {
         path: path.resolve( __dirname, "static/js" ),
-        filename: `clutch.${process.env.NODE_ENV}.js`
+        filename: `clutch.js`
     },
 
 
@@ -89,13 +84,12 @@ const webpackConfig = {
                 test: /\.(sass|scss)$/,
                 exclude: /node_modules|vendor/,
                 use: [
-                    `file-loader?name=../css/[name].${process.env.NODE_ENV}.css`,
+                    `file-loader?name=../css/[name].css`,
                     "postcss-loader",
                     {
                         loader: "sass-loader",
                         options: {
-                            outputStyle: "compressed",
-                            data: '$font-path: "' + sassFontPath + '";'
+                            outputStyle: "compressed"
                         }
                     }
                 ]
@@ -113,17 +107,6 @@ const webpackConfig = {
 
 
 
-module.exports = ( env ) => {
-    // You can enable gzip compression here for S3...
-    if ( env.production && config.aws.cdn ) {
-        webpackConfig.plugins.push(new CompressionPlugin({
-            asset: "[path]",
-            algorithm: "gzip",
-            test: /\.(js|css)$/,
-            threshold: 0,
-            minRatio: 0.8
-        }));
-    }
-
+module.exports = () => {
     return webpackConfig;
 };

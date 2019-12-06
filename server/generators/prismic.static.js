@@ -58,7 +58,6 @@ const saveFile = ( obj ) => {
             minifyJS: true,
             removeComments: true,
             removeEmptyAttributes: true,
-            removeEmptyElements: true,
             removeRedundantAttributes: true
         });
 

@@ -48,22 +48,19 @@ const saveFile = ( obj ) => {
         place = `${place}/index.html`;
         regex = new RegExp( baseUrlBrowserSync, "gm" );
 
-        obj.html = String( obj.html ).replace( regex, buildConfig.env.sandbox ? "" : buildConfig.url );
-
-        if ( buildConfig.env.production ) {
-            obj.html = htmlMin.minify( obj.html, {
-                caseSensitive: true,
-                collapseWhitespace: true,
-                collapseInlineTagWhitespace: true,
-                keepClosingSlash: false,
-                minifyCSS: true,
-                minifyJS: true,
-                removeComments: true,
-                removeEmptyAttributes: true,
-                removeEmptyElements: true,
-                removeRedundantAttributes: true
-            });
-        }
+        obj.html = String( obj.html ).replace( regex, (buildConfig.env.sandbox ? "" : buildConfig.url) );
+        obj.html = htmlMin.minify( obj.html, {
+            caseSensitive: true,
+            collapseWhitespace: true,
+            collapseInlineTagWhitespace: true,
+            keepClosingSlash: false,
+            minifyCSS: true,
+            minifyJS: true,
+            removeComments: true,
+            removeEmptyAttributes: true,
+            removeEmptyElements: true,
+            removeRedundantAttributes: true
+        });
 
         files.writeStr( place, obj.html ).then(() => {
             lager.cache( `[Clutch] Linking static link ${place}` );

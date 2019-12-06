@@ -21,12 +21,9 @@ const checkCSRF = csurf({
     cookie: true
 });
 const http = require( "http" );
-const https = require( "https" );
 const fs = require( "fs" );
 const stasis = require( `../generators/${core.config.api.adapter}.static` );
 let httpServer = null;
-let httpsServer = null;
-let isSiteUpdate = false;
 
 
 
@@ -54,17 +51,10 @@ expressApp.use( express.static( core.config.template.staticDir, {
  */
 const setRoutes = () => {
     // SYSTEM
-    expressApp.get( "/preview", getPreview );
-    expressApp.post( "/webhook", postWebhook );
+    // expressApp.get( "/preview", getPreview );
+    // expressApp.post( "/webhook", postWebhook );
     expressApp.get( "/robots.txt", getRobots );
     expressApp.get( "/sitemap.xml", getSitemap );
-    expressApp.get( "/authorizations", checkAuthToken, getAuthorizations );
-    expressApp.get( "/authorizations/:app", checkAuthToken, getAuthorizationForApp );
-
-    // AUTHORIZATIONS
-    core.config.authorizations.apps.forEach(( app ) => {
-        require( `../auth/${app}` ).init( expressApp, checkCSRF );
-    });
 
     // API => JSON
     expressApp.get( "/api/:type", setReq, getApi );
@@ -141,25 +131,25 @@ const getPage = ( req, res ) => {
  * :POST Prismic stuff
  *
  */
-const getPreview = ( req, res ) => {
-    core.query.getPreview( req, res ).then(( url ) => {
-        res.redirect( url );
-    });
-};
-const postWebhook = ( req, res ) => {
-    // Skip if update is in progress, Skip if invalid secret was sent
-    if ( !isSiteUpdate && req.body.secret === core.config.api.secret ) {
-        isSiteUpdate = true;
-
-        // Re-Fetch Site JSON
-        core.query.getSite().then(() => {
-            isSiteUpdate = false;
-        });
-    }
-
-    // Always resolve with a 200 and some text
-    res.status( 200 ).send( "success" );
-};
+// const getPreview = ( req, res ) => {
+//     core.query.getPreview( req, res ).then(( url ) => {
+//         res.redirect( url );
+//     });
+// };
+// const postWebhook = ( req, res ) => {
+//     // Skip if update is in progress, Skip if invalid secret was sent
+//     if ( !isSiteUpdate && req.body.secret === core.config.api.secret ) {
+//         isSiteUpdate = true;
+//
+//         // Re-Fetch Site JSON
+//         core.query.getSite().then(() => {
+//             isSiteUpdate = false;
+//         });
+//     }
+//
+//     // Always resolve with a 200 and some text
+//     res.status( 200 ).send( "success" );
+// };
 const getSitemap = ( req, res ) => {
     const sitemap = require( `../generators/${core.config.api.adapter}.sitemap` );
 
@@ -194,38 +184,6 @@ const checkOrigin = ( req, res, next ) => {
             error: "Invalid origin for request"
         });
     }
-};
-const checkAuthToken = ( req, res, next ) => {
-    if ( req.query.token === core.config.authorizations.token ) {
-        next();
-
-    } else {
-        res.redirect( "/" );
-    }
-};
-
-
-
-/**
- *
- * :GET Authorizations
- *
- */
-const getAuthorizations = ( req, res ) => {
-    req.params.type = "authorizations";
-    core.content.getPage( req, res, listeners.authorizations ).then(( callback ) => {
-        // Handshake callback :-P
-        callback(( status, html ) => {
-            res.status( status ).send( html );
-        });
-    });
-};
-const getAuthorizationForApp = ( req, res ) => {
-    const app = core.config.authorizations.apps.find(( app ) => {
-        return (app === req.params.app);
-    });
-
-    require( `../auth/${app}` ).auth( req, res );
 };
 
 
@@ -270,16 +228,6 @@ module.exports = {
                 core.query.getSite().then(() => {
                     httpServer = http.createServer( expressApp );
                     httpServer.listen( core.config.express.port );
-
-                    if ( core.config.https ) {
-                        httpsServer = https.createServer({
-                                key: fs.readFileSync( core.config.letsencrypt.privkey, "utf8" ),
-                                cert: fs.readFileSync( core.config.letsencrypt.cert, "utf8" ),
-                                ca: fs.readFileSync( core.config.letsencrypt.chain, "utf8" )
-
-                            }, expressApp );
-                        httpsServer.listen( core.config.express.portHttps );
-                    }
 
                     stasis.clean( core.config ).then( resolve );
 

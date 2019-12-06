@@ -15,10 +15,9 @@
         "sourceType": "module"
     },
     "globals": {
-        "Y": true,
-        "Static": true,
-        "require": true,
-        "Squarespace": true
+        "hobo": true,
+        "clutch": true,
+        "require": true
     },
     "rules": {
         // Possible Errors

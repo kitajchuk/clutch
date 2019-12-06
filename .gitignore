@@ -9,33 +9,25 @@
 *.log
 
 
-# OS / Cache / Dot
+# OS / Cache
 .DS_Store
 .sass-cache
+
+
+# Clutch
 .notes
-.tmp
-
-
-# Dev
 .clutch
 .clutch-pre
-tmp
-local
-sandbox
 static/js
 static/css
+static/json
+static/svg
 static/robots.txt
 static/sitemap.xml
-static/cache.manifest
 static/*.html
 static/**/*.html
 
-# Dev - you can opt in to any of these you want
-static/json
-static/svg
 
-
-# Node / NPM
+# Node / npm
 node_modules
 npm-debug.log
-yarn.lock

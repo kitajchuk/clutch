@@ -11,6 +11,10 @@ const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 const child_process = require( "child_process" );
 const files = require( "./server/core/files" );
 // Leave this alone! You put your values in .clutch/config.json
+// Netlify environment variables need to be set:
+// PRISMIC_API_ACCESS
+// PRISMIC_API_TOKEN
+// PRISMIC_API_SECRET
 const rootConfig = require( "./clutch.root" );
 
 

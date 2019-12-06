@@ -2,34 +2,43 @@
   "title": "Clutch Server",
   "name": "clutch-server",
   "version": "0.1.0",
-  "description": "Express.js app server.",
+  "description": "A Node.js Server for Prismic.io.",
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start:staging": "export NODE_ENV=staging ; ./node_modules/.bin/forever -a -l forever.log -o out.log -e err.log start app.js",
-    "start:production": "export NODE_ENV=production ; ./node_modules/.bin/forever -a -l forever.log -o out.log -e err.log start app.js",
-    "install:staging": "export NODE_ENV=staging ; node app.install.js",
+    "start:sandbox": "export NODE_ENV=sandbox ; ./node_modules/.bin/pm2 --no-daemon --watch --ignore-watch '*.log' -a -l pm2.log -o out.log -e err.log start app.js",
+    "start:development": "export NODE_ENV=development ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
+    "start:production": "export NODE_ENV=production ; ./node_modules/.bin/pm2 -a -p pid.log -l pm2.log -o out.log -e err.log start app.js",
+    "install:development": "export NODE_ENV=development ; node app.install.js",
     "install:production": "export NODE_ENV=production ; node app.install.js",
-    "stop": "./node_modules/.bin/forever stopall"
+    "certbot:development:init": "export NODE_ENV=development ; node ./generators/certbot.init.js",
+    "certbot:production:init": "export NODE_ENV=production ; node ./generators/certbot.init.js",
+    "certbot:development:auto": "export NODE_ENV=development ; node ./generators/certbot.auto.js",
+    "certbot:production:auto": "export NODE_ENV=production ; node ./generators/certbot.auto.js",
+    "stop": "./node_modules/.bin/pm2 stop 'all'"
   },
   "contributors": [
     {
-      "name": "Brandon Kitajchuk",
-      "email": "kitajchuk@gmail.com",
-      "url": "http://kitajchuk.com"
+      "name": "Brandon Lee Kitajchuk",
+      "email": "bk@kitajchuk.com",
+      "url": "https://kitajchuk.com"
     }
   ],
   "license": "MIT",
   "dependencies": {
-    "compression": "^1.6.2",
-    "consolidate": "^0.14.1",
-    "contentful": "^4.3.0",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.2",
+    "consolidate": "^0.15.1",
     "cookie-parser": "^1.4.3",
-    "ejs": "^2.5.2",
-    "express": "^4.14.0",
-    "forever": "^0.15.2",
-    "node-watch": "^0.5.3",
-    "prismic.io": "^3.5.0",
-    "properjs-lager": "^0.1.0"
+    "csurf": "^1.9.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "pm2": "^3.0.4",
+    "prismic-dom": "^2.0.6",
+    "prismic-javascript": "^1.5.0-beta.2",
+    "properjs-lager": "^0.1.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "xml2js": "^0.4.22"
   }
 }

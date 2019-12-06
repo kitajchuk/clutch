@@ -1,37 +1,51 @@
+const fs = require( "fs" );
 const path = require( "path" );
+const files = require( "./server/core/files" );
 const root = path.resolve( __dirname );
+const rootConfig = files.read( path.join( root, ".clutch", "config.json" ), true );
+// If we're in local sandbox then these come from .clutch/config.json as above.
+// However, CircleCI doesn't have the config JSON so we use environment variables.
+const envRegex = /^DEVELOPMENT_URL|^PRODUCTION_URL/g;
+const envVars = {
+    devUrl: rootConfig.clutch.urls.development.replace( envRegex, "" ) || process.env.DEVELOPMENT_URL,
+    prodUrl: rootConfig.clutch.urls.production.replace( envRegex, "" ) || process.env.PRODUCTION_URL,
+    apiAccess: rootConfig.prismic.apiAccess || process.env.PRISMIC_API_ACCESS,
+    accessToken: rootConfig.prismic.accessToken || process.env.PRISMIC_API_TOKEN,
+    webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET
+};
 const config = {
     // The URL of your actual site
-    url: "http://clutch.kitajchuk.com",
+    // It's OK for this to be empty here as it will be determined below...
+    url: "",
     // Homepage UID
     homepage: "home",
     // Page Not Found UID — 404
     notfound: "404",
+    // Page Server Error UID - 500
+    notright: "500",
     // Timestamp ( Stamp of instantiation )
     timestamp: Date.now(),
+    // Single page web application
+    onepager: false,
     // Environments
     env: {
         sandbox: (process.env.NODE_ENV === "sandbox"),
-        staging: (process.env.NODE_ENV === "staging"),
+        development: (process.env.NODE_ENV === "development"),
         production: (process.env.NODE_ENV === "production")
     },
-    // API CMS config ( Prismic, Contentful )
+    // API CMS config ( Prismic )
     api: {
         // Prismic
+        // Access is your API URL from Prismic's settings panel
         adapter: "prismic",
-        access: "https://clutch.cdn.prismic.io/api", // This is your API URL
-        token: null // This is your optional API access token
-
-        // Contentful
-        // adapter: "contentful",
-        // access: "355y876evbep", // This is your space ID
-        // token: "8520d90818ee9a87c3cc1275c617ed7254d881f6d24178a4401d9b0cb39640d3", // This is your main CDN token
-        // preview: "0276a23aa96144f7fdaa7108bd7ba3fe9555107673f84d6c58dc42e0f33eda4a" // This is your main Preview token
+        access: envVars.apiAccess,
+        token: envVars.accessToken,
+        secret: envVars.webhookSecret
     },
     // Deployment config ( AWS )
     aws: {
-        cdn: "",
-        cdnOn: false // Turn on to use CloudFront CDN
+        // Turn on to use CDN ( You can just use S3 or add CloudFront if you want )
+        cdn: ""
     },
     // Templating config
     template: {
@@ -44,27 +58,28 @@ const config = {
     },
     // Express.js config
     express: {
-        port: 8000
+        port: 8000,
+        portHttps: 8443
     },
     // Browser-sync config
     browser: {
-        port: 8001,
-        hobo: "is eq not attr filter detach remove append",
-        appcache: true
+        port: 8001
     },
     // Static assets config
     static: {
         // One day
         maxAge: 86400000,
-        endJS: "/js/app.js",
-        endCSS: "/css/screen.css"
+        endJS: `/js/clutch.${process.env.NODE_ENV}.js`,
+        endCSS: `/css/screen.${process.env.NODE_ENV}.css`,
+        // Enable static site server+generator+deploy+websub
+        site: true
     },
     // Compression js config
     compression: {
         level: 9,
         threshold: 0
     },
-    // Generators config ( sitemap, robots, cache manifest )
+    // Generators config ( sitemap.xml, robots.txt, static )
     generate: {
         sitemap: {
             site: false
@@ -72,15 +87,66 @@ const config = {
         robots: {
             site: false,
             page: false
-        }
-    }
+        },
+        // Useful for prismic collection forms
+        // { type: collection }
+        // Example:  { "casestudy": "work" }
+        // Resolves "/work/:uid" from "/casestudy/:uid"
+        mappings: {}
+    },
+    // Third-party app Oauth authorizations
+    authorizations: {
+        token: rootConfig.clutch.authorizationsToken,
+        apps: []
+    },
+    // letsencrypt
+    letsencrypt: rootConfig.letsencrypt,
+    // https
+    https: false
 };
 
 
 
-// Serves assets from either CDN or App Server...
-config.static.js = (config.aws.cdnOn && !config.env.sandbox && !config.env.staging) ? `${config.aws.cdn}${config.static.endJS}` : config.static.endJS;
-config.static.css = (config.aws.cdnOn && !config.env.sandbox && !config.env.staging) ? `${config.aws.cdn}${config.static.endCSS}` : config.static.endCSS;
+// Serves assets from either CDN or App Server/Static site
+if ( config.aws.cdn && config.env.production ) {
+    config.static.js = `${config.aws.cdn}${config.static.endJS}`;
+    config.static.css = `${config.aws.cdn}${config.static.endCSS}`;
+
+} else {
+    config.static.js = config.static.endJS;
+    config.static.css = config.static.endCSS;
+}
+
+
+
+// Configure URLs & HTTPS
+// Local sandbox
+if ( config.env.sandbox ) {
+    config.url = `http://localhost:${config.browser.port}`;
+    config.https = false;
+
+// Development box
+} else if ( config.env.development ) {
+    config.url = envVars.devUrl;
+
+    // NOT running clutch-static, HTTPS:TRUE & viable path to letsencrypt certs
+    if ( !config.static.site && config.https && rootConfig.letsencrypt.developmentPath ) {
+        config.letsencrypt.privkey = `${rootConfig.letsencrypt.developmentPath}privkey.pem`;
+        config.letsencrypt.cert = `${rootConfig.letsencrypt.developmentPath}cert.pem`;
+        config.letsencrypt.chain = `${rootConfig.letsencrypt.developmentPath}chain.pem`;
+    }
+
+// Production box
+} else if ( config.env.production ) {
+    config.url = envVars.prodUrl;
+
+    // NOT running clutch-static, HTTPS:TRUE & viable path to letsencrypt certs
+    if ( !config.static.site && config.https && rootConfig.letsencrypt.productionPath ) {
+        config.letsencrypt.privkey = `${rootConfig.letsencrypt.productionPath}privkey.pem`;
+        config.letsencrypt.cert = `${rootConfig.letsencrypt.productionPath}cert.pem`;
+        config.letsencrypt.chain = `${rootConfig.letsencrypt.productionPath}chain.pem`;
+    }
+}
 
 
 

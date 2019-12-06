@@ -1,256 +1,112 @@
 {
-    "Information": {
-        "title": {
-            "type": "Text",
-            "fieldset": "Title",
-            "config": {
-                "label": "Title"
+    "Information":{
+        "title":{
+            "type":"Text",
+            "fieldset":"Title",
+            "config":{
+                "label":"Title"
             }
         },
-        "url": {
-            "type": "Text",
-            "fieldset": "Site URL",
-            "config": {
-                "label": "Site URL"
+        "url":{
+            "type":"Text",
+            "fieldset":"Site URL",
+            "config":{
+                "label":"Site URL"
             }
         },
-        "description": {
-            "type": "Text",
-            "fieldset": "Description",
-            "config": {
-                "label": "Description"
+        "description":{
+            "type":"Text",
+            "fieldset":"Description",
+            "config":{
+                "label":"Description"
             }
         },
-        "email": {
-            "type": "Text",
-            "fieldset": "Email",
-            "config": {
-                "label": "Email"
+        "email":{
+            "type":"Text",
+            "fieldset":"Email",
+            "config":{
+                "label":"Email"
+            }
+        },
+        "phone":{
+            "type":"Text",
+            "config":{
+                "label":"Phone"
+            }
+        },
+        "location":{
+            "type":"StructuredText",
+            "config":{
+                "multi":"paragraph",
+                "label":"Location",
+                "placeholder":"Location"
             }
         }
     },
-    "Google": {
-        "googleUA": {
-            "type": "Text",
-            "fieldset": "Google Analytics Tag",
-            "config": {
-                "label": "Google Analytics Tag"
+    "Analytics":{
+        "googleUA":{
+            "type":"Text",
+            "fieldset":"Google Analytics Tag",
+            "config":{
+                "label":"Google Analytics Tag"
             }
         },
-        "googleVerify": {
-            "type": "Text",
-            "fieldset": "Google Site Verification",
-            "config": {
-                "label": "Google Site Verification"
+        "googleVerify":{
+            "type":"Text",
+            "fieldset":"Google Site Verification",
+            "config":{
+                "label":"Google Site Verification"
             }
         }
     },
-    "Webapp": {
-        "appName": {
-            "type": "Text",
-            "fieldset": "App Name",
-            "config": {
-                "label": "App Name"
-            }
-        },
-        "appLogo": {
-            "type": "Image",
-            "fieldset": "Logo Image ( can be svg )",
-            "config": {
-                "placeholder": "Logo Image ( can be svg )"
-            }
-        },
-        "appImage": {
-            "type": "Image",
-            "fieldset": "OG Image ( jpg or png )",
-            "config": {
-                "placeholder": "OG Image ( jpg or png )"
-            }
-        },
-        "appFavicon": {
-            "type": "Image",
-            "fieldset": "Favicon Image ( png )",
-            "config": {
-                "placeholder": "Favicon Image ( png )"
-            }
-        },
-
-        "appIOSIcon180x180": {
-            "type": "Image",
-            "fieldset": "apple-icon-180x180 ( png )",
-            "config": {
-                "placeholder": "apple-icon-180x180 ( png )"
-            }
-        },
-        "appIOSIcon152x152": {
-            "type": "Image",
-            "fieldset": "apple-icon-152x152 ( png )",
-            "config": {
-                "placeholder": "apple-icon-152x152 ( png )"
-            }
-        },
-        "appIOSIcon144x144": {
-            "type": "Image",
-            "fieldset": "apple-icon-144x144 ( png )",
-            "config": {
-                "placeholder": "apple-icon-144x144 ( png )"
-            }
-        },
-        "appIOSIcon120x120": {
-            "type": "Image",
-            "fieldset": "apple-icon-120x120 ( png )",
-            "config": {
-                "placeholder": "apple-icon-120x120 ( png )"
-            }
-        },
-        "appIOSIcon114x114": {
-            "type": "Image",
-            "fieldset": "apple-icon-114x114 ( png )",
-            "config": {
-                "placeholder": "apple-icon-114x114 ( png )"
-            }
-        },
-        "appIOSIcon76x76": {
-            "type": "Image",
-            "fieldset": "apple-icon-76x76 ( png )",
-            "config": {
-                "placeholder": "apple-icon-76x76 ( png )"
-            }
-        },
-        "appIOSIcon72x72": {
-            "type": "Image",
-            "fieldset": "apple-icon-72x72 ( png )",
-            "config": {
-                "placeholder": "apple-icon-72x72 ( png )"
-            }
-        },
-        "appIOSIcon60x60": {
-            "type": "Image",
-            "fieldset": "apple-icon-60x60 ( png )",
-            "config": {
-                "placeholder": "apple-icon-60x60 ( png )"
-            }
-        },
-        "appIOSIcon57x57": {
-            "type": "Image",
-            "fieldset": "apple-icon-57x57 ( png )",
-            "config": {
-                "placeholder": "apple-icon-57x57 ( png )"
-            }
-        },
-
-        "appIcon192x192": {
-            "type": "Image",
-            "fieldset": "favicon-192x192 ( png )",
-            "config": {
-                "placeholder": "favicon-192x192 ( png )"
-            }
-        },
-        "appIcon96x96": {
-            "type": "Image",
-            "fieldset": "favicon-96x96 ( png )",
-            "config": {
-                "placeholder": "favicon-96x96 ( png )"
-            }
-        },
-        "appIcon32x32": {
-            "type": "Image",
-            "fieldset": "favicon-32x32 ( png )",
-            "config": {
-                "placeholder": "favicon-32x32 ( png )"
-            }
-        },
-        "appIcon16x16": {
-            "type": "Image",
-            "fieldset": "favicon-16x16 ( png )",
-            "config": {
-                "placeholder": "favicon-16x16 ( png )"
-            }
-        },
-
-        "appMSTileColor": {
-            "type": "Color",
-            "fieldset": "msapplication-TileColor",
-            "config": {
-                "label": "msapplication-TileColor"
-            }
-        },
-        "appMSIcon310x310": {
-            "type": "Image",
-            "fieldset": "msapp-icon-310x310logo ( png )",
-            "config": {
-                "placeholder": "msapp-icon-310x310logo ( png )"
-            }
-        },
-        "appMSIcon310x150": {
-            "type": "Image",
-            "fieldset": "msapp-icon-310x150logo ( png )",
-            "config": {
-                "placeholder": "msa-icon-310x150logo ( png )"
-            }
-        },
-        "appMSIcon150x150": {
-            "type": "Image",
-            "fieldset": "msapp-icon-150x150logo ( png )",
-            "config": {
-                "placeholder": "msapp-icon-150x150logo ( png )"
-            }
-        },
-        "appMSIcon70x70": {
-            "type": "Image",
-            "fieldset": "msapp-icon-70x70logo ( png )",
-            "config": {
-                "placeholder": "msapp-icon-70x70logo ( png )"
-            }
-        }
-    },
-    "Navigation": {
-        "navi": {
-            "type": "Slices",
-            "fieldset": "Navigation Items",
-            "config": {
-                "choices": {
-                    "item": {
-                        "type": "Group",
-                        "fieldset": "Navigation Item",
-                        "config": {
-                            "fields": {
-                                "name": {
-                                    "type": "Text",
-                                    "fieldset": "Navigation Display Text",
-                                    "config": {
-                                        "label": "Navigation Display Text"
-                                    }
-                                },
-                                "slug": {
-                                    "type": "Text",
-                                    "fieldset": "Navigation Slug",
-                                    "config": {
-                                        "label": "Navigation Slug"
-                                    }
-                                },
-                                "style": {
-                                    "type": "Select",
-                                    "config": {
-                                        "options": [
-                                            "Primary",
-                                            "Tertiary"
-                                        ],
-                                        "label": "Select Style",
-                                        "placeholder": "Select Style"
-                                    }
-                                },
-                                "page": {
-                                    "type": "Link",
-                                    "fieldset": "Page to link to?",
-                                    "config": {
-                                        "placeholder": "Page to link to?",
-                                        "select": "document",
-                                        "masks": ["page"]
-                                    }
+    "Navigation":{
+        "navi":{
+            "type":"Slices",
+            "fieldset":"Navigation Items",
+            "config":{
+                "choices":{
+                    "nav_item":{
+                        "type":"Slice",
+                        "fieldset":"Nav Item",
+                        "description":"An item in the main navigation",
+                        "icon":"open_in_new",
+                        "display":"list",
+                        "non-repeat":{
+                            "label":{
+                                "type":"Text",
+                                "config":{
+                                    "label":"Label",
+                                    "placeholder":"Display label"
                                 }
                             },
-                            "repeat": false
+                            "name":{
+                                "type":"Text",
+                                "config":{
+                                    "label":"Name",
+                                    "placeholder":"Display text"
+                                }
+                            },
+                            "slug":{
+                                "type":"Text",
+                                "config":{
+                                    "label":"Slug",
+                                    "placeholder":"URL slug ( skip if linking document below )"
+                                }
+                            },
+                            "page":{
+                                "type":"Link",
+                                "config":{
+                                    "select":"document",
+                                    "customtypes":[
+                                        "page"
+                                    ],
+                                    "label":"Page",
+                                    "placeholder":"Link to page document"
+                                }
+                            }
+                        },
+                        "repeat":{
+
                         }
                     }
                 }

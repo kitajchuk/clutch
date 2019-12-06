@@ -9,11 +9,14 @@ const autoprefixer = require( "autoprefixer" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
 const CompressionPlugin = require( "compression-webpack-plugin" );
 const OnBuildWebpackPlugin = require( "on-build-webpack" );
-const sassFontPath = config.aws.cdnOn ? `${config.aws.cdn}/fonts/` : "/fonts/";
+const sassFontPath = (config.aws.cdn && config.env.production) ? `${config.aws.cdn}/fonts/` : "/fonts/";
 
 
 
 const webpackConfig = {
+    mode: "none",
+
+
     devtool: "source-map",
 
 
@@ -30,37 +33,80 @@ const webpackConfig = {
             open: true,
             host: "localhost",
             port: config.browser.port,
-            proxy: `http://localhost:${config.express.port}`,
-            files: [
-                "template/**/*.html"
-            ]
+            proxy: `http://localhost:${config.express.port}`
         })
     ],
 
 
     resolve: {
         modules: [root, source, nodeModules],
-        mainFields: ["webpack", "browserify", "web", "hobo", "main"]
+        mainFields: ["webpack", "browserify", "web", "clutch", "hobo", "main"]
     },
 
 
     entry: {
-        "app": path.resolve( __dirname, "source/js/app.js" )
+        "clutch": path.resolve( __dirname, "source/js/properjs/clutch.js" )
     },
 
 
     output: {
         path: path.resolve( __dirname, "static/js" ),
-        filename: "app.js"
+        filename: `clutch.${process.env.NODE_ENV}.js`
     },
 
 
     module: {
         rules: [
-            { test: /source\/js\/.*\.js$/, /*exclude: /node_modules/,*/ use: ["eslint-loader"], enforce: "pre" },
-            { test: /source\/js\/.*\.js$/, /*exclude: /node_modules/,*/ use: [{ loader: "babel-loader", options: { presets: ["es2015"] } }] },
-            { test: /(hobo|hobo.build)\.js$/, use: ["expose-loader?hobo"] },
-            { test: /\.(sass|scss)$/, use: ["file-loader?name=../css/[name].css", "postcss-loader", {loader: "sass-loader", options: { outputStyle: "compressed", data: '$font-path: "' + sassFontPath + '";' }}] }
+            {
+                test: /source\/js\/.*\.js$/,
+                exclude: /node_modules|vendor/,
+                loader: "eslint-loader",
+                enforce: "pre",
+                options: {
+                    emitError: true,
+                    emitWarning: false,
+                    failOnError: true,
+                    quiet: true
+                }
+            },
+            {
+                test: /source\/js\/.*\.js$/,
+                exclude: /node_modules|vendor/,
+                use: [
+                    {
+                        loader: "babel-loader",
+                        options: {
+                            presets: ["env"]
+                        }
+                    }
+                ]
+            },
+            {
+                test: /(hobo|hobo.build)\.js$/,
+                use: ["expose-loader?hobo"]
+            },
+            {
+                test: /\.(sass|scss)$/,
+                exclude: /node_modules|vendor/,
+                use: [
+                    `file-loader?name=../css/[name].${process.env.NODE_ENV}.css`,
+                    "postcss-loader",
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            outputStyle: "compressed",
+                            data: '$font-path: "' + sassFontPath + '";'
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.svg$/,
+                exclude: /node_modules/,
+                use: [
+                    "svg-inline-loader"
+                ]
+            }
         ]
     }
 };
@@ -68,16 +114,16 @@ const webpackConfig = {
 
 
 module.exports = ( env ) => {
-    // You can enable gzip compression here...
-    // if ( env.staging || env.production ) {
-    //     webpackConfig.plugins.push(new CompressionPlugin({
-    //         asset: "[path]",
-    //         algorithm: "gzip",
-    //         test: /\.(js|css)$/,
-    //         threshold: 0,
-    //         minRatio: 0.8
-    //     }));
-    // }
+    // You can enable gzip compression here for S3...
+    if ( env.production && config.aws.cdn ) {
+        webpackConfig.plugins.push(new CompressionPlugin({
+            asset: "[path]",
+            algorithm: "gzip",
+            test: /\.(js|css)$/,
+            threshold: 0,
+            minRatio: 0.8
+        }));
+    }
 
     return webpackConfig;
 };

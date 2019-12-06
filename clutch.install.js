@@ -1,46 +1,41 @@
-"use strict";
-
-
-
 const fs = require( "fs" );
 const path = require( "path" );
 const root = __dirname;
 const rootNodeModules = path.join( root, "node_modules" );
 const rootPackageLock = path.join( root, "package-lock.json" );
-const rootSandbox = path.join( root, "sandbox" );
+const rootClutch = path.join( root, ".clutch" );
 const rootTemplatePartials = path.join( root, "template", "partials" );
 const rootNotes = path.join( root, ".notes" );
 const rootServer = path.join( root, "server" );
-const rootTasks = path.join( root, "tasks" );
 const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 const child_process = require( "child_process" );
-const config = require( "./clutch.config" );
-
-
-
-// Note that with `npm@5` there have been some hiccups
-// The ultimate resolve was to trash the `.npm` cache
+const files = require( "./server/core/files" );
+// Leave this alone! You put your values in .clutch/config.json
+const rootConfig = require( "./clutch.root" );
 
 
 
 // 1.0: Fresh `node_modules`
-console.log( "Installing node_modules..." );
+console.log( "[Clutch] Installing node_modules..." );
 
-child_process.execSync( `rm -rf ${rootPackageLock}` );
-// child_process.execSync( `rm -rf ${rootNodeModules}` );
-child_process.execSync( "npm install" );
+child_process.execSync( "npm i" );
+
 
 
 // 2.0 Create sandbox
-console.log( "Creating sandbox..." );
+console.log( "[Clutch] Creating .clutch directory..." );
 
-if ( !fs.existsSync( rootSandbox ) ) {
-    child_process.execSync( `mkdir ${rootSandbox}` );
+if ( !fs.existsSync( rootClutch ) ) {
+    child_process.execSync( `mkdir ${rootClutch}` );
+    child_process.execSync( `mkdir ${path.join( rootClutch, "authorizations" )}` );
+    child_process.execSync( `touch ${path.join( rootClutch, "config.json" )}` );
+
+    files.write( path.join( rootClutch, "config.json" ), rootConfig, true );
 }
 
 
 // 3.0 Create template partials
-console.log( "Creating template partials..." );
+console.log( "[Clutch] Creating template partials..." );
 
 if ( !fs.existsSync( rootTemplatePartials ) ) {
     child_process.execSync( `mkdir ${rootTemplatePartials}` );
@@ -48,7 +43,7 @@ if ( !fs.existsSync( rootTemplatePartials ) ) {
 
 
 // 4.0 Create notes
-console.log( "Creating notes..." );
+console.log( "[Clutch] Creating .notes file for dev..." );
 
 if ( !fs.existsSync( rootNotes ) ) {
     child_process.execSync( `touch ${rootNotes}` );
@@ -56,23 +51,15 @@ if ( !fs.existsSync( rootNotes ) ) {
 
 
 // 5.0 Hobo.js build
-console.log( "Building properjs-hobo..." );
+console.log( "[Clutch] Building properjs-hobo..." );
 
-child_process.execSync( `cd ${rootHobo} && npm install && npm run build -- '${config.browser.hobo}'` );
+child_process.execSync( `npm run bootstrap:hobo` );
 
 
 // 6.0 server install
-console.log( "Installing server node_modules..." );
+console.log( "[Clutch] Installing server node_modules..." );
 
-child_process.execSync( `cd ${rootServer} && npm install` );
+child_process.execSync( `cd ${rootServer} && npm i` );
 
-
-// 7.0 tasks install
-console.log( "Installing tasks node_modules..." );
-
-if ( fs.existsSync( rootTasks ) ) {
-    child_process.execSync( `cd ${rootTasks} && npm install` );
-}
-
-// 8.0 done
-console.log( "Done!" );
+// 7.0 done
+console.log( "[Clutch] Install complete!" );

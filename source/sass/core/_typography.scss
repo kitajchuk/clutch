@@ -1,0 +1,74 @@
+/******************************************************************************
+ * Paragraphs
+*******************************************************************************/
+.p,
+.cms p {
+    @include p();
+
+    a {
+        border-bottom: 1px solid inherit;
+        }
+    em {
+        color: $grey2;
+        font-size: $p-size-meta;
+        }
+    b,
+    strong {
+        font-size: $p-size-bold;
+        @include font-family-bold();
+        }
+}
+.li,
+.cms li {
+    @include li();
+    }
+.ol .li,
+.cms ol li {
+    @include ol-li();
+    }
+.ul .li,
+.cms ul li {
+    @include ul-li();
+    }
+
+
+
+/******************************************************************************
+ * Headlines
+*******************************************************************************/
+.h1,
+.cms h1 {
+    @include h1();
+
+    @include respond-min( $mobile-width ) {
+        font-size: $h1-size-fluid;
+    }
+
+    @include respond-min( $bind-width ) {
+        font-size: $h1-size;
+    }
+}
+.h2,
+.cms h2 {
+    @include h2();
+
+    @include respond-min( $mobile-width ) {
+        font-size: $h2-size-fluid;
+    }
+
+    @include respond-min( $bind-width ) {
+        font-size: $h2-size;
+    }
+}
+.h3,
+.cms h3 {
+    @include h3();
+
+    @include respond-min( $mobile-width ) {
+        font-size: $h3-size-fluid;
+    }
+
+    @include respond-min( $bind-width ) {
+        font-size: $h3-size;
+    }
+}

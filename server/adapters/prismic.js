@@ -28,18 +28,18 @@
  *
  */
 const path = require( "path" );
-const prismic = require( "prismic.io" );
+const prismic = require( "prismic-javascript" );
 const cache = {
     api: null,
     site: null,
     navi: null
 };
 const core = {
-    watch: require( "../core/watch" ),
     config: require( "../../clutch.config" ),
     template: require( "../core/template" )
 };
 const ContextObject = require( "../class/ContextObject" );
+const apiOptions = (core.config.api.token ? { accessToken: core.config.api.token } : null);
 
 
 
@@ -60,6 +60,17 @@ const getApi = function ( req, res, listener ) {
             // All documents for /:type
             } else {
                 data.documents = json;
+            }
+
+            // Pagination information
+            data.pagination = {
+                page: json.page,
+                results_per_page: json.results_per_page,
+                results_size: json.results_size,
+                total_results_size: json.total_results_size,
+                total_pages: json.total_pages,
+                next_page: json.next_page,
+                prev_page: json.prev_page
             }
 
             // Render partial for ?format=html&template=foo
@@ -105,13 +116,19 @@ const getPage = function ( req, res, listener ) {
  *
  */
 const getPreview = function ( req, res ) {
+    let resolvedUrl = "/";
+
     return new Promise(( resolve, reject ) => {
         const previewToken = req.query.token;
         const linkResolver = function ( doc ) {
-            return `/${doc.type}/${doc.uid}/`;
+            const type = (core.config.generate.mappings[ doc.type ] || doc.type);
+
+            resolvedUrl = (type === "page") ? `/${doc.uid}/` : `/${type}/${doc.uid}/`;
+
+            return resolvedUrl;
         };
 
-        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
+        prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
             api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
                 res.cookie( prismic.previewCookie, previewToken, {
                     maxAge: 60 * 30 * 1000,
@@ -119,7 +136,7 @@ const getPreview = function ( req, res ) {
                     httpOnly: false
                 });
 
-                resolve( redirectUrl );
+                resolve( resolvedUrl );
             });
         });
     });
@@ -141,6 +158,7 @@ const getPartial = function ( req, data, listener ) {
         const template = path.join( core.config.template.partialsDir, `${partial}.html` );
 
         localObject.context.set({
+            csrf: req.csrfToken ? req.csrfToken() : null,
             site: cache.site,
             navi: cache.navi
         });
@@ -177,7 +195,7 @@ const getPartial = function ( req, data, listener ) {
  */
 const getSite = function ( req ) {
     return new Promise(( resolve, reject ) => {
-        prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
+        prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
             api.getSingle( "site" ).then(( document ) => {
                 const navi = {
                     items: []
@@ -187,45 +205,38 @@ const getSite = function ( req ) {
                 };
 
                 // Normalize site context
-                for ( let i in document.fragments ) {
-                    if ( i !== "site.navi" ) {
-                        const key = i.replace( /^site\./, "" );
+                for ( let i in document.data ) {
+                    // Skip navi since we process that elsewhere...
+                    if ( i !== "navi" ) {
+                        // Handle `null` values...
+                        if ( !document.data[ i ] ) {
+                            site.data[ i ] = "";
 
-                        site.data[ key ] = document.fragments[ i ].value || document.fragments[ i ].url;
+                        // Handle `string` values...
+                        } else {
+                            site.data[ i ] = document.data[ i ];
+                        }
                     }
                 }
 
                 // Normalize navi context
-                document.getSliceZone( "site.navi" ).value.forEach(( slice ) => {
-                    let id = null;
-                    let uid = null;
-                    let type = null;
-                    let slug = null;
-                    const style = slice.value.value[ 0 ].data.style.value.toLowerCase();
-                    const title = slice.value.value[ 0 ].data.name.value;
+                document.data.navi.forEach(( slice ) => {
+                    let slug = slice.primary.page.uid;
 
-                    // Handle Document.link to a Page
-                    if ( slice.value.value[ 0 ].data.page ) {
-                        id = slice.value.value[ 0 ].data.page.value.document.id;
-                        uid = slice.value.value[ 0 ].data.page.value.document.uid;
-                        type = slice.value.value[ 0 ].data.page.value.document.type;
-                        slug = uid;
+                    if ( slug === core.config.homepage ) {
+                        slug = "/";
 
-                    // Handle `slug` manual entry
                     } else {
-                        slug = slice.value.value[ 0 ].data.slug.value.replace( /\//g, "" );
-                        id = slug;
-                        uid = slug;
-                        type = slug;
+                        slug = `/${slug}/`;
                     }
 
                     navi.items.push({
-                        id: id,
-                        uid: (slug === core.config.homepage ? slug : uid),
-                        type: type,
-                        slug: (slug === core.config.homepage ? "/" : `/${slug}/`),
-                        title: title,
-                        style: style
+                        id: slice.primary.page.id || "",
+                        uid: slice.primary.page.uid || slice.primary.slug,
+                        type: slice.primary.page.type || slice.primary.slug,
+                        slug,
+                        title: slice.primary.name,
+                        label: slice.primary.label
                     });
                 });
 
@@ -268,7 +279,7 @@ const getNavi = function ( type ) {
 const getDataForApi = function ( req, listener ) {
     return new Promise(( resolve, reject ) => {
         const doQuery = function ( type ) {
-            prismic.api( core.config.api.access, (core.config.api.token || null) ).then(( api ) => {
+            prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
                 const done = function ( json ) {
                     resolve( json.results );
                 };
@@ -286,7 +297,7 @@ const getDataForApi = function ( req, listener ) {
                     query.push( prismic.Predicates.at( "document.type", type ) );
                 }
 
-                // query: pubsub?
+                // @hook: query
                 if ( listener && listener.handlers.query ) {
                     query = listener.handlers.query( prismic, api, query, cache, req );
                 }
@@ -301,13 +312,33 @@ const getDataForApi = function ( req, listener ) {
                         form.query( query );
                     }
 
+                    // @hook: orderings
+                    if ( listener && listener.handlers.orderings ) {
+                        listener.handlers.orderings( prismic, cache.api, form, cache, req );
+                    }
+
+                    // @hook: fetchLinks
+                    if ( listener && listener.handlers.fetchLinks ) {
+                        listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
+                    }
+
+                    // @hook: pagination
+                    if ( listener && listener.handlers.pagination ) {
+                        listener.handlers.pagination( prismic, cache.api, form, cache, req );
+                    }
+
                     // submit
                     form.submit().then( done ).catch( fail );
                 }
             });
         };
 
-        doQuery( req.params.type );
+        if ( core.config.onepager ) {
+            doQuery( core.config.homepage, null );
+
+        } else {
+            doQuery( req.params.type, null );
+        }
     });
 };
 
@@ -328,11 +359,12 @@ const getDataForPage = function ( req, listener ) {
             let query = [];
             const navi = getNavi( type );
             const form = getForm( req, cache.api, type );
+            const isHeadlessHome = (type === core.config.homepage);
             const isNaviNoForm = (navi && !cache.api.data.forms[ type ]);
             const done = function ( json ) {
                 if ( !json.results.length ) {
                     // Static page with no CMS data attached to it...
-                    if ( core.watch.cache.pages.indexOf( `${type}.html` ) !== -1 ) {
+                    if ( core.template.cache.pages.indexOf( `${type}.html` ) !== -1 ) {
                         resolve( data );
 
                     } else {
@@ -344,8 +376,8 @@ const getDataForPage = function ( req, listener ) {
                     data.items = json.results;
 
                     // uid
-                    if ( uid || isNaviNoForm ) {
-                        data.item = getDoc( (isNaviNoForm ? navi.uid : uid), json.results );
+                    if ( uid || isNaviNoForm || isHeadlessHome ) {
+                        data.item = getDoc( (isHeadlessHome ? core.config.homepage : (isNaviNoForm ? navi.uid : uid)), json.results );
 
                         if ( !data.item ) {
                             reject( `The document with UID "${isNaviNoForm ? navi.uid : uid}" could not be found by Prismic.` );
@@ -360,7 +392,11 @@ const getDataForPage = function ( req, listener ) {
             };
 
             // query: type?
-            if ( isNaviNoForm ) {
+            if ( isHeadlessHome ) {
+                query.push( prismic.Predicates.at( "document.type", "page" ) );
+                query.push( prismic.Predicates.at( "my.page.uid", core.config.homepage ) );
+
+            } else if ( isNaviNoForm ) {
                 query.push( prismic.Predicates.at( "document.type", navi.type ) );
                 query.push( prismic.Predicates.at( "document.id", navi.id ) );
 
@@ -369,7 +405,7 @@ const getDataForPage = function ( req, listener ) {
                 query.push( prismic.Predicates.at( "document.type", type ) );
             }
 
-            // query: pubsub?
+            // @hook: query
             if ( listener && listener.handlers.query ) {
                 query = listener.handlers.query( prismic, cache.api, query, cache, req );
             }
@@ -384,24 +420,35 @@ const getDataForPage = function ( req, listener ) {
                     form.query( query );
                 }
 
-                // ordering?
+                // @hook: orderings
+                if ( listener && listener.handlers.orderings ) {
+                    listener.handlers.orderings( prismic, cache.api, form, cache, req );
+                }
+
+                // @hook: fetchLinks
+                if ( listener && listener.handlers.fetchLinks ) {
+                    listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
+                }
+
+                // @hook: pagination
+                if ( listener && listener.handlers.pagination ) {
+                    listener.handlers.pagination( prismic, cache.api, form, cache, req );
+                }
 
                 // submit
                 form.submit().then( done ).catch( fail );
             }
         };
 
-        getSite( req ).then(() => {
-            const type = req.params.type;
-            const uid = req.params.uid;
+        if ( core.config.onepager ) {
+            doQuery( core.config.homepage, null );
 
-            if ( !type ) {
-                resolve( data );
+        } else if ( !req.params.type ) {
+            resolve( data );
 
-            } else {
-                doQuery( type, uid );
-            }
-        });
+        } else {
+            doQuery( req.params.type, req.params.uid );
+        }
     });
 };
 
@@ -453,6 +500,7 @@ const getForm = function ( req, api, collection ) {
 module.exports = {
     cache,
     getApi,
+    getSite,
     getPage,
     getPreview
 };

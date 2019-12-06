@@ -6,15 +6,27 @@ const express = require( "express" );
 const expressApp = express();
 const compression = require( "compression" );
 const cookieParser = require( "cookie-parser" );
+const bodyParser = require( "body-parser" );
 const lager = require( "properjs-lager" );
+const csurf = require( "csurf" );
 const listeners = {};
 const core = {
-    watch: require( "./watch" ),
     query: require( "./query" ),
     config: require( "../../clutch.config" ),
     content: require( "./content" ),
     template: require( "./template" )
 };
+const ContextObject = require( "../class/ContextObject" );
+const checkCSRF = csurf({
+    cookie: true
+});
+const http = require( "http" );
+const https = require( "https" );
+const fs = require( "fs" );
+const stasis = require( `../generators/${core.config.api.adapter}.static` );
+let httpServer = null;
+let httpsServer = null;
+let isSiteUpdate = false;
 
 
 
@@ -24,6 +36,10 @@ const core = {
  *
  */
 expressApp.use( cookieParser() );
+expressApp.use( bodyParser.json() );
+expressApp.use( bodyParser.urlencoded({
+    extended: true
+}));
 expressApp.use( compression( core.config.compression ) );
 expressApp.use( express.static( core.config.template.staticDir, {
     maxAge: core.config.static.maxAge
@@ -36,15 +52,60 @@ expressApp.use( express.static( core.config.template.staticDir, {
  * Configure Express Routes.
  *
  */
-const getKey = function ( type ) {
+const setRoutes = () => {
+    // SYSTEM
+    expressApp.get( "/preview", getPreview );
+    expressApp.post( "/webhook", postWebhook );
+    expressApp.get( "/robots.txt", getRobots );
+    expressApp.get( "/sitemap.xml", getSitemap );
+    expressApp.get( "/authorizations", checkAuthToken, getAuthorizations );
+    expressApp.get( "/authorizations/:app", checkAuthToken, getAuthorizationForApp );
+
+    // AUTHORIZATIONS
+    core.config.authorizations.apps.forEach(( app ) => {
+        require( `../auth/${app}` ).init( expressApp, checkCSRF );
+    });
+
+    // API => JSON
+    expressApp.get( "/api/:type", setReq, getApi );
+    expressApp.get( "/api/:type/:uid", setReq, getApi );
+
+    // URI => HTML
+    expressApp.get( "/", checkCSRF, setReq, getPage );
+    expressApp.get( "/:type", checkCSRF, setReq, getPage );
+    expressApp.get( "/:type/:uid", checkCSRF, setReq, getPage );
+};
+
+
+
+
+/**
+ *
+ * Request handling.
+ *
+ */
+const setReq = ( req, res, next ) => {
+    req.params.type = req.params.type || core.config.homepage;
+
+    next();
+};
+const getKey = ( type ) => {
     const key = type;
 
     return key || core.config.homepage;
-}
-const getApi = function ( req, res ) {
+};
+
+
+
+/**
+ *
+ * :GET API
+ *
+ */
+const getApi = ( req, res ) => {
     const key = getKey( req.params.type );
 
-    core.query.getApi( req, res, listeners[ key ] ).then(( result ) => {
+    core.query.getApi( req, res, listeners[ key ] || listeners[ "all" ] ).then(( result ) => {
         if ( req.query.format === "html" ) {
             res.status( 200 ).send( result );
 
@@ -53,35 +114,119 @@ const getApi = function ( req, res ) {
         }
     });
 };
-const getPage = function ( req, res ) {
+
+
+
+/**
+ *
+ * :GET Pages
+ *
+ */
+const getPage = ( req, res ) => {
     const key = getKey( req.params.type );
 
-    core.content.getPage( req, res, listeners[ key ] ).then(( callback ) => {
+    core.content.getPage( req, res, listeners[ key ] || listeners[ "all" ] ).then(( callback ) => {
         // Handshake callback :-P
         callback(( status, html ) => {
             res.status( status ).send( html );
         });
     });
 };
-const getPreview = function ( req, res ) {
+
+
+
+/**
+ *
+ * :GET  Prismic stuff
+ * :POST Prismic stuff
+ *
+ */
+const getPreview = ( req, res ) => {
     core.query.getPreview( req, res ).then(( url ) => {
         res.redirect( url );
     });
 };
+const postWebhook = ( req, res ) => {
+    // Skip if update is in progress, Skip if invalid secret was sent
+    if ( !isSiteUpdate && req.body.secret === core.config.api.secret ) {
+        isSiteUpdate = true;
+
+        // Re-Fetch Site JSON
+        core.query.getSite().then(() => {
+            isSiteUpdate = false;
+        });
+    }
+
+    // Always resolve with a 200 and some text
+    res.status( 200 ).send( "success" );
+};
+const getSitemap = ( req, res ) => {
+    const sitemap = require( `../generators/${core.config.api.adapter}.sitemap` );
+
+    sitemap.generate().then(( xml ) => {
+        res.set( "Content-Type", "text/xml" ).status( 200 ).send( xml );
+    });
+
+};
+const getRobots = ( req, res ) => {
+    const robots = require( `../generators/${core.config.api.adapter}.robots` );
+
+    robots.generate().then(( txt ) => {
+        res.set( "Content-Type", "text/plain" ).status( 200 ).send( txt );
+    });
+
+};
 
 
 
-// SYSTEM
-expressApp.get( "/preview", getPreview );
+/**
+ *
+ * Middleware checks
+ *
+ */
+const checkOrigin = ( req, res, next ) => {
+    // No origin means not CORS :-)
+    if ( !req.headers.origin ) {
+        next();
 
-// API => JSON
-expressApp.get( "/api/:type", getApi );
-expressApp.get( "/api/:type/:uid", getApi );
+    } else {
+        res.status( 200 ).json({
+            error: "Invalid origin for request"
+        });
+    }
+};
+const checkAuthToken = ( req, res, next ) => {
+    if ( req.query.token === core.config.authorizations.token ) {
+        next();
 
-// URI => HTML
-expressApp.get( "/", getPage );
-expressApp.get( "/:type", getPage );
-expressApp.get( "/:type/:uid", getPage );
+    } else {
+        res.redirect( "/" );
+    }
+};
+
+
+
+/**
+ *
+ * :GET Authorizations
+ *
+ */
+const getAuthorizations = ( req, res ) => {
+    req.params.type = "authorizations";
+    core.content.getPage( req, res, listeners.authorizations ).then(( callback ) => {
+        // Handshake callback :-P
+        callback(( status, html ) => {
+            res.status( status ).send( html );
+        });
+    });
+};
+const getAuthorizationForApp = ( req, res ) => {
+    const app = core.config.authorizations.apps.find(( app ) => {
+        return (app === req.params.app);
+    });
+
+    require( `../auth/${app}` ).auth( req, res );
+};
 
 
 
@@ -115,15 +260,32 @@ module.exports = {
      *
      */
     init () {
-        core.watch.getPages().then(() => {
-            if ( core.config.env.sandbox ) {
-                core.watch.startWatch();
-            }
+        return new Promise(( resolve, reject ) => {
+            // Init routes
+            setRoutes();
 
-            expressApp.listen( core.config.express.port );
+            // Fetch ./template/pages listing
+            core.template.getPages().then(() => {
+                // Fetch Site JSON
+                core.query.getSite().then(() => {
+                    httpServer = http.createServer( expressApp );
+                    httpServer.listen( core.config.express.port );
 
-            lager.server( `Clutch Express server started` );
-            lager.server( `Clutch access URL — http://localhost:${core.config.browser.port}` );
+                    if ( core.config.https ) {
+                        httpsServer = https.createServer({
+                                key: fs.readFileSync( core.config.letsencrypt.privkey, "utf8" ),
+                                cert: fs.readFileSync( core.config.letsencrypt.cert, "utf8" ),
+                                ca: fs.readFileSync( core.config.letsencrypt.chain, "utf8" )
+
+                            }, expressApp );
+                        httpsServer.listen( core.config.express.portHttps );
+                    }
+
+                    stasis.clean( core.config ).then( resolve );
+
+                    lager.cache( `[Clutch] Server Initialized` );
+                });
+            });
         });
     }
 };

@@ -3,6 +3,7 @@
 
 
 const config = require( "../../clutch.config" );
+const prismicDOM = require( "prismic-dom" );
 
 
 
@@ -24,6 +25,8 @@ class ContextObject {
         this.stylesheet = config.static.css;
         this.javascript = config.static.js;
         this.config = config;
+        this.dom = (config.api.adapter === "prismic" ? prismicDOM : null);
+        this.env = process.env.NODE_ENV;
     }
 
     set ( prop, value ) {
@@ -46,40 +49,45 @@ class ContextObject {
     }
 
     getPageTitle () {
+        const site = this.get( "site" );
         const item = this.get( "item" );
-        let title = this.get( "site" ).data.title;
+        let title = null;
+        let isRich = null;
 
-        if ( config.api.adapter === "prismic" ) {
-            title = (item ? item.getText( `${item.type}.title` ) + ` — ${title}` : title);
+        if ( config.onepager ) {
+            title = site.data.title;
 
-        } else if ( config.api.adapter === "contentful" ) {
-            title = (item ? `${item.fields.title} — ${title}` : title);
+        } else if ( item ) {
+            isRich = !(typeof item.data.title === "string");
+            title = `${isRich ? prismicDOM.RichText.asText( item.data.title ) : item.data.title} — ${site.data.title}`;
+
+        } else {
+            title = site.data.title;
         }
 
         return title;
     }
 
-    getPageImage () {
+    getPageDescription () {
+        const site = this.get( "site" );
         const item = this.get( "item" );
-        const appImage = this.get( "site" ).data.appImage;
-        let pageImage = "";
+        let desc = null;
 
-        if ( config.api.adapter === "prismic" ) {
-            pageImage = item ? item.getImage( `${item.type}.image` ) : "";
-
-        } else if ( config.api.adapter === "contentful" ) {
-            pageImage = item ? item.fields.image.fields.file.url : "";
+        // Homepage
+        if ( item && (item.uid === config.homepage) || !item ) {
+            desc = site.data.description;
         }
 
-        return (pageImage ? pageImage.url : appImage);
+        return desc;
     }
 
-    // Prismic specific... tsk tsk...?
-    getUrl ( item ) {
-        return `/${item.type}/${item.uid}/`;
+    getUrl ( doc ) {
+        const type = (config.generate.mappings[ doc.type ] || doc.type);
+        const resolvedUrl = doc.uid === config.homepage ? "/" : ((type === "page") ? `/${doc.uid}/` : `/${type}/${doc.uid}/`);
+
+        return resolvedUrl;
     }
 
-    // Prismic specific... tsk tsk...?
     getMediaAspect ( media ) {
         return `${media.height / media.width * 100}%`;
     }

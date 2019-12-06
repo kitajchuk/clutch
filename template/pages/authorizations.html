@@ -1,0 +1,16 @@
+<%
+const items = locals.context.get( 'items' );
+const config = locals.context.get( 'config' );
+%>
+<div class="authorizations -pad">
+    <div class="-wrap -exp">
+        <h3 class="h3">Authorizations</h3>
+        <div class="-exp">
+            <% items.forEach(( item ) => { %>
+                <p class="p">
+                    <a href="/authorizations/<%= item.app %>/?token=<%= config.authorizations.token %>" class="js-router--ignore -spot"><%= item.app %></a> / authorized: <%- item.authorized %>
+                </p>
+            <% }) %>
+        </div>
+    </div>
+</div>

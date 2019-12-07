@@ -1,7 +1,7 @@
 {
   "title": "Clutch",
   "name": "clutch",
-  "description": "A Developer SDK for Prismic.io and Netlify.",
+  "description": "A Developer SDK for Prismic.io.",
   "private": true,
   "version": "3.0.0",
   "scripts": {

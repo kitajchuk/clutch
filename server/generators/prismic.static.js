@@ -89,11 +89,18 @@ const cleanStatic = ( json ) => {
                     if ( regex.test( link ) ) {
                         fs.unlinkSync( link );
 
-                    } else {
-                        fs.rmdirSync( link );
-                    }
+                        lager.error( `[Clutch] Un-Linking static link ${link}` );
 
-                    lager.error( `[Clutch] Un-Linking static link ${link}` );
+                    } else {
+                        // Make sure the `folder` is empty...
+                        const files = fs.readdirSync( link );
+
+                        if ( !files.length ) {
+                            fs.rmdirSync( link );
+
+                            lager.error( `[Clutch] Un-Linking static link ${link}` );
+                        }
+                    }
 
                     uris.pop();
 

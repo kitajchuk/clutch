@@ -81,6 +81,17 @@ const createSitemap = () => {
         prismic.api( config.api.access, apiOptions ).then(( api ) => {
             getDocuments( api ).then(( docs ) => {
                 const nodes = [];
+                const homepage = docs.find(( doc ) => {
+                    return (doc.uid === config.homepage);
+                });
+
+                if ( !homepage ) {
+                    docs.unshift({
+                        uid: config.homepage,
+                        type: "page",
+                        last_publication_date: Date.now()
+                    });
+                }
 
                 docs.forEach(( doc ) => {
                     let loc = `${config.url}`;

@@ -85,4 +85,11 @@ const config = {
 
 
 
+// Local dev URL
+if ( config.env.sandbox ) {
+    config.url = `http://localhost:${config.browser.port}`;
+}
+
+
+
 module.exports = config;

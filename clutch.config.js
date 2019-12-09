@@ -11,9 +11,9 @@ const envVars = {
     webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET
 };
 const config = {
-    // The URL of your actual site, Netlify domain: `clutch.kitajchuk.com`
+    // The URL of your actual site, Netlify domain: `bs.services`
     url: "https://clutch.kitajchuk.com",
-    // Homepage UID
+    // Homepage UID, make sure it matches what you use in Prismic
     homepage: "home",
     // Page Not Found UID — 404
     notfound: "404",
@@ -28,14 +28,15 @@ const config = {
         sandbox: (process.env.NODE_ENV === "sandbox"),
         netlify: (process.env.NODE_ENV === "netlify")
     },
-    // API CMS config ( Prismic )
+    // Content service API
     api: {
-        // Prismic
-        // Access is your API URL from Prismic's settings panel
         adapter: "prismic",
         access: envVars.apiAccess,
         token: envVars.accessToken,
-        secret: envVars.webhookSecret
+        secret: envVars.webhookSecret,
+        // For linked documents these will always be useing in Prismic api querying
+        // https://prismic.io/docs/rest-api/query-the-api/fetch-linked-document-fields
+        fetchLinks: []
     },
     // Templating config
     template: {
@@ -74,12 +75,7 @@ const config = {
         robots: {
             site: false,
             page: false
-        },
-        // Useful for prismic collection forms
-        // { type: collection }
-        // Example:  { "casestudy": "work" }
-        // Resolves "/work/:uid" from "/casestudy/:uid"
-        mappings: {}
+        }
     }
 };
 

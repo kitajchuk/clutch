@@ -21,9 +21,23 @@ const lager = require( "properjs-lager" );
 const botsText = `
 # Clutch Robots Txt
 
+User-agent: AdsBot-Google
+Disallow: /api/
+@content
+
+User-agent: AdsBot-Google-Mobile
+Disallow: /api/
+@content
+
+User-agent: AdsBot-Google-Mobile-Apps
+Disallow: /api/
+@content
+
 User-agent: *
 Disallow: /api/
 @content
+
+Sitemap: ${config.url}/sitemap.xml
 `;
 
 
@@ -40,7 +54,7 @@ const createRobots = () => {
             }
         }
 
-        const finalTXT = botsText.replace( "@content", rules.join( "\n" ) );
+        const finalTXT = botsText.replace( /\@content/g, rules.join( "\n" ) );
 
         resolve( finalTXT );
     });

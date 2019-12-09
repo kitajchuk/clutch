@@ -20,12 +20,13 @@
 .clutch-pre
 static/js
 static/css
-static/json
 static/svg
 static/robots.txt
 static/sitemap.xml
 static/*.html
 static/**/*.html
+static/*.json
+static/**/*.json
 
 
 # Node / npm

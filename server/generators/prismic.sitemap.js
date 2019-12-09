@@ -15,9 +15,9 @@
  *
  *
  */
-const prismic = require( "prismic-javascript" );
 const config = require( "../../clutch.config" );
 const lager = require( "properjs-lager" );
+const query = require( "../core/query" );
 const apiOptions = (config.api.token ? { accessToken: config.api.token } : null);
 const xmlDoc = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -44,81 +44,71 @@ const getLastmod = ( timestamp ) => {
 
     ].join( "-" );
 };
-const getDocuments = ( api ) => {
-    return new Promise(( resolve, reject ) => {
-        let docs = [];
-        const getDocs = ( p ) => {
-            api.form( "everything" )
-                .pageSize( 100 )
-                .page( p )
-                .ref( api.master() )
-                .submit()
-                .then(( json ) => {
-                    json.results.forEach(( doc ) => {
-                        // Explicit `false` to exclude content-type
-                        if ( !(config.generate.sitemap[ doc.type ] === false) ) {
-                            docs.push( doc );
-                        }
-                    });
-
-                    if ( json.next_page ) {
-                        getDocs( (p + 1) );
-
-                    } else {
-                        resolve( docs );
-                    }
-                })
-                .catch(( error ) => {
-                    reject( error );
-                })
-        };
-
-        getDocs( 1 );
-    });
-};
 const createSitemap = () => {
     return new Promise(( resolve, reject ) => {
-        prismic.api( config.api.access, apiOptions ).then(( api ) => {
-            getDocuments( api ).then(( docs ) => {
-                const nodes = [];
-                const homepage = docs.find(( doc ) => {
-                    return (doc.uid === config.homepage);
+        query.getDocs().then(( docs ) => {
+            const nodes = [];
+            const homepage = docs.page.find(( doc ) => {
+                return (doc.uid === config.homepage);
+            });
+            const pushNode = ( loc, timestamp ) => {
+                nodes.push(
+                    xmlNode
+                        .replace( "@loc", loc )
+                        .replace( "@changefreq", "daily" )
+                        .replace( "@priority", "0.75" )
+                        .replace( "@lastmod", getLastmod( timestamp ) )
+                );
+            }
+
+            // One-pager
+            if ( config.onepager ) {
+                query.cache.navi.items.forEach(( navi ) => {
+                    let loc = `${core.config.url}`;
+
+                    // if ( core.config.generate.mappings[ navi.uid ] !== "/" ) {
+                    //     loc = `${loc}${navi.slug}`;
+                    // }
+
+                    loc = `${loc}${navi.slug}`;
+
+                    pushNode( loc, homepage.last_publication_date );
                 });
 
+            // Standard
+            } else {
                 if ( !homepage ) {
-                    docs.unshift({
+                    docs.page.unshift({
                         uid: config.homepage,
                         type: "page",
                         last_publication_date: Date.now()
                     });
                 }
 
-                docs.forEach(( doc ) => {
-                    let loc = `${config.url}`;
+                for ( let i in docs ) {
+                    docs[ i ].forEach(( doc ) => {
+                        if ( config.generate.sitemap[ doc.type ] !== false ) {
+                            let loc = `${config.url}`;
 
-                    // Clutch lets pages be special
-                    // e.g /page/foobar => /foobar
-                    if ( doc.type !== "page" ) {
-                        loc = `${loc}/${config.generate.mappings[ doc.type ] ? config.generate.mappings[ doc.type ] : doc.type}`;
-                    }
+                            // Clutch lets pages be special
+                            // e.g /page/foobar => /foobar
+                            if ( doc.type !== "page" ) {
+                                loc = `${loc}/${query.cache.api.data.forms[ doc.type ] ? query.cache.api.data.forms[ doc.type ] : doc.type}`;
+                            }
 
-                    if ( doc.uid !== config.homepage ) {
-                        loc = `${loc}/${doc.uid}/`;
-                    }
+                            if ( doc.uid !== config.homepage ) {
+                                loc = `${loc}/${doc.uid}/`;
+                            }
 
-                    nodes.push(
-                        xmlNode
-                            .replace( "@loc", loc )
-                            .replace( "@changefreq", "yearly" )
-                            .replace( "@priority", "0.5" )
-                            .replace( "@lastmod", getLastmod( doc.last_publication_date ) )
-                    );
-                });
+                            pushNode( loc, doc.last_publication_date );
+                        }
+                    });
+                }
+            }
 
-                const finalXML = xmlDoc.replace( "@content", nodes.join( "\n" ) );
+            const finalXML = xmlDoc.replace( "@content", nodes.join( "\n" ) );
 
-                resolve( finalXML );
-            });
+            resolve( finalXML );
         });
     });
 };

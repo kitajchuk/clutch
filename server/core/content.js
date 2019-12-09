@@ -22,12 +22,21 @@ const getPage = function ( req, res, listener ) {
     return new Promise(( resolve, reject ) => {
         const page = (core.config.onepager ? core.config.homepage : (req.params.type ? req.params.type : core.config.homepage));
         let context = new ContextObject( page );
-        const check = function ( data ) {
+        const check = ( data ) => {
+            // data: {
+            //     site,
+            //     navi,
+            //     docs?,
+            //     doc?,
+            //     next?,
+            //     prev?
+            // }
+
             // 0.0 => Missing template file
             // 0.1 => Single ContentItem
             // 0.2 => Multiple ContentItems(s)
             const isNoNamePage = (core.template.cache.pages.indexOf( `${page}.html` ) === -1);
-            const isNoTypePage = data.item ? (core.template.cache.pages.indexOf( `${data.item.type}.html` ) === -1) : true;
+            const isNoTypePage = data.doc ? (core.template.cache.pages.indexOf( `${data.doc.type}.html` ) === -1) : true;
 
             if ( isNoNamePage && isNoTypePage ) {
                 const file = path.join( core.config.template.pagesDir, `${page}.html` );
@@ -35,12 +44,20 @@ const getPage = function ( req, res, listener ) {
                 fail( `The template file for this path is missing at "${file}".` );
 
             } else {
-                if ( data.item ) {
-                    context.set( "item", data.item );
+                if ( data.doc ) {
+                    context.set( "doc", data.doc );
                 }
 
-                if ( data.items ) {
-                    context.set( "items", data.items );
+                if ( data.docs ) {
+                    context.set( "docs", data.docs );
+                }
+
+                if ( data.prev ) {
+                    context.set( "prev", data.prev );
+                }
+
+                if ( data.next ) {
+                    context.set( "next", data.next );
                 }
 
                 // context?
@@ -51,7 +68,7 @@ const getPage = function ( req, res, listener ) {
                 done();
             }
         };
-        const fail = function ( error ) {
+        const fail = ( error ) => {
             context.set({
                 page: core.config.notfound,
                 error: error
@@ -59,7 +76,7 @@ const getPage = function ( req, res, listener ) {
 
             done();
         };
-        const done = function () {
+        const done = () => {
             context.set({
                 csrf: req.csrfToken ? req.csrfToken() : null,
                 navi: core.query.cache.navi,
@@ -70,15 +87,15 @@ const getPage = function ( req, res, listener ) {
                 render( callback );
             });
         };
-        const render = function ( callback ) {
+        const render = ( callback ) => {
             const localObject = {
                 context: context
             };
-            const item = localObject.context.get( "item" );
+            const doc = localObject.context.get( "doc" );
             const isNoNamePage = (core.template.cache.pages.indexOf( `${page}.html` ) === -1);
 
-            if ( isNoNamePage && item ) {
-                localObject.context.set( "page", item.type );
+            if ( isNoNamePage && doc ) {
+                localObject.context.set( "page", doc.type );
             }
 
             core.template.render( core.config.template.layout, localObject ).then(( html ) => {
@@ -88,7 +105,7 @@ const getPage = function ( req, res, listener ) {
                 renderError( callback, error );
             });
         };
-        const renderError = function ( callback, error ) {
+        const renderError = ( callback, error ) => {
             context.set({
                 page: core.config.notright,
                 error: error

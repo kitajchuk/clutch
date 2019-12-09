@@ -24,6 +24,7 @@ const http = require( "http" );
 const fs = require( "fs" );
 const stasis = require( `../generators/${core.config.api.adapter}.static` );
 let httpServer = null;
+let cacheIndex = 0;
 
 
 
@@ -94,15 +95,24 @@ const getKey = ( type ) => {
  */
 const getApi = ( req, res ) => {
     const key = getKey( req.params.type );
-
-    core.query.getApi( req, res, listeners[ key ] || listeners[ "all" ] ).then(( result ) => {
-        if ( req.query.format === "html" ) {
-            res.status( 200 ).send( result );
-
-        } else {
+    const done = () => {
+        core.query.getApi( req, res, listeners[ key ] ).then(( result ) => {
             res.status( 200 ).json( result );
-        }
-    });
+        });
+    };
+
+    if ( req.query.nocache ) {
+        cacheIndex = Number( req.query.nocache );
+
+        core.query.getSite().then(() => {
+            lager.cache( `[Clutch] Cache query index ${cacheIndex}` );
+
+            done();
+        });
+
+    } else {
+        done();
+    }
 };
 
 
@@ -114,13 +124,27 @@ const getApi = ( req, res ) => {
  */
 const getPage = ( req, res ) => {
     const key = getKey( req.params.type );
-
-    core.content.getPage( req, res, listeners[ key ] || listeners[ "all" ] ).then(( callback ) => {
-        // Handshake callback :-P
-        callback(( status, html ) => {
-            res.status( status ).send( html );
+    const done = () => {
+        core.content.getPage( req, res, listeners[ key ] ).then(( callback ) => {
+            // Handshake callback
+            callback(( status, html ) => {
+                res.status( status ).send( html );
+            });
         });
-    });
+    };
+
+    if ( req.query.nocache ) {
+        cacheIndex = Number( req.query.nocache );
+
+        core.query.getSite().then(() => {
+            lager.cache( `[Clutch] Cache query index ${cacheIndex}` );
+
+            done();
+        });
+
+    } else {
+        done();
+    }
 };
 
 

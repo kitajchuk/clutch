@@ -17,7 +17,6 @@ class ContextObject {
         this.site = null;
         this.navi = null;
         this.page = page;
-        this.cache = config.env.production;
         this.error = null;
         this.timestamp = config.timestamp;
         this.item = null;
@@ -82,7 +81,8 @@ class ContextObject {
     }
 
     getUrl ( doc ) {
-        const type = (config.generate.mappings[ doc.type ] || doc.type);
+        const query = require( "../core/query" );
+        const type = (query.cache.api.data.forms[ doc.type ] || doc.type);
         const resolvedUrl = doc.uid === config.homepage ? "/" : ((type === "page") ? `/${doc.uid}/` : `/${type}/${doc.uid}/`);
 
         return resolvedUrl;

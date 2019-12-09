@@ -14,13 +14,15 @@
  *
  */
 const path = require( "path" );
-const config = require( "../../clutch.config" );
 const lager = require( "properjs-lager" );
 const fs = require( "fs" );
 const request = require( "request-promise" );
 const xml2js = require( "xml2js" );
 const htmlMin = require( "html-minifier" );
 const files = require( "../core/files" );
+const config = require( "../../clutch.config" );
+const sitemap = require( `./${config.api.adapter}.sitemap` );
+const robots = require( `./${config.api.adapter}.robots` );
 const baseUrl = `http://localhost:${config.express.port}`;
 const baseUrlBrowserSync = `http://localhost:${config.browser.port}`;
 const saveLoc = config.template.staticDir;
@@ -34,6 +36,14 @@ const saveFile = ( obj ) => {
         let place = saveLoc;
         let slug = obj.url.loc[ 0 ].replace( regex, "" );
         const uris = slug ? slug.split( "/" ) : [];
+        const _saveFile = () => {
+            files.writeStr( place, obj.html ).then(() => {
+                lager.cache( `[Clutch] Linking static link ${place}` );
+
+                resolve();
+
+            }).catch( reject );
+        };
 
         uris.forEach(( uri ) => {
             place = `${place}/${uri}`;
@@ -61,12 +71,18 @@ const saveFile = ( obj ) => {
             removeRedundantAttributes: true
         });
 
-        files.writeStr( place, obj.html ).then(() => {
-            lager.cache( `[Clutch] Linking static link ${place}` );
+        if ( !obj.json.error ) {
+            const placeJson = place.replace( /\.html$/, ".json" );
 
-            resolve();
+            files.write( placeJson, obj.json ).then(() => {
+                lager.cache( `[Clutch] Linking static link ${placeJson}` );
 
-        }).catch( reject );
+                _saveFile();
+            });
+
+        } else {
+            _saveFile();
+        }
     });
 };
 
@@ -77,11 +93,18 @@ const cleanStatic = ( json ) => {
     return new Promise(( resolve, reject ) => {
         json.urlset.url.forEach(( url ) => {
             let regex = new RegExp( `^${buildConfig.url}\/{0,1}|\/$`, "g" );
-            let slug = url.loc[ 0 ].replace( regex, "" );
-                slug = slug ? `${slug}/index.html` : "index.html";
-            const uris = slug.split( "/" );
+            const slug = url.loc[ 0 ].replace( regex, "" );
+            const slugHtml = slug ? `${slug}/index.html` : "index.html";
+            const slugJson = slug ? `${slug}/index.json` : "";
+            const uris = slugHtml.split( "/" );
+            const urisJson = slugJson.split( "/" );
+            const files = {
+                robots: `${saveLoc}/robots.txt`,
+                sitemap: `${saveLoc}/sitemap.xml`
+            };
             const unlinkF = () => {
                 const link = `${saveLoc}/${uris.join( "/" )}`;
+                const linkJson = `${saveLoc}/${urisJson.join( "/" )}`;
 
                 if ( fs.existsSync( link ) ) {
                     regex = /\.html$/;
@@ -90,6 +113,12 @@ const cleanStatic = ( json ) => {
                         fs.unlinkSync( link );
 
                         lager.error( `[Clutch] Un-Linking static link ${link}` );
+
+                        if ( fs.existsSync( linkJson ) && (linkJson !== `${saveLoc}/`) ) {
+                            fs.unlinkSync( linkJson );
+
+                            lager.error( `[Clutch] Un-Linking static link ${linkJson}` );
+                        }
 
                     } else {
                         // Make sure the `folder` is empty...
@@ -112,6 +141,18 @@ const cleanStatic = ( json ) => {
                     }
                 }
             };
+
+            if ( fs.existsSync( files.robots ) ) {
+                fs.unlinkSync( files.robots );
+
+                lager.error( `[Clutch] Un-Linking static link ${files.robots}` );
+            }
+
+            if ( fs.existsSync( files.sitemap ) ) {
+                fs.unlinkSync( files.sitemap );
+
+                lager.error( `[Clutch] Un-Linking static link ${files.sitemap}` );
+            }
 
             unlinkF();
         });
@@ -138,6 +179,28 @@ const requestLoc = ( url ) => {
 
 
 
+// Request a sitemap location for API
+const requestApi = ( url ) => {
+    return new Promise(( resolve, reject ) => {
+        const api = url.loc[ 0 ].replace( buildConfig.url, baseUrl ).replace( baseUrl, `${baseUrl}/api` );
+
+        request({
+            url: api,
+            method: "GET"
+
+        }).then(( json ) => {
+            resolve( json );
+
+        }).catch(( error ) => {
+            resolve({
+                error: true
+            });
+        });
+    });
+};
+
+
+
 // Process XML
 const processXml = ( xml ) => {
     return new Promise(( resolve, reject ) => {
@@ -157,41 +220,49 @@ const processXml = ( xml ) => {
 // Query all documents
 const createSite = ( options ) => {
     return new Promise(( resolve, reject ) => {
-        request({
-            url: `${baseUrl}/sitemap.xml`,
-            method: "GET"
-
-        }).then(( xml ) => {
-            processXml( xml ).then(( json ) => {
-                cleanStatic( json ).then(() => {
+        sitemap.generate().then(( xml ) => {
+            processXml( xml ).then(( xmlJson ) => {
+                cleanStatic( xmlJson ).then(() => {
                     if ( options.create ) {
                         let saved = 0;
 
-                        json.urlset.url.forEach(( url ) => {
-                            requestLoc( url ).then(( html ) => {
-                                saveFile( {html, url} ).then(() => {
-                                    saved++;
+                        robots.generate().then(( txt ) => {
+                            const fileRobots = `${saveLoc}/robots.txt`;
+                            const fileSitemap = `${saveLoc}/sitemap.xml`;
 
-                                    if ( saved === json.urlset.url.length ) {
-                                        resolve();
-                                    }
+                            // Robots.txt
+                            files.writeStr( fileRobots, txt, true );
+                            lager.cache( `[Clutch] Linking static link ${fileRobots}` );
+
+                            // Sitemap.xml
+                            files.writeStr( fileSitemap, xml.replace( baseUrl, buildConfig.url ), true );
+                            lager.cache( `[Clutch] Linking static link ${fileSitemap}` );
+
+                            xmlJson.urlset.url.forEach(( url ) => {
+                                requestApi( url ).then(( apiJson ) => {
+                                    requestLoc( url ).then(( html ) => {
+                                        saveFile( {html, url, json: apiJson} ).then(() => {
+                                            saved++;
+
+                                            if ( saved === xmlJson.urlset.url.length ) {
+                                                resolve();
+                                            }
+
+                                        }).catch( reject );
+
+                                    }).catch( reject );
 
                                 }).catch( reject );
-
-                            }).catch( reject );
+                            });
                         });
 
                     } else {
-                        lager.cache( `[Clutch] Cleaned static directory of files` );
                         resolve();
                     }
 
                 }).catch( reject );
 
             }).catch( reject );
-
-        }).catch(( error ) => {
-            reject( `You need to run "npm run server:static" for the app to boot.` );
         });
     });
 };

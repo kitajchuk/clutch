@@ -75,6 +75,10 @@ const config = {
         robots: {
             site: false,
             page: false
+        },
+        mappings: {
+            // For onepager to map a slice to homepage ( root )
+            // someslicename: "/"
         }
     }
 };

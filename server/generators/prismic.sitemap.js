@@ -48,9 +48,6 @@ const createSitemap = () => {
     return new Promise(( resolve, reject ) => {
         query.getDocs().then(( docs ) => {
             const nodes = [];
-            const homepage = docs.page.find(( doc ) => {
-                return (doc.uid === config.homepage);
-            });
             const pushNode = ( loc, timestamp ) => {
                 nodes.push(
                     xmlNode
@@ -59,6 +56,19 @@ const createSitemap = () => {
                         .replace( "@priority", "0.75" )
                         .replace( "@lastmod", getLastmod( timestamp ) )
                 );
+            };
+            let homepage = docs.page.find(( doc ) => {
+                return (doc.uid === config.homepage);
+            });
+
+            if ( !homepage ) {
+                homepage = {
+                    uid: config.homepage,
+                    type: "page",
+                    last_publication_date: Date.now()
+                };
+
+                docs.page.unshift( homepage );
             }
 
             // One-pager
@@ -77,14 +87,6 @@ const createSitemap = () => {
 
             // Standard
             } else {
-                if ( !homepage ) {
-                    docs.page.unshift({
-                        uid: config.homepage,
-                        type: "page",
-                        last_publication_date: Date.now()
-                    });
-                }
-
                 for ( let i in docs ) {
                     docs[ i ].forEach(( doc ) => {
                         if ( config.generate.sitemap[ doc.type ] !== false ) {

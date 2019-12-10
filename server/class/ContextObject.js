@@ -82,7 +82,7 @@ class ContextObject {
 
     getUrl ( doc ) {
         const query = require( "../core/query" );
-        const type = (query.cache.api.data.forms[ doc.type ] || doc.type);
+        const type = config.generate.mappings[ doc.type ] || doc.type;
         const resolvedUrl = doc.uid === config.homepage ? "/" : ((type === "page") ? `/${doc.uid}/` : `/${type}/${doc.uid}/`);
 
         return resolvedUrl;

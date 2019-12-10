@@ -114,98 +114,94 @@ const getSite = ( req ) => {
  * Handle API requests.
  *
  */
-const getApi = ( req, res, listener ) => {
-    return new Promise(( resolve, reject ) => {
-        const doQuery = ( type, uid ) => {
-            let ret = null;
-            let pageUID = cache.docs.page.find(( page ) => {
-                return (page.uid === type);
-            });
+ const getApi = ( req, res, listener ) => {
+     return new Promise(( resolve, reject ) => {
+         const doQuery = ( type, uid ) => {
+             let ret = null;
+             let pageUIDoc = cache.docs.page.find(( page ) => {
+                 return (page.uid === type);
+             });
+             const resolveData = {
+                 site: cache.site,
+                 navi: cache.navi
+             };
 
-            if ( cache.api.data.forms[ type ] ) {
-                const regex = /\[\[\:d\s=\sany\(document.type,\s\["(.*?)"\]\)\]\]/;
-                const match = cache.api.data.forms[ type ].fields.q.default.match( regex );
+             if ( cache.api.data.forms[ type ] ) {
+                 const regex = /\[\[\:d\s=\sany\(document.type,\s\["(.*?)"\]\)\]\]/;
+                 const match = cache.api.data.forms[ type ].fields.q.default.match( regex );
 
-                type = match[ 1 ] || type;
-            }
+                 type = match[ 1 ] || type;
+             }
 
-            // One-pager
-            if ( core.config.onepager ) {
-                resolve({
-                    site: cache.site,
-                    navi: cache.navi,
-                    doc: cache.docs.page.find(( d ) => {
-                        return (d.uid === core.config.homepage);
-                    })
-                });
+             // One-pager
+             if ( core.config.onepager ) {
+                 resolveData.doc = cache.docs.page.find(( d ) => {
+                     return (d.uid === core.config.homepage);
+                 });
 
-            // Homepage "/"
-            // No document type, No found page document
-            } else if ( !cache.docs[ type ] && !pageUID ) {
-                resolve({
-                    site: cache.site,
-                    navi: cache.navi,
-                    docs: cache.docs
-                });
+             // Homepage "/"
+             // No document type, No found page document
+             } else if ( !cache.docs[ type ] && !pageUIDoc ) {
+                 resolve({
+                     docs: cache.docs
+                 });
 
-            } else {
-                const docs = pageUID ? cache.docs.page : cache.docs[ type ];
+             } else {
+                 const docs = cache.docs[ type ] || cache.docs.page;
 
-                // Single
-                if ( uid || pageUID ) {
-                    const doc = docs.find(( d ) => {
-                        return (d.uid === (pageUID ? pageUID.uid : uid));
-                    });
-                    const idx = docs.indexOf( doc );
-                    let next = null;
-                    let prev = null;
+                 // Single
+                 if ( uid ) {
+                     const doc = docs.find(( d ) => {
+                         return (d.uid === uid);
+                     });
+                     const idx = docs.indexOf( doc );
+                     let next = null;
+                     let prev = null;
 
-                    if ( docs[ idx + 1 ] ) {
-                        next = docs[ idx + 1 ];
-                    }
+                     if ( docs[ idx + 1 ] ) {
+                         next = docs[ idx + 1 ];
+                     }
 
-                    if ( docs[ idx - 1 ] ) {
-                        prev = docs[ idx - 1 ];
-                    }
+                     if ( docs[ idx - 1 ] ) {
+                         prev = docs[ idx - 1 ];
+                     }
 
-                    resolve({
-                        site: cache.site,
-                        navi: cache.navi,
-                        doc,
-                        next,
-                        prev
-                    });
+                     resolveData.doc = doc;
+                     resolveData.next = next;
+                     resolveData.prev = prev;
 
-                } else {
-                    resolve({
-                        site: cache.site,
-                        navi: cache.navi,
-                        docs
-                    });
-                }
-            }
+                 } else if ( pageUIDoc ) {
+                     resolveData.doc = pageUIDoc;
+                     resolveData.docs = docs;
 
-            /*
-            // @hook: orderings
-            if ( listener && listener.handlers.orderings ) {
-                listener.handlers.orderings( prismic, cache.api, form, cache, req );
-            }
+                 } else {
+                     resolveData.docs = docs;
+                 }
+             }
 
-            // @hook: fetchLinks
-            if ( listener && listener.handlers.fetchLinks ) {
-                listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
-            }
+             resolve( resolveData );
 
-            // @hook: pagination
-            if ( listener && listener.handlers.pagination ) {
-                listener.handlers.pagination( prismic, cache.api, form, cache, req );
-            }
-            */
-        };
+             /*
+             // @hook: orderings
+             if ( listener && listener.handlers.orderings ) {
+                 listener.handlers.orderings( prismic, cache.api, form, cache, req );
+             }
 
-        doQuery( req.params.type, req.params.uid );
-    });
-};
+             // @hook: fetchLinks
+             if ( listener && listener.handlers.fetchLinks ) {
+                 listener.handlers.fetchLinks( prismic, cache.api, form, cache, req );
+             }
+
+             // @hook: pagination
+             if ( listener && listener.handlers.pagination ) {
+                 listener.handlers.pagination( prismic, cache.api, form, cache, req );
+             }
+             */
+         };
+
+         doQuery( req.params.type, req.params.uid );
+     });
+ };
 
 
 

@@ -81,23 +81,20 @@ const getSite = ( req ) => {
 
                 // Normalize navi context
                 docs.site[ 0 ].data.navi.forEach(( slice ) => {
-                    let slug = slice.primary.page.uid || core.config.homepage;
+                    const navItem = {
+                        uid: slice.primary.slug,
+                        label: slice.primary.label
+                    };
+                    let slug = slice.primary.page.uid ? slice.primary.page.uid : slice.primary.slug ? slice.primary.slug : core.config.homepage;
 
                     if ( slug === core.config.homepage ) {
-                        slug = "/";
+                        navItem.slug = "/";
 
                     } else {
-                        slug = `/${slug}/`;
+                        navItem.slug = `/${slug}/`;
                     }
 
-                    navi.items.push({
-                        id: slice.primary.page.id || "",
-                        uid: slice.primary.page.uid || slice.primary.slug,
-                        type: slice.primary.page.type || slice.primary.slug,
-                        slug,
-                        title: slice.primary.name,
-                        label: slice.primary.label
-                    });
+                    navi.items.push( navItem );
                 });
 
                 cache.site = site;
@@ -132,22 +129,23 @@ const getApi = ( req, res, listener ) => {
                 type = match[ 1 ] || type;
             }
 
-            // Homepage "/"
-            if ( !cache.docs[ type ] && !pageUID ) {
-                resolve({
-                    site: cache.site,
-                    navi: cache.navi,
-                    docs: cache.docs
-                });
-
             // One-pager
-            } else if ( core.config.onepager ) {
+            if ( core.config.onepager ) {
                 resolve({
                     site: cache.site,
                     navi: cache.navi,
                     doc: cache.docs.page.find(( d ) => {
                         return (d.uid === core.config.homepage);
                     })
+                });
+
+            // Homepage "/"
+            // No document type, No found page document
+            } else if ( !cache.docs[ type ] && !pageUID ) {
+                resolve({
+                    site: cache.site,
+                    navi: cache.navi,
+                    docs: cache.docs
                 });
 
             } else {

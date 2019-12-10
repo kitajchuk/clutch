@@ -76,13 +76,6 @@
                                 "type":"Text",
                                 "config":{
                                     "label":"Label",
-                                    "placeholder":"Display label"
-                                }
-                            },
-                            "name":{
-                                "type":"Text",
-                                "config":{
-                                    "label":"Name",
                                     "placeholder":"Display text"
                                 }
                             },

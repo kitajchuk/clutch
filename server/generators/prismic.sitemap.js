@@ -64,7 +64,7 @@ const createSitemap = () => {
             // One-pager
             if ( config.onepager ) {
                 query.cache.navi.items.forEach(( navi ) => {
-                    let loc = `${core.config.url}`;
+                    let loc = `${config.url}`;
 
                     // if ( core.config.generate.mappings[ navi.uid ] !== "/" ) {
                     //     loc = `${loc}${navi.slug}`;

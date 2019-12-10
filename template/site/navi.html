@@ -3,7 +3,7 @@
         <% locals.context.get( 'navi' ).items.forEach(( item ) => { %>
             <li class="navi__li">
                 <a class="navi__a navi__a--<%= item.uid %> js-navi-a js-navi--<%= item.uid %> h3" href="<%= item.slug %>">
-                    <%= item.title %>
+                    <%= item.label %>
                 </a>
             </li>
         <% }) %>

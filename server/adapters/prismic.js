@@ -27,7 +27,8 @@
  *
  */
 const path = require( "path" );
-const prismic = require( "prismic-javascript" );
+const prismicJS = require( "prismic-javascript" );
+const prismicDOM = require( "prismic-dom" );
 const cache = {
     api: null,
     site: null,
@@ -41,7 +42,6 @@ const core = {
 const ContextObject = require( "../class/ContextObject" );
 const apiOptions = {
     accessToken: core.config.api.token || null,
-    fetchLinks: core.config.api.fetchLinks || []
 };
 
 
@@ -53,7 +53,7 @@ const apiOptions = {
  */
 const getSite = ( req ) => {
     return new Promise(( resolve, reject ) => {
-        prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
+        prismicJS.api( core.config.api.access, apiOptions ).then(( api ) => {
             cache.api = api;
 
             getDocs().then(( docs ) => {
@@ -82,8 +82,8 @@ const getSite = ( req ) => {
                 // Normalize navi context
                 docs.site[ 0 ].data.navi.forEach(( slice ) => {
                     const navItem = {
-                        uid: slice.primary.slug,
-                        label: slice.primary.label
+                        uid: slice.primary.page.uid ? slice.primary.page.uid : slice.primary.slug,
+                        text: slice.primary.page.uid ? prismicDOM.RichText.asText( slice.primary.page.data.title ) : slice.primary.text
                     };
                     let slug = slice.primary.page.uid ? slice.primary.page.uid : slice.primary.slug ? slice.primary.slug : core.config.homepage;
 
@@ -92,6 +92,14 @@ const getSite = ( req ) => {
 
                     } else {
                         navItem.slug = `/${slug}/`;
+                    }
+
+                    // Iterate type mappings and reverse the lookup
+                    for ( let type in core.config.generate.mappings ) {
+                        // The collection mapping value matches a page UID
+                        if ( core.config.generate.mappings[ type ] === slice.primary.page.uid ) {
+                            navItem.children = docs[ type ];
+                        }
                     }
 
                     navi.items.push( navItem );
@@ -225,11 +233,15 @@ const getDocs = () => {
     return new Promise(( resolve, reject ) => {
         let docs = {};
         const getDocs = ( p ) => {
-            cache.api.form( "everything" )
-                .pageSize( 100 )
-                .page( p )
-                .ref( cache.api.master() )
-                .submit()
+            const options = {
+                fetchLinks: core.config.api.fetchLinks || [],
+                pageSize: 100,
+                page: p,
+                ref: cache.api.master()
+            };
+
+            cache.api
+                .query( "", options )
                 .then(( json ) => {
                     json.results.forEach(( doc ) => {
                         if ( !docs[ doc.type ] ) {
@@ -284,8 +296,8 @@ const getNavi = ( type ) => {
 const getRef = ( req, api ) => {
     let ref = api.master();
 
-    if ( req && req.cookies && req.cookies[ prismic.previewCookie ] ) {
-        ref = req.cookies[ prismic.previewCookie ];
+    if ( req && req.cookies && req.cookies[ prismicJS.previewCookie ] ) {
+        ref = req.cookies[ prismicJS.previewCookie ];
     }
 
     return ref;
@@ -337,9 +349,9 @@ const getDoc = ( uid, documents ) => {
 //             return resolvedUrl;
 //         };
 //
-//         prismic.api( core.config.api.access, apiOptions ).then(( api ) => {
+//         prismicJS.api( core.config.api.access, apiOptions ).then(( api ) => {
 //             api.previewSession( previewToken, linkResolver, "/", ( error, redirectUrl ) => {
-//                 res.cookie( prismic.previewCookie, previewToken, {
+//                 res.cookie( prismicJS.previewCookie, previewToken, {
 //                     maxAge: 60 * 30 * 1000,
 //                     path: "/",
 //                     httpOnly: false

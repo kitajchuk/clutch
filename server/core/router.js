@@ -64,6 +64,7 @@ const setRoutes = () => {
     expressApp.get( "/", checkCSRF, setReq, getPage );
     expressApp.get( "/:type", checkCSRF, setReq, getPage );
     expressApp.get( "/:type/:uid", checkCSRF, setReq, getPage );
+    expressApp.get( "/:type/:uid/index.json", checkCSRF, setReq, getPage );
 };
 
 
@@ -95,9 +96,22 @@ const getKey = ( type ) => {
 const getPage = ( req, res ) => {
     const key = getKey( req.params.type );
     const done = () => {
-        if ( req.query.format === "json" ) {
+        const rJson = /\.json$/;
+        const isStaticJson = rJson.test( req.path );
+        const isServerJson = (req.query.format === "json");
+
+        if ( isStaticJson || isServerJson ) {
+            if ( isStaticJson && rJson.test( req.params.uid ) ) {
+                delete req.params.uid;
+            }
+
             core.query.getApi( req, res, listeners[ key ] ).then(( result ) => {
-                res.status( 200 ).send( JSON.stringify( result ) );
+                if ( isServerJson ) {
+                    res.status( 200 ).json( result );
+
+                } else {
+                    res.status( 200 ).send( JSON.stringify( result ) );
+                }
             });
 
         } else {

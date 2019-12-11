@@ -36,7 +36,11 @@ const config = {
         secret: envVars.webhookSecret,
         // For linked documents these will always be useing in Prismic api querying
         // https://prismic.io/docs/rest-api/query-the-api/fetch-linked-document-fields
-        fetchLinks: []
+        fetchLinks: [
+            "page.title",
+            "page.image",
+            "page.description"
+        ]
     },
     // Templating config
     template: {

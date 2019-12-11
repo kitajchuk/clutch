@@ -27,8 +27,13 @@ static/*.html
 static/**/*.html
 static/*.json
 static/**/*.json
+!static/img/icon/manifest.json
 
 
 # Node / npm
 node_modules
 npm-debug.log
+
+
+# Local Netlify folder
+.netlify

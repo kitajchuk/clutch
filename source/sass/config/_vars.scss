@@ -43,7 +43,7 @@ $padding-2: 16vw;
 *******************************************************************************/
 $wrap-copy: 700px;
 $logo-width: 256px;
-$header-height: 256px;
+$header-height: 96px;
 $bind-width: 1680px;
 $mobile-width: 480px;
 
@@ -77,7 +77,7 @@ $h3-line: 1;
 /******************************************************************************
  * Breakpoints
 *******************************************************************************/
-$break-desktop-large: 2200px;
+$break-desktop-medium: 2560px;
 $break-desktop: 1920px;
 $break-laptop-full: 1680px;
 $break-laptop-medium: 1440px;
@@ -88,6 +88,12 @@ $break-tablet-small: 768px;
 $break-mobile-full: 640px;
 $break-mobile-medium: 480px;
 $break-mobile-small: 320px;
+
+// App usage
+$mobile-breakpoint: $break-mobile-full;   // 640
+$tablet-breakpoint: $break-tablet-medium; // 1024
+$laptop-breakpoint: $break-laptop-medium; // 1440
+$desktop-breakpoint: $break-desktop-medium; // 2560
 
 
 

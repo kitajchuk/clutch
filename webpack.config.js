@@ -7,7 +7,6 @@ const nodeModules = "node_modules";
 const webpack = require( "webpack" );
 const autoprefixer = require( "autoprefixer" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
-const CompressionPlugin = require( "compression-webpack-plugin" );
 
 
 

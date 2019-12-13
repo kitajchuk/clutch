@@ -59,17 +59,7 @@ const saveFile = ( obj ) => {
         regex = new RegExp( baseUrlBrowserSync, "gm" );
 
         obj.html = String( obj.html ).replace( regex, (buildConfig.env.sandbox ? "" : buildConfig.url) );
-        obj.html = htmlMin.minify( obj.html, {
-            caseSensitive: true,
-            collapseWhitespace: true,
-            collapseInlineTagWhitespace: true,
-            keepClosingSlash: false,
-            minifyCSS: true,
-            minifyJS: true,
-            removeComments: true,
-            removeEmptyAttributes: true,
-            removeRedundantAttributes: true
-        });
+        obj.html = htmlMin.minify( obj.html, config.static.minify.html );
 
         if ( !obj.json.error ) {
             const placeJson = place.replace( /\.html$/, ".json" );

@@ -64,7 +64,21 @@ const config = {
         // One day
         maxAge: 86400000,
         js: `/js/clutch.js`,
-        css: `/css/screen.css`
+        css: `/css/screen.css`,
+        minify: {
+            // html-minifier config
+            html: {
+                caseSensitive: true,
+                collapseWhitespace: true,
+                collapseInlineTagWhitespace: false,
+                keepClosingSlash: false,
+                minifyCSS: true,
+                minifyJS: true,
+                removeComments: true,
+                removeEmptyAttributes: true,
+                removeRedundantAttributes: true
+            }
+        }
     },
     // Compression js config
     compression: {
@@ -81,8 +95,8 @@ const config = {
             page: false
         },
         mappings: {
-            // For onepager to map a slice to homepage ( root )
-            // someslicename: "/"
+            // For onepager to map a :uid to homepage ( root )
+            // uid?: "/"
         }
     }
 };

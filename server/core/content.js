@@ -41,7 +41,7 @@ const getPage = function ( req, res, listener ) {
             if ( isNoNamePage && isNoTypePage ) {
                 const file = path.join( core.config.template.pagesDir, `${page}.html` );
 
-                fail( `The template file for this path is missing at "${file}".` );
+                fail( `Missing template for this endpoint. ${file.replace( `${page}.html`, `<em>${page}.html</em>` )}.` );
 
             } else {
                 if ( data.doc ) {

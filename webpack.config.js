@@ -42,7 +42,7 @@ const webpackConfig = {
 
 
     entry: {
-        "clutch": path.resolve( __dirname, "source/js/properjs/clutch.js" )
+        "clutch": path.resolve( __dirname, `source/${config.theme}/js/clutch.js` )
     },
 
 

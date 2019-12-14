@@ -1,7 +1,8 @@
 module.exports = {
-   prismic: {
-       apiAccess: "",
-       accessToken: "",
-       webhookSecret: ""
+    theme: "properjs",
+    prismic: {
+        apiAccess: "",
+        accessToken: "",
+        webhookSecret: ""
    }
 };

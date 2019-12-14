@@ -13,6 +13,8 @@ const envVars = {
 const config = {
     // The URL of your actual site, Netlify domain: `bs.services`
     url: "https://clutch.kitajchuk.com",
+    // Theme to load from ./source and ./template
+    theme: rootConfig.theme,
     // Homepage UID, make sure it matches what you use in Prismic
     homepage: "home",
     // Page Not Found UID — 404
@@ -45,10 +47,10 @@ const config = {
     // Templating config
     template: {
         module: "ejs",
-        dir: path.join( root, "template" ),
-        layout: path.join( root, "template/index.html" ),
-        pagesDir: path.join( root, "template", "pages" ),
-        partialsDir: path.join( root, "template", "partials" ),
+        dir: path.join( root, "template", rootConfig.theme ),
+        layout: path.join( root, "template", rootConfig.theme, "index.html" ),
+        pagesDir: path.join( root, "template", rootConfig.theme, "pages" ),
+        partialsDir: path.join( root, "template", rootConfig.theme, "partials" ),
         staticDir: path.join( root, "static" )
     },
     // Express.js config

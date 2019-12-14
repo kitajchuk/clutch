@@ -87,7 +87,7 @@ const config = {
         level: 9,
         threshold: 0
     },
-    // Generators config ( sitemap.xml, robots.txt, static )
+    // Generators config ( sitemap.xml, robots.txt, static build )
     generate: {
         sitemap: {
             site: false

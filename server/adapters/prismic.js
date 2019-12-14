@@ -8,25 +8,24 @@
  * https://prismic.io
  *
  * Every adapter must have a common, public `cache` object:
- * cache: Object { api: Object, site: Object, navi: Object, docs: Object }
+ * api?
+ * site
+ * navi
+ * docs
+ *
  *
  * Every adapter must have common, public functions:
- * getApi: Function
- * getPage: Function
- * getPreview: Function
- *
- * Every adapter must have common, private functions:
- * getSite: Function
- * getNavi: Function
- * getDataForApi: Function
- * getDataForPage: Function
+ * cache^
+ * getApi
+ * getPage
+ * getSite
+ * getDocs
  *
  * Different Headless CMS require slightly different approaches here.
  * Any means necessary is A-OK as long as the data resolves properly.
  *
  *
  */
-const path = require( "path" );
 const prismicJS = require( "prismic-javascript" );
 const prismicDOM = require( "prismic-dom" );
 const cache = {
@@ -39,7 +38,6 @@ const core = {
     config: require( "../../clutch.config" ),
     template: require( "../core/template" )
 };
-const ContextObject = require( "../class/ContextObject" );
 const apiOptions = {
     accessToken: core.config.api.token || null,
 };
@@ -120,6 +118,14 @@ const getSite = ( req ) => {
 /**
  *
  * Handle API requests.
+ * resolveData: {
+ *    site,
+ *    navi,
+ *    docs?,
+ *    doc?,
+ *    next?,
+ *    prev?
+ * }
  *
  */
 const getApi = ( req, res, listener ) => {
@@ -189,21 +195,6 @@ const getApi = ( req, res, listener ) => {
                 }
             }
 
-            // @hook: orderings
-            // if ( listener && listener.handlers.orderings ) {
-            //     listener.handlers.orderings( req, cache, resolveData );
-            // }
-
-            // @hook: fetchLinks
-            // if ( listener && listener.handlers.fetchLinks ) {
-            //     listener.handlers.fetchLinks( req, cache, resolveData );
-            // }
-
-            // @hook: pagination
-            // if ( listener && listener.handlers.pagination ) {
-            //     listener.handlers.pagination( req, cache, resolveData );
-            // }
-
             resolve( resolveData );
         };
 
@@ -271,62 +262,17 @@ const getDocs = () => {
 
 /**
  *
- * Mapping for `site.navi` links referencing `Page` documents
- *
- */
-const getNavi = ( type ) => {
-    let ret = false;
-
-    cache.navi.items.forEach(( item ) => {
-        if ( item.uid === type ) {
-            ret = item;
-        }
-    });
-
-    return ret;
-};
-
-
-
-/**
- *
  * Get valid `ref` for Prismic API data ( handles previews ).
  *
  */
-const getRef = ( req, api ) => {
-    let ref = api.master();
-
-    if ( req && req.cookies && req.cookies[ prismicJS.previewCookie ] ) {
-        ref = req.cookies[ prismicJS.previewCookie ];
-    }
-
-    return ref;
-};
-
-
-
-/**
- *
- * Get one document from all documents.
- *
- */
-const getDoc = ( uid, documents ) => {
-    return documents.find(( doc ) => {
-        return (doc.uid === uid);
-    });
-};
-
-
-
-/**
- *
- * Get the stub of the search form.
- *
- */
-// const getForm = function ( req, api, collection ) {
-//     const form = api.data.forms[ collection ] ? collection : "everything";
+// const getRef = ( req, api ) => {
+//     let ref = api.master();
 //
-//     return api.form( form ).pageSize( 100 ).ref( getRef( req, api ) );
+//     if ( req && req.cookies && req.cookies[ prismicJS.previewCookie ] ) {
+//         ref = req.cookies[ prismicJS.previewCookie ];
+//     }
+//
+//     return ref;
 // };
 
 

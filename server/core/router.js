@@ -22,7 +22,7 @@ const checkCSRF = csurf({
 });
 const http = require( "http" );
 const fs = require( "fs" );
-const stasis = require( `../generators/${core.config.api.adapter}.static` );
+const stasis = require( `../generators/static` );
 let httpServer = null;
 let cacheIndex = 0;
 
@@ -167,7 +167,7 @@ const getPage = ( req, res ) => {
 //     res.status( 200 ).send( "success" );
 // };
 const getSitemap = ( req, res ) => {
-    const sitemap = require( `../generators/${core.config.api.adapter}.sitemap` );
+    const sitemap = require( `../generators/sitemap` );
 
     sitemap.generate().then(( xml ) => {
         res.set( "Content-Type", "text/xml" ).status( 200 ).send( xml );
@@ -175,7 +175,7 @@ const getSitemap = ( req, res ) => {
 
 };
 const getRobots = ( req, res ) => {
-    const robots = require( `../generators/${core.config.api.adapter}.robots` );
+    const robots = require( `../generators/robots` );
 
     robots.generate().then(( txt ) => {
         res.set( "Content-Type", "text/plain" ).status( 200 ).send( txt );

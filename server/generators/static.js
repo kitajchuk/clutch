@@ -13,7 +13,6 @@
  *
  *
  */
-const path = require( "path" );
 const lager = require( "properjs-lager" );
 const fs = require( "fs" );
 const request = require( "request-promise" );
@@ -21,8 +20,8 @@ const xml2js = require( "xml2js" );
 const htmlMin = require( "html-minifier" );
 const files = require( "../core/files" );
 const config = require( "../../clutch.config" );
-const sitemap = require( `./${config.api.adapter}.sitemap` );
-const robots = require( `./${config.api.adapter}.robots` );
+const sitemap = require( `./sitemap` );
+const robots = require( `./robots` );
 const baseUrl = `http://localhost:${config.express.port}`;
 const baseUrlBrowserSync = `http://localhost:${config.browser.port}`;
 const saveLoc = config.template.staticDir;

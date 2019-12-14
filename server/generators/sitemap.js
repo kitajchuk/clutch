@@ -18,7 +18,6 @@
 const config = require( "../../clutch.config" );
 const lager = require( "properjs-lager" );
 const query = require( "../core/query" );
-const apiOptions = (config.api.token ? { accessToken: config.api.token } : null);
 const xmlDoc = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     @content
@@ -54,7 +53,7 @@ const createSitemap = () => {
                         .replace( "@loc", loc )
                         .replace( "@changefreq", "daily" )
                         .replace( "@priority", "0.75" )
-                        .replace( "@lastmod", getLastmod( timestamp ) )
+                        .replace( "@lastmod", getLastmod( timestamp || Date.now() ) )
                 );
             };
             let homepage = docs.page.find(( doc ) => {
@@ -71,8 +70,8 @@ const createSitemap = () => {
                 docs.page.unshift( homepage );
             }
 
-            // One-pager
-            if ( config.onepager ) {
+            // One-pager OR Static adapter
+            if ( config.onepager || config.api.adapter === "static" ) {
                 query.cache.navi.items.forEach(( navi ) => {
                     if ( config.generate.sitemap[ navi.uid ] !== false ) {
                         let loc = `${config.url}`;

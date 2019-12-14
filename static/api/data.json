@@ -1,0 +1,29 @@
+{
+    "site": {
+        "data": {
+            "title": "Clutch",
+            "description": "A Developer SDK for Prismic.io.",
+            "googleUA": "",
+            "googleVerify": ""
+        }
+    },
+    "navi": {
+        "items": [
+            {
+                "uid": "home",
+                "text": "Home",
+                "slug": "/"
+            }
+        ]
+    },
+    "results": [
+        {
+            "uid": "home",
+            "type": "page",
+            "data": {
+                "title": "Home",
+                "description": "A Node.js Developer SDK for Prismic.io."
+            }
+        }
+    ]
+}

@@ -76,6 +76,7 @@ const router = {
         this.setState( "future", data );
         this.setClass();
         this.topper();
+        navi.active( this.state.now.view );
         clutch.controllers.exec();
 
         setTimeout(() => {
@@ -164,7 +165,7 @@ const router = {
     changePageOut ( data ) {
         core.dom.html.addClass( "is-tranny" );
         this.setState( "future", data );
-        // navi.setActive( { uid: this.state.future.view } );
+        navi.active( this.state.future.view );
         navi.close();
     },
 

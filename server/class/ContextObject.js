@@ -24,8 +24,11 @@ class ContextObject {
         this.stylesheet = config.static.css;
         this.javascript = config.static.js;
         this.config = config;
-        this.dom = (config.api.adapter === "prismic" ? prismicDOM : null);
         this.env = process.env.NODE_ENV;
+
+        if ( config.api.adapter === "prismic" ) {
+            this.dom = prismicDOM;
+        }
     }
 
     set ( prop, value ) {

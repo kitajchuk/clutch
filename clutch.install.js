@@ -1,15 +1,14 @@
 const fs = require( "fs" );
 const path = require( "path" );
+const child_process = require( "child_process" );
+const files = require( "./server/core/files" );
 const root = __dirname;
 const rootNodeModules = path.join( root, "node_modules" );
 const rootPackageLock = path.join( root, "package-lock.json" );
 const rootClutch = path.join( root, ".clutch" );
 const rootTemplatePartials = path.join( root, "template", "partials" );
 const rootNotes = path.join( root, ".notes" );
-const rootServer = path.join( root, "server" );
 const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
-const child_process = require( "child_process" );
-const files = require( "./server/core/files" );
 // Leave this alone! You put your values in .clutch/config.json
 // Netlify environment variables need to be set:
 // PRISMIC_API_ACCESS
@@ -60,10 +59,5 @@ console.log( "[Clutch] Building properjs-hobo..." );
 child_process.execSync( `npm run bootstrap:hobo` );
 
 
-// 6.0 server install
-console.log( "[Clutch] Installing server node_modules..." );
-
-child_process.execSync( `cd ${rootServer} && npm i` );
-
-// 7.0 done
+// 6.0 done
 console.log( "[Clutch] Install complete!" );

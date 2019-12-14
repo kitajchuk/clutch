@@ -74,15 +74,15 @@ const createSitemap = () => {
             // One-pager
             if ( config.onepager ) {
                 query.cache.navi.items.forEach(( navi ) => {
-                    let loc = `${config.url}`;
+                    if ( config.generate.sitemap[ navi.uid ] !== false ) {
+                        let loc = `${config.url}`;
 
-                    // if ( core.config.generate.mappings[ navi.uid ] !== "/" ) {
-                    //     loc = `${loc}${navi.slug}`;
-                    // }
+                        if ( !config.generate.mappings[ navi.uid ] || config.generate.mappings[ navi.uid ] !== "/" ) {
+                            loc = `${loc}${navi.slug}`;
+                        }
 
-                    loc = `${loc}${navi.slug}`;
-
-                    pushNode( loc, homepage.last_publication_date );
+                        pushNode( loc, homepage.last_publication_date );
+                    }
                 });
 
             // Standard

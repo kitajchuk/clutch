@@ -90,10 +90,6 @@
         font-size: $h1-size-fluid;
     }
 
-    // @include respond-min( $text-width-2 ) {
-    //     width: $text-width-2-fluid;
-    // }
-
     @include respond-min( $laptop-breakpoint ) {
         font-size: $h1-size;
     }
@@ -297,6 +293,7 @@
     }
 }
 @mixin ruler() {
+    border: 0;
     background-color: $grey-dark;
     height: 1px;
     margin-top: $expander-v;

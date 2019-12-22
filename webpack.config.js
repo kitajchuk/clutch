@@ -29,7 +29,8 @@ const webpackConfig = {
             port: config.browser.port,
             proxy: `http://localhost:${config.express.port}`,
             files: [
-                "template/**/*.html"
+                "template/**/*.html",
+                "template/**/*.json"
             ]
         })
     ],
@@ -42,13 +43,13 @@ const webpackConfig = {
 
 
     entry: {
-        "clutch": path.resolve( __dirname, `source/${config.theme}/js/clutch.js` )
+        "app": path.resolve( __dirname, `source/${config.theme}/js/app.js` )
     },
 
 
     output: {
         path: path.resolve( __dirname, "static/js" ),
-        filename: `clutch.js`
+        filename: `app.js`
     },
 
 

@@ -1,5 +1,8 @@
+<%
+const site = locals.context.site;
+%>
 <div class="home -wrap -exp">
-    <h1><em><%- locals.context.get( 'site' ).data.title %></em></h1>
-    <p><%- locals.context.get( 'site' ).data.description %></p>
+    <h1><em><%- site.data.title %></em></h1>
+    <p><%- site.data.description %></p>
     <p>Getting started? View the dev docs <a href="https://www.kitajchuk.com/clutch/workflow" target="_blank">HERE</a>.</p>
 </div>

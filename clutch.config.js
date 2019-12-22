@@ -11,7 +11,7 @@ const envVars = {
     webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET
 };
 const config = {
-    // The URL of your actual site, Netlify domain: `bs.services`
+    // The URL of your actual site, Netlify domain: `kitajchuk.com`
     url: "https://clutch.kitajchuk.com",
     // Theme to load from ./source and ./template
     theme: rootConfig.theme,
@@ -65,7 +65,7 @@ const config = {
     static: {
         // One day
         maxAge: 86400000,
-        js: `/js/clutch.js`,
+        js: `/js/app.js`,
         css: `/css/screen.css`,
         minify: {
             // html-minifier config

@@ -6,7 +6,7 @@ module.exports = {
             env: {
                 NODE_ENV: "sandbox"
             },
-            watch: ["server", "template"],
+            watch: ["server", "template", "static/api"],
             watch_delay: 1000,
             ignore_watch : ["node_modules"],
             watch_options: {

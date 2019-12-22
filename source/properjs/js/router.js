@@ -2,7 +2,7 @@ import $ from "properjs-hobo";
 import PageController from "properjs-pagecontroller";
 import * as core from "./core";
 import navi from "./modules/navi";
-import clutch from "./clutch";
+import app from "./app";
 
 
 
@@ -77,7 +77,7 @@ const router = {
         this.setClass();
         this.topper();
         navi.active( this.state.now.view );
-        clutch.controllers.exec();
+        app.controllers.exec();
 
         setTimeout(() => {
             this._resolve();
@@ -171,15 +171,15 @@ const router = {
 
 
     changeContent ( data ) {
-        clutch.controllers.destroy();
+        app.controllers.destroy();
         this.setDoc( data );
         this.unsetClass();
         this.setClass();
         this.setState( "now", data );
         core.dom.main[ 0 ].innerHTML = this.doc.html;
         this.topper();
-        clutch.controllers.exec();
-        clutch.analytics.track( this.doc );
+        app.controllers.exec();
+        app.analytics.track( this.doc );
     },
 
 

@@ -20,11 +20,11 @@ import Controllers from "./Controllers";
 /**
  *
  * @public
- * @class Clutch
+ * @class App
  * @classdesc Main Clutch ProperJS Application.
  *
  */
-class Clutch {
+class App {
     constructor () {
         // this.Store = Store;
         this.core = core;
@@ -127,9 +127,9 @@ class Clutch {
 }
 
 
-// Create {clutch} instance
-window.clutch = new Clutch();
+// Create {app} instance
+window.app = new App();
 
 
 // Export {app} instance
-export default window.clutch;
+export default window.app;

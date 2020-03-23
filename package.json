@@ -5,16 +5,21 @@
   "private": true,
   "version": "3.0.0",
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "(npm run server & npm run watch)",
     "bootstrap": "node clutch.install.js",
     "bootstrap:hobo": "cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass'",
     "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/pm2 --no-daemon --watch -a start ./ecosystem.config.js",
     "server:stop": "./node_modules/.bin/pm2 stop 'all' --watch",
-    "build": "npm rebuild node-sass ; npm run bootstrap ; npm run build:netlify ; npm run static:build",
-    "build:netlify": "export NODE_ENV=netlify ; ./node_modules/.bin/webpack --env.netlify --progress --profile --display-modules --colors -p",
-    "static:build": "export NODE_ENV=netlify ; export CLUTCH_CLEAN=0 ; node clutch.static.js",
-    "static:clean": "export NODE_ENV=netlify ; export CLUTCH_CLEAN=1 ; node clutch.static.js"
+    "build": "npm rebuild node-sass ; npm run bootstrap ; npm run build:container ; npm run static:build",
+    "deploy": "export NODE_ENV=container ; node clutch.deploy.js",
+    "build:container": "export NODE_ENV=container ; ./node_modules/.bin/webpack --env.container --progress --profile --display-modules --colors -p",
+    "static:build": "export NODE_ENV=container ; export CLUTCH_CLEAN=0 ; node clutch.static.js",
+    "static:clean": "export NODE_ENV=container ; export CLUTCH_CLEAN=1 ; node clutch.static.js"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.3"
   },
   "devDependencies": {
     "autoprefixer": "^8.6.2",
@@ -41,15 +46,16 @@
     "properjs-easing": "~0.2",
     "properjs-hobo": "^0.3.26",
     "properjs-imageloader": ">=0.3.1",
+    "properjs-jscroll": "~0.1",
     "properjs-lager": "^0.1.2",
     "properjs-mediabox": "~0.3",
     "properjs-pagecontroller": "~0.4",
     "properjs-resizecontroller": "~0.2",
     "properjs-router": "^0.3.7",
+    "properjs-s3": "^0.3.3",
     "properjs-scrollcontroller": "~0.2",
     "properjs-throttle": "^0.3.0",
     "properjs-tween": "~0.2",
-    "properjs-jscroll": "~0.1",
     "sass-loader": "^7.0.3",
     "svg-inline-loader": "^0.8.0",
     "webpack": "^4.12.0",

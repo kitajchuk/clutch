@@ -4,5 +4,9 @@ module.exports = {
         apiAccess: "",
         accessToken: "",
         webhookSecret: ""
+   },
+   aws: {
+       accessKey: "",
+       secretAccessKey: ""
    }
 };

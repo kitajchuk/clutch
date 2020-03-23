@@ -4,11 +4,13 @@ const files = require( "./server/core/files" );
 const root = path.resolve( __dirname );
 const rootConfig = files.read( path.join( root, ".clutch", "config.json" ), true );
 // If we're in local sandbox then these come from .clutch/config.json as above.
-// However, Netlify doesn't have the config JSON so we use environment variables.
+// However, Netlify / CircleCI doesn't have the config JSON so we use environment variables.
 const envVars = {
     apiAccess: rootConfig.prismic.apiAccess || process.env.PRISMIC_API_ACCESS,
     accessToken: rootConfig.prismic.accessToken || process.env.PRISMIC_API_TOKEN,
-    webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET
+    webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET,
+    accessKey: rootConfig.aws.accessKey || process.env.AWS_ACCESS_KEY,
+    secretAccessKey: rootConfig.aws.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY
 };
 const config = {
     // The URL of your actual site, Netlify domain: `kitajchuk.com`
@@ -28,7 +30,7 @@ const config = {
     // Environments
     env: {
         sandbox: (process.env.NODE_ENV === "sandbox"),
-        netlify: (process.env.NODE_ENV === "netlify")
+        container: (process.env.NODE_ENV === "container"),
     },
     // Content service API
     api: {
@@ -102,6 +104,11 @@ const config = {
         }
     }
 };
+
+
+
+// Expose ENV vars for other local processes
+config.envVars = envVars;
 
 
 

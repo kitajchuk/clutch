@@ -9,10 +9,12 @@ const rootClutch = path.join( root, ".clutch" );
 const rootNotes = path.join( root, ".notes" );
 const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 // Leave this alone! You put your values in .clutch/config.json
-// Netlify environment variables need to be set:
+// Netlify / CircleCI environment variables need to be set:
 // PRISMIC_API_ACCESS
 // PRISMIC_API_TOKEN
 // PRISMIC_API_SECRET
+// AWS_ACCESS_KEY
+// AWS_SECRET_ACCESS_KEY
 const rootConfig = require( "./clutch.root" );
 
 

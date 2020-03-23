@@ -4,7 +4,7 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.22
 
 jobs:
-    aws-cli-config:
+    aws-cli-setup:
         executor: aws-cli/default
         steps:
           - checkout
@@ -58,8 +58,7 @@ workflows:
     version: 2
     build-deploy:
         jobs:
-            - aws-cli-config:
-                context: aws
+            - aws-cli-setup
             - build
             - deploy-dev:
                 requires:

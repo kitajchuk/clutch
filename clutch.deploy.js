@@ -17,8 +17,9 @@ const stasis = require( "./server/generators/static" );
 // Use the node.js app to generate our static build
 router.init().then(() => {
     stasis.generate( config ).then(() => {
-        const bucket = config.url.replace( /^https?:\/\//, "" );
-        const region = "us-west-2";
+        // Fallback to `dev` since that should be the first env established in the workflow
+        const bucket = config.aws.buckets[ process.env.NODE_ENV ] || config.aws.buckets.dev;
+        const region = config.aws.region;
         const directory = "static";
         const doGzip = false;
 

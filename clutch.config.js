@@ -11,7 +11,7 @@ const envVars = {
     webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET,
 };
 const config = {
-    // The URL of your actual site, Netlify domain: `kitajchuk.com`
+    // The URL of your actual site, prod domain: `clutch.kitajchuk.com`
     url: "https://clutch.kitajchuk.com",
     // Theme to load from ./source and ./template
     theme: rootConfig.theme,
@@ -28,7 +28,16 @@ const config = {
     // Environments
     env: {
         sandbox: (process.env.NODE_ENV === "sandbox"),
-        container: (process.env.NODE_ENV === "container"),
+        dev: (process.env.NODE_ENV === "dev"),
+        prod: (process.env.NODE_ENV === "prod"),
+    },
+    // AWS S3 bucket origins for environments (dev:dev, prod:master)
+    aws: {
+        buckets: {
+            dev: "clutch-dev.kitajchuk.com",
+            prod: "clutch.kitajchuk.com",
+        },
+        region: "us-west-2",
     },
     // Content service API
     api: {
@@ -102,11 +111,6 @@ const config = {
         }
     }
 };
-
-
-
-// Expose ENV vars for other local processes
-config.envVars = envVars;
 
 
 

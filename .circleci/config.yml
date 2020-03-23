@@ -23,7 +23,7 @@ jobs:
                 root: ~/clutch
                 paths:
                     - .
-    deploy-development:
+    deploy-dev:
         working_directory: ~/clutch
         machine:
             enabled: true
@@ -32,8 +32,8 @@ jobs:
                 at: ~/clutch
             - run:
                 name: Development Deploy ( dev branch )
-                command: npm run deploy
-    deploy-production:
+                command: export NODE_ENV=dev ; npm run deploy
+    deploy-prod:
         working_directory: ~/clutch
         machine:
             enabled: true
@@ -42,20 +42,20 @@ jobs:
                 at: ~/clutch
             - run:
                 name: Production Deploy ( master branch )
-                command: npm run deploy
+                command: export NODE_ENV=prod ; npm run deploy
 
 workflows:
     version: 2
     build-deploy:
         jobs:
             - build
-            - deploy-development:
+            - deploy-dev:
                 requires:
-                    - build
+                    - build:dev
                 filters:
                     branches:
                         only: dev
-            - deploy-production:
+            - deploy-prod:
                 requires:
                     - build
                 filters:

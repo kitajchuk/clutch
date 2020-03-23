@@ -92,7 +92,7 @@ const webpackConfig = {
                     {
                         loader: "sass-loader",
                         options: {
-                            outputStyle: "compressed"
+                            outputStyle: (config.env.sandbox ? "uncompressed" : "compressed")
                         }
                     }
                 ]

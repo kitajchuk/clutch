@@ -51,7 +51,7 @@ workflows:
             - build
             - deploy-dev:
                 requires:
-                    - build:dev
+                    - build
                 filters:
                     branches:
                         only: dev

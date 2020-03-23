@@ -1,6 +1,16 @@
-version: 2
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@0.1.22
 
 jobs:
+    aws-cli-config:
+        executor: aws-cli/default
+        steps:
+          - checkout
+          - aws-cli/setup:
+              profile-name: default
+          - run: echo "Run your code here"
     build:
         working_directory: ~/clutch
         machine:
@@ -46,6 +56,10 @@ jobs:
 
 workflows:
     version: 2
+    aws-cli:
+        jobs:
+          - aws-cli-config:
+              context: aws
     build-deploy:
         jobs:
             - build

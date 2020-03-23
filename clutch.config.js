@@ -9,8 +9,6 @@ const envVars = {
     apiAccess: rootConfig.prismic.apiAccess || process.env.PRISMIC_API_ACCESS,
     accessToken: rootConfig.prismic.accessToken || process.env.PRISMIC_API_TOKEN,
     webhookSecret: rootConfig.prismic.webhookSecret || process.env.PRISMIC_API_SECRET,
-    accessKey: rootConfig.aws.accessKey || process.env.AWS_ACCESS_KEY,
-    secretAccessKey: rootConfig.aws.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY
 };
 const config = {
     // The URL of your actual site, Netlify domain: `kitajchuk.com`

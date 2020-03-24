@@ -1,6 +1,16 @@
-version: 2
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@0.1.22
 
 jobs:
+    aws-cli-setup:
+        executor: aws-cli/default
+        steps:
+          - checkout
+          - aws-cli/setup:
+              profile-name: default
+          - run: echo "Run your code here"
     build:
         working_directory: ~/clutch
         machine:
@@ -23,7 +33,7 @@ jobs:
                 root: ~/clutch
                 paths:
                     - .
-    deploy-development:
+    deploy-dev:
         working_directory: ~/clutch
         machine:
             enabled: true
@@ -32,8 +42,8 @@ jobs:
                 at: ~/clutch
             - run:
                 name: Development Deploy ( dev branch )
-                command: npm run deploy
-    deploy-production:
+                command: export NODE_ENV=dev ; npm run deploy
+    deploy-prod:
         working_directory: ~/clutch
         machine:
             enabled: true
@@ -42,20 +52,22 @@ jobs:
                 at: ~/clutch
             - run:
                 name: Production Deploy ( master branch )
-                command: npm run deploy
+                command: export NODE_ENV=prod ; npm run deploy
 
 workflows:
     version: 2
     build-deploy:
         jobs:
+            - aws-cli-setup:
+                context: aws
             - build
-            - deploy-development:
+            - deploy-dev:
                 requires:
                     - build
                 filters:
                     branches:
                         only: dev
-            - deploy-production:
+            - deploy-prod:
                 requires:
                     - build
                 filters:

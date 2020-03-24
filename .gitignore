@@ -5,19 +5,7 @@
 # git config --global core.excludesfile ~/.gitignore_global
 
 
-# Logs
-*.log
 
-
-# OS / Cache
-.DS_Store
-.sass-cache
-
-
-# Clutch
-.notes
-.clutch
-.clutch-pre
 static/js
 static/css
 static/svg
@@ -31,10 +19,5 @@ static/**/*.json
 !static/api/data.json
 
 
-# Node / npm
-node_modules
-npm-debug.log
 
-
-# Local Netlify folder
-.netlify
+prismic.test.js

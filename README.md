@@ -12,22 +12,28 @@ Clutch
 
 ### Getting started
 
-Install the `clutch` command line interface:
+Install the clutch command line interface (CLI):
 
 ```shell
 npm i clutch-cli -g
 ```
 
-You can initialize clutch in your current working directory, or pass a folder name you would like clutch to create and initialize within:
+Initialize your new clutch project:
 
 ```shell
-# Assuming you are in the directory you want to initialize from
+# In cwd
 clutch init
 
-# Assuming you want clutch to create the directory for you to initialize from
+# Create new dir
 clutch init my-project
+```
+
+Install the NPM dependencies and boostrap the scaffold:
+
+```shell
+npm run bootstrap
 ```
 
 
 ### Documentation
-That's it! Checkout the [clutch docs](https://kitajchuk.com/clutch/readme) for complete info on developing with the SDK.
+You’ll need to setup your Prismic repository before developing with the SDK. The [docs](https://kitajchuk.com/clutch/prismic) will walk through a baseline content stub in Prismic. Beyond that you'll want to learn the [workflow](https://www.kitajchuk.com/clutch/workflow) for developing with Clutch.

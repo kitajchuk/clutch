@@ -6,17 +6,17 @@
   "version": "3.0.0",
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "(npm run server & npm run watch)",
     "bootstrap": "node clutch.install.js",
     "bootstrap:hobo": "cd ./node_modules/properjs-hobo && npm install && npm run build -- 'is eq not one next prev attr last first index parent filter detach append remove trigger prepend closest children removeAttr toggleClass'",
+    "start": "(npm run server & npm run watch)",
     "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/pm2 --no-daemon --watch -a start ./ecosystem.config.js",
     "server:stop": "./node_modules/.bin/pm2 stop 'all' --watch",
-    "build": "npm rebuild node-sass ; npm run bootstrap ; npm run build:container ; npm run static:build",
-    "deploy": "export NODE_ENV=container ; node clutch.deploy.js",
-    "build:container": "export NODE_ENV=container ; ./node_modules/.bin/webpack --env.container --progress --profile --display-modules --colors -p",
-    "static:build": "export NODE_ENV=container ; export CLUTCH_CLEAN=0 ; node clutch.static.js",
-    "static:clean": "export NODE_ENV=container ; export CLUTCH_CLEAN=1 ; node clutch.static.js"
+    "webpack": "./node_modules/.bin/webpack --progress --profile --display-modules --colors -p",
+    "build": "export NODE_ENV=prod ; npm rebuild node-sass ; npm run bootstrap ; npm run webpack ; npm run static:build",
+    "deploy": "node clutch.deploy.js",
+    "static:build": "export CLUTCH_CLEAN=0 ; node clutch.static.js",
+    "static:clean": "export CLUTCH_CLEAN=1 ; node clutch.static.js"
   },
   "resolutions": {
     "graceful-fs": "4.2.3"

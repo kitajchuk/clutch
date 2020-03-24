@@ -223,12 +223,12 @@ const getPage = ( req, res, listener ) => {
 const getDocs = () => {
     return new Promise(( resolve, reject ) => {
         let docs = {};
-        const getDocs = ( p ) => {
+        const _getDocs = ( p ) => {
             const options = {
                 fetchLinks: core.config.api.fetchLinks || [],
                 pageSize: 100,
                 page: p,
-                ref: cache.api.master()
+                ref: getRef()
             };
 
             cache.api
@@ -243,7 +243,7 @@ const getDocs = () => {
                     });
 
                     if ( json.next_page ) {
-                        getDocs( (p + 1) );
+                        _getDocs( (p + 1) );
 
                     } else {
                         resolve( docs );
@@ -254,7 +254,7 @@ const getDocs = () => {
                 })
         };
 
-        getDocs( 1 );
+        _getDocs( 1 );
     });
 };
 
@@ -265,21 +265,31 @@ const getDocs = () => {
  * Get valid `ref` for Prismic API data ( handles previews ).
  *
  */
-// const getRef = ( req, api ) => {
-//     let ref = api.master();
-//
-//     if ( req && req.cookies && req.cookies[ prismicJS.previewCookie ] ) {
-//         ref = req.cookies[ prismicJS.previewCookie ];
-//     }
-//
-//     return ref;
-// };
+const getRef = () => {
+    let ref = null;
+
+    // Preview sessions
+    // Formerly used for the live node app deployments...
+    // if ( req && req.cookies && req.cookies[ prismicJS.previewCookie ] ) {
+    //     ref = req.cookies[ prismicJS.previewCookie ];
+    // }
+
+    // Prismic releases
+    if ( core.config.api.release ) {
+        ref = cache.api.refs.find(( ref ) => {
+            return (ref.label === core.config.api.release);
+        });
+    }
+
+    return ref ? ref.ref : cache.api.masterRef.ref;
+};
 
 
 
 /**
  *
  * Handle preview URLs for draft content.
+ * Formerly used for the live node app deployments...
  *
  */
 // const getPreview = function ( req, res ) {

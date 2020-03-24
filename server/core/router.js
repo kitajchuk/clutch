@@ -56,6 +56,7 @@ const setRoutes = () => {
     expressApp.get( "/sitemap.xml", getSitemap );
 
     // SYSTEM => OLD
+    // Formerly used for the live node app deployments...
     // expressApp.get( "/preview", getPreview );
     // expressApp.post( "/webhook", postWebhook );
 

@@ -13,7 +13,8 @@ const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 // PRISMIC_API_ACCESS
 // PRISMIC_API_TOKEN
 // PRISMIC_API_SECRET
-// AWS_ACCESS_KEY
+// For CircleCI set these in a Context called `aws`
+// AWS_ACCESS_KEY_ID
 // AWS_SECRET_ACCESS_KEY
 const rootConfig = require( "./clutch.root" );
 

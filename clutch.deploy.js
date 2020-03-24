@@ -3,7 +3,7 @@
 // PRISMIC_API_ACCESS
 // PRISMIC_API_TOKEN
 // PRISMIC_API_SECRET
-// AWS_ACCESS_KEY
+// AWS_ACCESS_KEY_ID
 // AWS_SECRET_ACCESS_KEY
 const child_process = require( "child_process" );
 const lager = require( "properjs-lager" );

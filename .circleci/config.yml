@@ -58,7 +58,8 @@ workflows:
     version: 2
     build-deploy:
         jobs:
-            - aws-cli-setup
+            - aws-cli-setup:
+                context: aws
             - build
             - deploy-dev:
                 requires:

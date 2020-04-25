@@ -52,16 +52,16 @@ class ContextObject {
 
     getPageTitle () {
         const site = this.get( "site" );
-        const item = this.get( "item" );
+        const doc = this.get( "doc" );
         let title = null;
         let isRich = null;
 
         if ( config.onepager ) {
             title = site.data.title;
 
-        } else if ( item ) {
-            isRich = !(typeof item.data.title === "string");
-            title = `${isRich ? prismicDOM.RichText.asText( item.data.title ) : item.data.title} — ${site.data.title}`;
+        } else if ( doc ) {
+            isRich = !(typeof doc.data.title === "string");
+            title = `${isRich ? prismicDOM.RichText.asText( doc.data.title ) : doc.data.title} — ${site.data.title}`;
 
         } else {
             title = site.data.title;
@@ -72,11 +72,11 @@ class ContextObject {
 
     getPageDescription () {
         const site = this.get( "site" );
-        const item = this.get( "item" );
+        const doc = this.get( "doc" );
         let desc = null;
 
         // Homepage
-        if ( item && (item.uid === config.homepage) || !item ) {
+        if ( doc && (doc.uid === config.homepage) || !doc ) {
             desc = site.data.description;
         }
 

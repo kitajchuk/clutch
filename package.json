@@ -12,7 +12,7 @@
     "watch": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors --watch",
     "server": "export NODE_ENV=sandbox ; ./node_modules/.bin/pm2 --no-daemon --watch -a start ./ecosystem.config.js",
     "server:stop": "./node_modules/.bin/pm2 stop 'all' --watch",
-    "webpack": "./node_modules/.bin/webpack --progress --profile --display-modules --colors -p",
+    "webpack": "./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
     "build": "export NODE_ENV=prod ; npm rebuild node-sass ; npm run bootstrap ; npm run webpack ; npm run static:build",
     "deploy": "node clutch.deploy.js",
     "static:build": "export CLUTCH_CLEAN=0 ; node clutch.static.js",
@@ -51,8 +51,7 @@
     "sass-loader": "^8.0.2",
     "svg-inline-loader": "^0.8.2",
     "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11",
-    "websocket": "^1.0.31"
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

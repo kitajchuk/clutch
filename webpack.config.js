@@ -51,7 +51,7 @@ module.exports = ( env ) => {
         module: {
             rules: [
                 {
-                    test: /src\/js\/.*\.js$/i,
+                    test: /source\/js\/.*\.js$/i,
                     exclude: /node_modules/,
                     loader: "eslint-loader",
                     enforce: "pre",
@@ -63,7 +63,7 @@ module.exports = ( env ) => {
                     },
                 },
                 {
-                    test: /src\/js\/.*\.js$/i,
+                    test: /source\/js\/.*\.js$/i,
                     exclude: /node_modules/,
                     use: [
                         {

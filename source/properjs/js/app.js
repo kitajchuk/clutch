@@ -5,8 +5,8 @@ import "../sass/screen.scss";
 
 // Load the JS
 // import Store from "./core/Store";
-import JScroll from "properjs-jscroll";
 import ResizeController from "properjs-resizecontroller";
+import ScrollController from "properjs-scrollcontroller";
 import debounce from "properjs-debounce";
 import router from "./router";
 import * as core from "./core";
@@ -34,10 +34,11 @@ class App {
         this.deBounce = 300;
         this.scrollTimeout = null;
         this.mobileWidth = 812;
-        this.isRaf = false;
-        this.isLoad = false;
         this.analytics = new Analytics();
         this.resizer = new ResizeController();
+        this.scroller = new ScrollController();
+        this.scrollBounce = 300;
+        this.scrollTimeout = null;
         this.controllers = new Controllers({
             el: this.core.dom.main
         });
@@ -50,11 +51,7 @@ class App {
         this.intro.init();
         this.navi.init();
         this.router.init().load().then(() => {
-            this.jscroll = new JScroll({
-                scrollbar: true
-            });
             this.bind();
-            this.reqRaf();
             this.init();
 
         }).catch(( error ) => {
@@ -78,51 +75,31 @@ class App {
 
         this.resizer.on( "resize", this._onResize );
 
-        // VIRTUAL-SCROLL
-        this.jscroll.vs.on(( e ) => {
-            this.core.emitter.fire( "app--scroll", e );
+        // SCROLL
+        this.scroller.on( "scroll", ( scrollY ) => {
+            core.emitter.fire( "app--scroll", scrollY );
 
-            // this.reqRaf();
-
-            this.core.dom.html.addClass( "is-scrolling" );
+            core.dom.html.addClass( "is-scrolling" );
 
             clearTimeout( this.scrollTimeout );
 
             this.scrollTimeout = setTimeout(() => {
-                this.core.dom.html.removeClass( "is-scrolling" );
+                core.dom.html.removeClass( "is-scrolling" );
 
-                // this.cancelRaf();
-
-            }, this.deBounce );
-
-            // DOWN
-            // if ( e.deltaY < 0 ) {
-            //     this.core.dom.html.removeClass( "is-scroll-up" ).addClass( "is-scroll-down" );
-            //     this.core.emitter.fire( "app--scrolldown", e );
-            //
-            // // UP
-            // } else {
-            //     this.core.dom.html.removeClass( "is-scroll-down" ).addClass( "is-scroll-up" );
-            //     this.core.emitter.fire( "app--scrollup", e );
-            // }
+            }, this.scrollBounce );
         });
-    }
 
+        this.scroller.on( "scrollup", ( scrollY ) => {
+            core.dom.html.removeClass( "is-scroll-down" ).addClass( "is-scroll-up" );
+            core.emitter.fire( "app--scrollup", scrollY );
+        });
 
-    reqRaf () {
-        if ( !this.isRaf ) {
-            this.isRaf = true;
-
-            this.core.emitter.go(() => {
-                this.core.emitter.fire( "app--raf" );
-            });
-        }
-    }
-
-
-    cancelRaf () {
-        this.isRaf = false;
-        this.core.emitter.stop();
+        this.scroller.on( "scrolldown", ( scrollY ) => {
+            if ( scrollY > 0 ) {
+                core.dom.html.removeClass( "is-scroll-up" ).addClass( "is-scroll-down" );
+                core.emitter.fire( "app--scrolldown", scrollY );
+            }
+        });
     }
 }
 

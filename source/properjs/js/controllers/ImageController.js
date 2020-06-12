@@ -92,7 +92,7 @@ class ImageController extends Controller {
         let loader = null;
 
         for ( loader in this.loaders ) {
-            if ( this.loaders.hasOwnProperty( loader ) ) {
+            if ( this.loaders[ loader ] ) {
                 this.loaders[ loader ].stop();
                 this.loaders[ loader ] = null;
 

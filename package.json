@@ -14,6 +14,7 @@
     "server:stop": "./node_modules/.bin/pm2 stop 'all' --watch",
     "webpack": "./node_modules/.bin/webpack --env.production --progress --profile --display-modules --colors -p",
     "build": "export NODE_ENV=prod ; npm rebuild node-sass ; npm run bootstrap ; npm run webpack ; npm run static:build",
+    "build:sandbox": "export NODE_ENV=sandbox ; ./node_modules/.bin/webpack --env.sandbox --hide-modules --colors",
     "deploy": "node clutch.deploy.js",
     "static:build": "export CLUTCH_CLEAN=0 ; node clutch.static.js",
     "static:clean": "export CLUTCH_CLEAN=1 ; node clutch.static.js"

@@ -59,10 +59,8 @@ context.pageTemplate = context.getTemplate();
     </head>
     <body class="-fzero">
         <%- include( 'site/header.html' ) %>
-        <main class="main -pad js-main js-smooth" data-title="<%= context.pageTitle %>">
-            <div class="main__content cms js-smooth-section">
-                <%- include( context.pageTemplate ) %>
-            </div>
+        <main class="main js-main" data-title="<%= context.pageTitle %>">
+            <%- include( context.pageTemplate ) %>
         </main>
         <%- include( 'site/intro.html' ) %>
         <script src="<%= sourceJS %>"></script>

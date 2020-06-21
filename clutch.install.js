@@ -38,14 +38,6 @@ if ( !fs.existsSync( rootClutch ) ) {
 }
 
 
-// Create notes
-console.log( "[Clutch] Creating .notes file for dev..." );
-
-if ( !fs.existsSync( rootNotes ) ) {
-    child_process.execSync( `touch ${rootNotes}` );
-}
-
-
 // Hobo.js build
 console.log( "[Clutch] Building properjs-hobo..." );
 

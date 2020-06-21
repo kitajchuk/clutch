@@ -63,8 +63,9 @@ module.exports = ( env ) => {
                     },
                 },
                 {
-                    test: /source\/.*\.js$/i,
-                    exclude: /node_modules/,
+                    // test: /source\/.*\.js$/i,
+                    // exclude: /node_modules/,
+                    test: /source\/.*\.js$|node_modules\/[properjs-|konami-|paramalama].*/i,
                     use: [
                         {
                             loader: "babel-loader",

@@ -4,7 +4,6 @@ const child_process = require( "child_process" );
 const files = require( "./server/core/files" );
 const root = __dirname;
 const rootNodeModules = path.join( root, "node_modules" );
-const rootPackageLock = path.join( root, "package-lock.json" );
 const rootClutch = path.join( root, ".clutch" );
 const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 // Leave this alone! You put your values in .clutch/config.json

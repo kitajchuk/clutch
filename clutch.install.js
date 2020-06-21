@@ -6,7 +6,6 @@ const root = __dirname;
 const rootNodeModules = path.join( root, "node_modules" );
 const rootPackageLock = path.join( root, "package-lock.json" );
 const rootClutch = path.join( root, ".clutch" );
-const rootNotes = path.join( root, ".notes" );
 const rootHobo = path.join( rootNodeModules, "properjs-hobo" );
 // Leave this alone! You put your values in .clutch/config.json
 // Netlify / CircleCI environment variables need to be set:

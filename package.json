@@ -39,7 +39,7 @@
     "node-sass": "^4.13.1",
     "paramalama": "^0.3.0",
     "prismic-dom": "^2.1.0",
-    "properjs-controller": "^0.3.0",
+    "properjs-controller": "^0.3.1",
     "properjs-debounce": "^0.3.0",
     "properjs-hobo": "^0.3.26",
     "properjs-imageloader": "^0.4.0",

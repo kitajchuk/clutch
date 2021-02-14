@@ -6,11 +6,15 @@ const lager = require( "properjs-lager" );
 const nodeModules = "node_modules";
 const webpack = require( "webpack" );
 const BrowserSyncPlugin = require( "browser-sync-webpack-plugin" );
+const ESLintPlugin = require( "eslint-webpack-plugin" );
+const isEnv = ( env ) => {
+    return (process.env.NODE_ENV === env);
+};
 
 
 
-module.exports = ( env ) => {
-    return {
+module.exports = [
+    {
         mode: "none",
 
 
@@ -18,6 +22,16 @@ module.exports = ( env ) => {
 
 
         plugins: [
+            new ESLintPlugin({
+                emitError: true,
+                emitWarning: false,
+                failOnError: true,
+                quiet: true,
+                context: path.resolve( __dirname, "source" ),
+                exclude: [
+                    "node_modules",
+                ],
+            }),
             new BrowserSyncPlugin({
                 open: true,
                 host: "localhost",
@@ -51,18 +65,6 @@ module.exports = ( env ) => {
         module: {
             rules: [
                 {
-                    test: /source\/.*\.js$/i,
-                    exclude: /node_modules/,
-                    loader: "eslint-loader",
-                    enforce: "pre",
-                    options: {
-                        emitError: true,
-                        emitWarning: false,
-                        failOnError: true,
-                        quiet: true,
-                    },
-                },
-                {
                     // test: /source\/.*\.js$/i,
                     // exclude: /node_modules/,
                     test: /source\/.*\.js$|node_modules\/[properjs-|konami-|paramalama].*/i,
@@ -88,7 +90,7 @@ module.exports = ( env ) => {
                             loader: "sass-loader",
                             options: {
                                 sassOptions: {
-                                    outputStyle: (env.sandbox ? "uncompressed" : "compressed"),
+                                    outputStyle: (isEnv( "sandbox" ) ? "uncompressed" : "compressed"),
                                 },
                             },
                         },
@@ -103,5 +105,5 @@ module.exports = ( env ) => {
                 },
             ]
         }
-    };
-};
+    }
+];
